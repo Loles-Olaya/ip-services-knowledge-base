@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IP Services Knowledge Base</title>
+<style>
+  :root{
+    --ink:#2D3748;
+    --ink-soft:#4A5568;
+    --paper:#FAF9F7;
+    --card:#FFFFFF;
+    --border:#E5E1DA;
+    --accent:#F56565;
+    --accent-soft:#FDECEC;
+
+    --c-filing:#3182CE;      --c-filing-bg:#EBF4FC;
+    --c-recordals:#B7791F;   --c-recordals-bg:#FBF3E4;
+    --c-renewals:#D53F41;    --c-renewals-bg:#FCEAEA;
+    --c-ipms:#6B46C1;        --c-ipms-bg:#F1EBFB;
+    --c-roles:#2F855A;       --c-roles-bg:#E9F6EF;
+    --c-companies:#4A5568;   --c-companies-bg:#EEF0F3;
+    --c-rws:#3E016F;         --c-rws-bg:#F3E9FB;
+    --c-trademarks:#DD6B20;  --c-trademarks-bg:#FDF1E6;
+    --c-otherip:#319795;     --c-otherip-bg:#E6F7F6;
+    --c-compare:#97266D;     --c-compare-bg:#FBEAF2;
+    --c-lifecycle:#0B7285;   --c-lifecycle-bg:#E5F4F6;
+
+    --c-overview:#3E016F;            --c-overview-bg:#F3E9FB;
+    --c-getting-started:#5B21B6;     --c-getting-started-bg:#F1E8FC;
+    --c-navigation:#6D28D9;          --c-navigation-bg:#F3EBFC;
+    --c-recordals-overview:#7C3AED;  --c-recordals-overview-bg:#F5EEFD;
+    --c-recordals-projects:#9333EA;  --c-recordals-projects-bg:#F7EFFD;
+    --c-country-folders:#A21CAF;     --c-country-folders-bg:#FAEBFA;
+    --c-due-dates:#BE185D;           --c-due-dates-bg:#FCE7F0;
+    --c-documents:#C2185B;           --c-documents-bg:#FCE4EC;
+    --c-invoicing:#E60054;           --c-invoicing-bg:#FDE8F0;
+    --c-portal-mvp:#0F766E;          --c-portal-mvp-bg:#E6F5F3;
+    --c-release-notes:#92400E;       --c-release-notes-bg:#FBEEE0;
+  }
+  body.mode-rws .sidebar{ background:linear-gradient(180deg, #2a004d 0%, #3E016F 100%); }
+  body.mode-rws .search-box input:focus{ border-color:#E60054; }
+  body.mode-rws .cat-btn.active{ background:#E60054; }
+  body.mode-rws .card:hover{ box-shadow:0 4px 14px rgba(62,1,111,.18); border-color:#c9a8e8; }
+  body.mode-rws .detail-close{ background:#F1EBFC; }
+  body.mode-rws .note{ border-left-color:#E60054; background:#FDE8F0; color:#7a002f; }
+  .mode-switch{ display:flex; gap:6px; margin:0 0 18px; background:#1f2733; border-radius:9px; padding:4px; }
+  body.mode-rws .mode-switch{ background:rgba(0,0,0,.25); }
+  .mode-btn{ flex:1; border:none; background:transparent; color:#9AA5B1; font-size:12px; font-weight:600; padding:8px 6px; border-radius:6px; cursor:pointer; text-align:center; line-height:1.3; }
+  .mode-btn.active{ background:#37414F; color:#fff; }
+  body.mode-rws .mode-btn.active{ background:#E60054; color:#fff; }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Segoe UI', -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+    line-height:1.5;
+  }
+  .app{display:flex; min-height:100vh;}
+
+  /* ---- Sidebar ---- */
+  .sidebar{
+    width:270px; min-width:270px;
+    background:var(--ink);
+    color:#EDEFF3;
+    padding:22px 18px;
+    position:sticky; top:0; height:100vh; overflow-y:auto;
+  }
+  .brand{font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:#A0AEC0; margin-bottom:2px;}
+  .brand h1{font-size:19px; margin:2px 0 18px; color:#fff; font-weight:700; line-height:1.25;}
+  .search-box{
+    position:relative; margin-bottom:20px;
+  }
+  .search-box input{
+    width:100%; padding:10px 12px 10px 34px; border-radius:8px; border:1px solid #4A5568;
+    background:#37414F; color:#fff; font-size:14px; outline:none;
+  }
+  .search-box input::placeholder{color:#9AA5B1;}
+  .search-box input:focus{border-color:var(--accent);}
+  .search-box svg{position:absolute; left:10px; top:11px; opacity:.6;}
+
+  .cat-list{list-style:none; margin:0; padding:0;}
+  .cat-list li{margin-bottom:4px;}
+  .cat-btn{
+    width:100%; text-align:left; background:transparent; border:none; color:#CBD5E0;
+    padding:9px 10px; border-radius:7px; font-size:13.5px; cursor:pointer;
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    transition:background .15s ease;
+  }
+  .cat-btn:hover{background:#374151;}
+  .cat-btn.active{background:var(--accent); color:#fff; font-weight:600;}
+  .cat-dot{width:9px; height:9px; border-radius:50%; display:inline-block; margin-right:8px; flex-shrink:0;}
+  .cat-name{display:flex; align-items:center;}
+  .cat-count{font-size:11.5px; opacity:.75;}
+
+  .sidebar-footer{margin-top:24px; padding-top:16px; border-top:1px solid #4A5568; font-size:11.5px; color:#8B96A5;}
+
+  /* ---- Main ---- */
+  .main{flex:1; padding:30px 40px 80px; max-width:980px;}
+  .toolbar{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:6px; flex-wrap:wrap; gap:8px;}
+  .toolbar h2{margin:0; font-size:21px; font-weight:700;}
+  .result-count{font-size:13px; color:var(--ink-soft);}
+  .subtitle{color:var(--ink-soft); font-size:14px; margin:0 0 22px;}
+
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media (max-width:760px){ .grid{grid-template-columns:1fr;} .sidebar{width:220px; min-width:220px;} .main{padding:22px 18px;} }
+
+  .card{
+    background:var(--card); border:1px solid var(--border); border-radius:10px;
+    padding:16px 17px; cursor:pointer; transition:box-shadow .15s ease, transform .1s ease, border-color .15s ease;
+  }
+  .card:hover{box-shadow:0 4px 14px rgba(45,55,72,.09); transform:translateY(-1px); border-color:#D8D2C6;}
+  .card-tag{
+    display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+    padding:3px 8px; border-radius:5px; margin-bottom:9px;
+  }
+  .card h3{margin:0 0 6px; font-size:15.5px; line-height:1.35;}
+  .card p{margin:0; font-size:13px; color:var(--ink-soft); line-height:1.5;}
+  .card .tags{margin-top:10px; display:flex; flex-wrap:wrap; gap:5px;}
+  .chip{font-size:10.5px; background:#F1EEE7; color:#6B7280; padding:2px 7px; border-radius:20px;}
+
+  .empty{padding:60px 10px; text-align:center; color:var(--ink-soft);}
+  .empty svg{opacity:.35; margin-bottom:10px;}
+
+  /* ---- Detail overlay ---- */
+  .overlay{
+    position:fixed; inset:0; background:rgba(26,30,38,.55); display:none;
+    align-items:flex-start; justify-content:center; padding:40px 20px; overflow-y:auto; z-index:50;
+  }
+  .overlay.open{display:flex;}
+  .detail{
+    background:#fff; max-width:720px; width:100%; border-radius:12px; padding:34px 38px 40px;
+    box-shadow:0 20px 60px rgba(0,0,0,.3); position:relative; animation:pop .15s ease;
+  }
+  @keyframes pop{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+  .detail-close{
+    position:absolute; top:18px; right:18px; background:#F1EEE7; border:none; width:32px; height:32px;
+    border-radius:50%; cursor:pointer; font-size:16px; color:var(--ink-soft); line-height:1;
+  }
+  .detail-close:hover{background:#E5E1DA;}
+  .detail-tag{
+    display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+    padding:3px 9px; border-radius:5px; margin-bottom:12px;
+  }
+  .detail h2{margin:0 0 16px; font-size:23px; line-height:1.3; padding-right:20px;}
+  .detail-body h3{font-size:15px; margin:20px 0 8px; color:var(--ink);}
+  .detail-body h3:first-child{margin-top:0;}
+  .detail-body p{margin:0 0 10px; font-size:14.5px; color:#374151; line-height:1.65;}
+  .detail-body ul, .detail-body ol{margin:0 0 12px; padding-left:20px; font-size:14.5px; color:#374151; line-height:1.6;}
+  .detail-body li{margin-bottom:4px;}
+  .detail-body table{width:100%; border-collapse:collapse; margin:10px 0 16px; font-size:13.5px;}
+  .detail-body th, .detail-body td{border:1px solid var(--border); padding:7px 10px; text-align:left;}
+  .detail-body th{background:#F7F5F0; font-weight:600;}
+  .note{
+    background:#F7F5F0; border-left:3px solid var(--accent); padding:9px 13px; border-radius:0 6px 6px 0;
+    font-size:13px; color:var(--ink-soft); margin:14px 0;
+  }
+  .note.rws{border-left-color:var(--c-rws); background:var(--c-rws-bg); color:#4A3068;}
+  .detail-tags{margin-top:20px; padding-top:16px; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:6px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <nav class="sidebar">
+    <div class="brand">Reference tool</div>
+    <h1 id="brandTitle">IP Services<br>Knowledge Base</h1>
+    <div class="mode-switch">
+      <button class="mode-btn active" id="modeBtnIp">IP Services<br>Knowledge Base</button>
+      <button class="mode-btn" id="modeBtnRws">RWS PatOrg<br>Knowledge Base</button>
+    </div>
+    <div class="search-box">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9AA5B1" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="searchInput" type="text" placeholder="Search filing, recordals, PatOrg…" autocomplete="off">
+    </div>
+    <ul class="cat-list" id="catList"></ul>
+    <div class="sidebar-footer">
+      Sourced from public web research plus prior conversations with Loles. Use search to cut across categories — e.g. "PatOrg" or "Madrid Protocol".
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="toolbar">
+      <h2 id="viewTitle">All entries</h2>
+      <span class="result-count" id="resultCount"></span>
+    </div>
+    <p class="subtitle" id="viewSubtitle">Browse by category on the left, or search across everything.</p>
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="emptyState" style="display:none;">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <div>No entries match that search.</div>
+    </div>
+  </main>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="detail">
+    <button class="detail-close" id="closeBtn">✕</button>
+    <span class="detail-tag" id="dTag"></span>
+    <h2 id="dTitle"></h2>
+    <div class="detail-body" id="dBody"></div>
+    <div class="detail-tags" id="dTags"></div>
+  </div>
+</div>
+
+<script>
+const CATEGORIES_IP = [
+  {id:"all", name:"All entries", color:"var(--accent)"},
+  {id:"lifecycle", name:"Full Lifecycle by Matter Type", color:"var(--c-lifecycle)"},
+  {id:"filing", name:"Filing", color:"var(--c-filing)"},
+  {id:"trademarks", name:"Trademarks", color:"var(--c-trademarks)"},
+  {id:"recordals", name:"Recordals", color:"var(--c-recordals)"},
+  {id:"renewals", name:"Renewals & Annuities", color:"var(--c-renewals)"},
+  {id:"otherip", name:"Other IP Rights", color:"var(--c-otherip)"},
+  {id:"ipms", name:"IPMS & Portal Systems", color:"var(--c-ipms)"},
+  {id:"roles", name:"People & Roles", color:"var(--c-roles)"},
+  {id:"companies", name:"Providers & Market", color:"var(--c-companies)"},
+  {id:"compare", name:"Comparing & Managing Rights", color:"var(--c-compare)"},
+];
+
+const CATEGORIES_RWS = [
+  {id:"all", name:"All entries", color:"#E60054"},
+  {id:"overview", name:"Programme Overview", color:"var(--c-overview)"},
+  {id:"getting-started", name:"Getting Started in PatOrg", color:"var(--c-getting-started)"},
+  {id:"navigation", name:"Cases, Persons & Firms", color:"var(--c-navigation)"},
+  {id:"recordals-overview", name:"Recordals \u2014 Overview", color:"var(--c-recordals-overview)"},
+  {id:"recordals-projects", name:"Recordals \u2014 Project Creation", color:"var(--c-recordals-projects)"},
+  {id:"country-folders", name:"Country Folders & Workflows", color:"var(--c-country-folders)"},
+  {id:"due-dates", name:"Due Dates & Deadlines", color:"var(--c-due-dates)"},
+  {id:"documents", name:"Document Management", color:"var(--c-documents)"},
+  {id:"invoicing", name:"Recordals \u2014 Invoicing", color:"var(--c-invoicing)"},
+  {id:"portal-mvp", name:"Portal & MVP End-to-End Process", color:"var(--c-portal-mvp)"},
+  {id:"release-notes", name:"Release Notes & Caveats", color:"var(--c-release-notes)"},
+];
+
+const ARTICLES_IP = [
+/* ================= FULL LIFECYCLE BY MATTER TYPE ================= */
+{id:"l1", cat:"lifecycle", title:"Patent: full lifecycle from idea to expiry", tags:["patent lifecycle","provisional","PCT","maintenance fees","expiry"],
+ summary:"Invention \u2192 priority filing \u2192 PCT/national phase \u2192 examination \u2192 grant \u2192 recordals \u2192 annuities \u2192 expiry at 20 years \u2014 walked through with a worked example.",
+ body:`<h3>The flow</h3>
+ <ol><li><strong>Conception & invention disclosure</strong> \u2014 the inventor(s) and often an internal invention-disclosure process capture what\u2019s new; no legal filing yet, but this date can matter later for evidence</li>
+ <li><strong>Priority filing</strong> \u2014 a first application establishes the earliest possible date. Often a cheap, unexamined <em>provisional</em> application (US-style) that isn\u2019t itself examined or granted, but buys 12 months. No maintenance fees apply during this window</li>
+ <li><strong>Non-provisional / PCT filing (within 12 months)</strong> \u2014 the full application (specification, claims, drawings) is filed, either directly in target countries under the Paris Convention, or as a single PCT application to keep options open across 150+ countries</li>
+ <li><strong>Publication</strong> \u2014 the application publishes roughly 18 months after the earliest priority date, regardless of examination status</li>
+ <li><strong>National phase entry (PCT route)</strong> \u2014 around 30 months from priority, the applicant commits to specific countries and pays national filing costs in each</li>
+ <li><strong>Substantive examination</strong> \u2014 each national/regional office examines independently; office actions and responses go back and forth, typically taking 1\u20135 years depending on the office and technology area</li>
+ <li><strong>Grant</strong> \u2014 the patent issues once the issue fee is paid; enforceability generally starts here, though the 20-year term is measured from the earliest non-provisional filing date, not the grant date</li>
+ <li><strong>Recordals</strong> \u2014 any assignment, licence, merger, or name/address change from this point forward needs recording with each national office where the patent exists \u2014 this can happen at any time, pre- or post-grant, and often repeatedly over the patent\u2019s life</li>
+ <li><strong>Maintenance / annuities</strong> \u2014 most of the world requires annual payments (from filing or grant, depending on the office) for the patent to stay in force; the US instead requires payment only at 3.5, 7.5, and 11.5 years post-grant</li>
+ <li><strong>Expiry</strong> \u2014 the patent lapses either on schedule at the end of its statutory term (20 years from filing, sometimes extended for regulatory delay in pharma) or early if a maintenance fee is missed \u2014 either way, the invention then enters the public domain</li></ol>
+ <h3>Worked example</h3>
+ <p>A battery-technology company invents a new electrode coating. It files a US provisional to lock in a priority date, then within 12 months files a PCT application. The PCT publishes at ~18 months; at ~30 months the company enters national phase in the US, Germany, Japan, and China. Examination runs 2\u20134 years per office, with different office actions and different outcomes possible in each country. The US patent grants first; Germany and Japan follow over the next year. The company pays annuities in Germany and Japan annually from filing, and pays US maintenance fees only at 3.5/7.5/11.5 years post-grant. Five years after grant, the company spins the battery division out as a separate entity \u2014 triggering an assignment recordal in every country where the patent is live. The patent expires 20 years after the original non-provisional filing date, at which point the technology is free for anyone to use.</p>`},
+
+{id:"l2", cat:"lifecycle", title:"Design: full lifecycle from creation to expiry", tags:["design lifecycle","Hague System","design patent","renewal"],
+ summary:"Creation \u2192 filing (national, EUIPO, or Hague) \u2192 examination that varies sharply by office \u2192 registration \u2192 recordals \u2192 renewal cycles that differ by jurisdiction \u2192 expiry.",
+ body:`<h3>The flow</h3>
+ <ol><li><strong>Creation of the design</strong> \u2014 the visual/ornamental appearance of a product is finalised; unlike a patent, there\u2019s no invention-disclosure equivalent \u2014 what matters is the final look, captured in drawings or photographs</li>
+ <li><strong>Filing</strong> \u2014 nationally (e.g. a US design patent application), regionally (an EU design at EUIPO), or internationally via the Hague System (one WIPO filing designating multiple countries, no prior national filing required)</li>
+ <li><strong>Examination \u2014 this is where designs diverge most by jurisdiction</strong>: some offices only check formalities (is the filing complete, are the views consistent) and register without testing novelty \u2014 much of the EU/Hague-designated territory works this way; others substantively examine for novelty before granting, as the US does for design patents</li>
+ <li><strong>Publication</strong> \u2014 typically automatic (Hague designs publish roughly 6\u201312 months after filing by default, with deferment sometimes available)</li>
+ <li><strong>Registration / grant</strong> \u2014 each designated office decides independently; a refusal in one country doesn\u2019t affect the registration anywhere else</li>
+ <li><strong>Recordals</strong> \u2014 ownership transfers, licences, and name/address changes are recorded against the registration \u2014 centrally through WIPO for a Hague registration, or nationally for a standalone filing</li>
+ <li><strong>Renewal</strong> \u2014 this is the other big jurisdictional split (see the worked example below): terms and renewal cadence vary widely by country</li>
+ <li><strong>Expiry</strong> \u2014 once the maximum term is reached, or a renewal is missed, the design falls into the public domain in that territory</li></ol>
+ <h3>Worked example</h3>
+ <p>A furniture company designs a new chair silhouette and files via the Hague System, designating the EU, Japan, and the US. WIPO checks formalities and issues an international registration; each designated office then decides independently. The EU registers it quickly with only a formalities check (initial term: 5 years from filing, renewable every 5 years up to a maximum of 25 years). Japan substantively examines it for novelty before granting. The US issues it as a design patent with a single 15-year term from the date of grant \u2014 and, unusually, no maintenance fees or renewals at all for that entire term. Two years in, the company licenses the design to a third-party manufacturer in Vietnam \u2014 a licence recordal is filed centrally through WIPO, covering the Hague-designated countries. At year 5, the EU portion needs its first renewal to stay alive; the US portion needs nothing until it simply expires at 15 years.</p>`},
+
+{id:"l3", cat:"lifecycle", title:"Trademark: full lifecycle from clearance to indefinite renewal", tags:["trademark lifecycle","opposition","renewal","indefinite"],
+ summary:"Clearance search \u2192 filing \u2192 examination \u2192 opposition \u2192 registration \u2192 recordals \u2192 renewal every 10 years, indefinitely \u2014 the only right of the four with no fixed expiry if properly maintained.",
+ body:`<h3>The flow</h3>
+ <ol><li><strong>Clearance search</strong> \u2014 checking whether the proposed name/logo conflicts with existing marks before committing to filing</li>
+ <li><strong>Filing</strong> \u2014 nationally, regionally (EUIPO), or via the Madrid Protocol (one WIPO application designating multiple countries); in use-based jurisdictions like the US, filing can be on an actual-use or intent-to-use basis</li>
+ <li><strong>Examination</strong> \u2014 the office checks absolute grounds (is the mark distinctive, non-descriptive, non-generic) and, in many offices, relative grounds (does it conflict with an earlier mark)</li>
+ <li><strong>Publication & opposition window</strong> \u2014 accepted marks publish for third-party challenge: 30 days in the US, 3 months in the EU and China, 4 months in India (see the Trademarks section for the full breakdown)</li>
+ <li><strong>Registration</strong> \u2014 if unopposed, or the opposition fails, the mark registers \u2014 in intent-to-use jurisdictions like the US, a Statement of Use (or extension request) must still be filed before registration actually issues, even after the opposition window clears</li>
+ <li><strong>Recordals</strong> \u2014 assignments, licences, and name/address changes are recorded against the registration at any point during its life, exactly as with patents and designs</li>
+ <li><strong>Renewal \u2014 every 10 years, indefinitely</strong> \u2014 unlike every other right on this list, a trademark has no maximum lifespan: as long as it\u2019s renewed (and, in many jurisdictions, actually used), it can be maintained forever</li>
+ <li><strong>Loss of rights</strong> \u2014 the only ways a trademark dies are a missed renewal, successful cancellation (e.g. for non-use, often after 3\u20135 years of non-use depending on jurisdiction), or the mark becoming generic through its own success</li></ol>
+ <h3>Worked example</h3>
+ <p>A beverage startup files a wordmark in the US on an intent-to-use basis, and separately files via Madrid designating the EU, UK, and China. The US application can\u2019t register until the company files a Statement of Use (with a possible series of 6-month extensions if the product isn\u2019t on shelves yet). The EU registration proceeds without any use requirement at filing. In China \u2014 a first-to-file jurisdiction \u2014 the company discovers a local party has already filed a near-identical mark speculatively; it has to fight this through opposition rather than simply relying on its US use history, which carries no weight there. Three years later the brand is acquired by a larger beverage group, triggering an assignment recordal in every jurisdiction where the mark is registered. The company renews the mark every 10 years going forward \u2014 assuming it keeps using it, there\u2019s no reason the registration ever has to lapse.</p>`},
+
+{id:"l4", cat:"lifecycle", title:"Copyright: full lifecycle from creation to public domain", tags:["copyright lifecycle","automatic protection","registration optional","no renewal"],
+ summary:"Creation \u2192 automatic protection, no filing required \u2192 optional registration \u2192 optional recordal of transfers \u2192 no renewal needed \u2192 expiry decades after the author's death.",
+ body:`<h3>The flow</h3>
+ <ol><li><strong>Creation & fixation</strong> \u2014 the moment an original work is fixed in a tangible form (written down, recorded, saved to disk), copyright exists automatically. No application, no office, no fee</li>
+ <li><strong>Optional registration</strong> \u2014 many countries offer voluntary registration (e.g. with the U.S. Copyright Office). It isn\u2019t required for the right to exist, but in the US it\u2019s a prerequisite before filing an infringement lawsuit, and registering promptly (before infringement or within a short window of publication) preserves access to statutory damages and attorney\u2019s fees that wouldn\u2019t otherwise be available</li>
+ <li><strong>No examination in the patent/trademark sense</strong> \u2014 a copyright office does a light administrative review (is this copyrightable subject matter, is the application complete) rather than searching for conflicting prior rights</li>
+ <li><strong>Recordal of transfers (optional but useful)</strong> \u2014 if ownership is assigned or exclusively licensed, that transfer can be recorded with the copyright office. It isn\u2019t mandatory, but in the US, recording establishes priority against any later, conflicting transfer of the same rights \u2014 functionally similar to why patent/trademark assignments get recorded, just entirely optional here</li>
+ <li><strong>No renewal, ever, for modern works</strong> \u2014 for works created from 1978 onward (in the US; broadly similar in most Berne Convention countries), there is no renewal requirement at all. Older US works published before 1978 are the one exception, where renewal registration after 28 years was historically required, though this no longer applies to new works</li>
+ <li><strong>Expiry into the public domain</strong> \u2014 for most modern individually-authored works, protection lasts for the life of the author plus 70 years (the EU standard is the same; some countries use 50). For anonymous, pseudonymous, or corporate/work-for-hire works, the term is instead a fixed 95 years from publication or 120 years from creation, whichever is shorter</li></ol>
+ <h3>Worked example</h3>
+ <p>A novelist finishes a manuscript. Copyright exists the instant it\u2019s saved to disk \u2014 no filing needed. Before publication, the publisher registers it with the U.S. Copyright Office anyway, purely to preserve the strongest enforcement options if it\u2019s ever pirated. Two years later, the author assigns film rights to a studio; that assignment is optionally recorded with the Copyright Office, which protects the studio if the author (improperly) tries to assign the same rights to someone else later. No renewal is ever required. The novel enters the public domain 70 years after the author\u2019s death \u2014 a single, automatically-calculated date, with no annuities, no renewal fees, and no recordal obligations along the way unless the parties choose to record something.</p>`},
+
+{id:"l5", cat:"lifecycle", title:"Lifecycle stage comparison: patent vs design vs trademark vs copyright", tags:["comparison table","lifecycle stages","side by side"],
+ summary:"The same eight lifecycle stages, mapped across all four matter types \u2014 where they line up, and where they genuinely diverge.",
+ body:`<table><tr><th>Stage</th><th>Patent</th><th>Design</th><th>Trademark</th><th>Copyright</th></tr>
+ <tr><td><strong>Right arises</strong></td><td>Only on grant</td><td>Only on registration</td><td>Only on registration (some unregistered common-law rights in a few countries)</td><td>Automatically, on creation \u2014 no filing at all</td></tr>
+ <tr><td><strong>Formal filing needed?</strong></td><td>Yes, examined</td><td>Yes \u2014 examined or unexamined depending on office</td><td>Yes, examined</td><td>No \u2014 registration is optional, not required for the right to exist</td></tr>
+ <tr><td><strong>Priority mechanism</strong></td><td>Provisional / first filing + 12-month Paris window, or PCT</td><td>First filing + 6-month Paris window, or Hague</td><td>First filing + 6-month Paris window, or Madrid</td><td>None needed \u2014 priority is simply the fixation date</td></tr>
+ <tr><td><strong>Examination type</strong></td><td>Substantive \u2014 novelty, inventive step, utility</td><td>Formalities-only (many offices) or substantive novelty check (some, e.g. US)</td><td>Absolute grounds + often relative grounds (conflict search)</td><td>Administrative only \u2014 no prior-rights search</td></tr>
+ <tr><td><strong>Publication before grant?</strong></td><td>Yes, ~18 months from priority</td><td>Yes, typically 6\u201312 months (deferment often possible)</td><td>Yes \u2014 opens the opposition window</td><td>N/A \u2014 no publication step in the registration process</td></tr>
+ <tr><td><strong>Third-party challenge window?</strong></td><td>Post-grant opposition in some offices (e.g. EPO); no universal pre-grant opposition</td><td>Rare pre-grant; post-grant invalidation actions possible</td><td>Yes \u2014 formal opposition period is standard (30 days\u20134 months, jurisdiction-dependent)</td><td>No formal window \u2014 disputes are resolved through litigation, not an office proceeding</td></tr>
+ <tr><td><strong>Recordals (ownership/licence changes)</strong></td><td>Yes \u2014 assignments, licences, name changes, all recordable, often required for enforceability</td><td>Yes \u2014 same pattern, centralised via WIPO for Hague filings</td><td>Yes \u2014 same pattern, centralised via WIPO for Madrid filings</td><td>Optional \u2014 recording a transfer isn\u2019t mandatory but establishes priority against later conflicting transfers</td></tr>
+ <tr><td><strong>Renewal / maintenance required?</strong></td><td>Yes \u2014 annual (most of world) or milestone-based (US: 3.5/7.5/11.5 yrs)</td><td>Yes in most jurisdictions (e.g. EU: every 5 yrs); US design patents are the exception \u2014 no fees at all after grant</td><td>Yes \u2014 every 10 years, indefinitely</td><td>No \u2014 never, for modern works</td></tr>
+ <tr><td><strong>Maximum duration</strong></td><td>20 years from filing</td><td>15\u201325 years depending on jurisdiction</td><td>Indefinite, as long as renewed (and often, used)</td><td>Life of author + 50\u201370 years, or 95/120 years for corporate/anonymous works</td></tr>
+ <tr><td><strong>How it ends</strong></td><td>Scheduled expiry, or early lapse from missed maintenance fee</td><td>Scheduled expiry at max term, or lapse from missed renewal</td><td>Only by missed renewal, successful cancellation (e.g. non-use), or genericide \u2014 never by simple time limit</td><td>Scheduled expiry only \u2014 there\u2019s no maintenance failure mode since nothing is ever due</td></tr></table>
+ <p>The clearest divide: patents, designs, and trademarks all run through the same skeleton \u2014 filing, examination, a publication/challenge step, registration, ongoing recordals, and periodic payments to stay alive. Copyright breaks that pattern almost entirely: it exists before any office is involved, needs no ongoing payments, and simply runs out the clock on a fixed term with no possibility of early lapse from inaction. Trademarks are the other outlier in the opposite direction \u2014 they\u2019re the only right of the four that never has to expire at all.</p>`},
+
+/* ================= FILING ================= */
+{id:"f1", cat:"filing", title:"What counts as a \u2018case\u2019 in patent filing", tags:["filing","case types","PCT","national phase"],
+ summary:"The building blocks of filing work: new applications, PCT filings, national phase entry, divisionals, and prosecution.",
+ body:`<h3>Filing cases</h3><p>Filing work covers the initial submission of patent applications to protect an invention. The main case types are:</p>
+ <ul><li>New patent applications \u2014 utility, provisional, or design</li>
+ <li>PCT (Patent Cooperation Treaty) applications, used to secure a single international filing date and search report ahead of country-by-country protection</li>
+ <li>National phase entries following a PCT filing, typically due around 30 months from the earliest filing date</li>
+ <li>Foreign filings under the Paris Convention, generally due within 12 months of the first filing</li>
+ <li>Divisional or continuation applications, splitting out claims from a parent application</li>
+ <li>Prosecution \u2014 responding to office actions, amendments, and examiner correspondence</li></ul>
+ <p>The PCT route doesn\u2019t grant a single global patent; it streamlines the process of filing in many countries by giving one filing date and one international search report, after which the applicant chooses which countries to enter for national examination.</p>`},
+
+{id:"f2", cat:"filing", title:"Patent prosecution and office actions", tags:["prosecution","office actions","examiner"],
+ summary:"The back-and-forth between applicant and examiner that follows filing, through to grant.",
+ body:`<p>Patent prosecution is the interaction between an applicant and a patent office once an application is filed. It splits into two phases:</p>
+ <ul><li><strong>Pre-grant</strong> \u2014 drafting and filing, responding to office actions, and navigating examination to meet patentability requirements</li>
+ <li><strong>Post-grant</strong> \u2014 maintaining the patent, handling oppositions or third-party challenges, and making corrections</li></ul>
+ <p>During examination, the examiner issues office actions raising objections or rejections \u2014 commonly citing prior art that may conflict with the claimed invention. The practitioner (attorney or agent) prepares a response arguing patentability or amending the claims; this negotiation is the core of prosecution work, and can involve examiner interviews.</p>
+ <p>Prosecution is distinct from patent litigation, which deals with infringement disputes after a patent is granted.</p>`},
+
+{id:"f3", cat:"filing", title:"USPTO now requires U.S. counsel for foreign-domiciled applicants", tags:["USPTO","foreign applicants","2026 rule change","local representation"],
+ summary:"A 2026 USPTO rule requires foreign-domiciled patent applicants and owners to have a U.S.-registered practitioner involved across the full patent lifecycle, not just at filing.",
+ body:`<p>As of July 2026, the USPTO has expanded its counsel requirements for foreign-domiciled patent applicants and owners. The change applies far beyond the initial filing act \u2014 it covers the entire lifecycle of a patent, including amendments, replies to office actions, Application Data Sheets, Information Disclosure Statements, petitions, and post-grant matters like maintenance fee payments.</p>
+ <p>A foreign applicant can still submit an initial application pro se to secure a filing date, but every subsequent submission needs a U.S. practitioner\u2019s signature. Domicile is based on where an individual maintains permanent legal residence, or where a business\u2019s senior executives actually direct operations \u2014 a U.S. mailing address, subsidiary, or branch office doesn\u2019t by itself make an applicant U.S.-domiciled.</p>
+ <p>The stated goals are improving filing quality, examination efficiency, and fraud prevention, and the change aligns U.S. practice with many foreign offices that already require local representation. It\u2019s expected to modestly increase demand for U.S. patent attorneys and agents, particularly for cross-border teams that previously let foreign agents or in-house staff communicate directly with the USPTO.</p>
+ <div class="note">This is a recent regulatory change (effective July 20, 2026) \u2014 worth flagging if it touches any filings workstream with U.S. exposure.</div>`},
+
+{id:"f4", cat:"filing", title:"Foreign associates and local correspondents", tags:["foreign associate","office agent","local correspondent","ethics"],
+ summary:"Why cross-border IP work almost always routes through a local intermediary, and the ethics basis that permits it.",
+ body:`<p>Because of language, cultural, and procedural differences, most cross-border patent and trademark prosecution runs through a local correspondent \u2014 a foreign associate or agent \u2014 who acts as intermediary between the client and the attorney handling the matter in a given jurisdiction.</p>
+ <p>In the U.S., the USPTO confirmed decades ago that a practitioner may take instructions from, and accept compensation via, a bona fide corporate liaison or foreign agent conveying the client\u2019s instructions, provided the client has consented to that arrangement. This is the ethical basis that makes the whole foreign-filing-agent ecosystem workable: the U.S. (or other local) attorney remains responsible for the substantive legal work, while the foreign associate manages translation, local formalities, and client communication.</p>
+ <p>Firms handling significant international portfolios typically maintain a network of associates across major jurisdictions (Europe, Asia, South America) to coordinate filings, and increasingly need in-house translation capability to work with those associates efficiently.</p>`},
+
+{id:"f5", cat:"filing", title:"Utility models: a lighter-weight patent-like right", tags:["utility models","petty patents","jurisdictions"],
+ summary:"Utility models protect smaller, shorter-life inventions more cheaply and quickly than a full patent \u2014 but they don\u2019t exist everywhere.",
+ body:`<p>A utility model is a patent-like right for protecting inventions, generally cheaper to obtain and maintain than a patent, with a shorter term (typically 6\u201315 years), faster grant, and less stringent patentability requirements. They\u2019re also called petty patents, short-term patents, innovation patents, or utility certificates depending on the country.</p>
+ <p>They suit incremental improvements to existing products, or products with a short commercial life where a lower-cost, faster right makes more sense than a full patent.</p>
+ <h3>Where they exist</h3>
+ <p>Utility models are territorial \u2014 there\u2019s no single centralised filing route comparable to an EU trademark. As of early 2024 they were available in roughly 76 jurisdictions, with China by far the most active market. Notable exceptions where utility models are <em>not</em> available include Canada, the UK, and the United States.</p>
+ <h3>Recordals on utility models</h3>
+ <p>Utility models need their own recordal treatment for ownership changes, mergers, and name changes \u2014 just like patents or trademarks. In most jurisdictions the effect is declaratory (failure to record doesn\u2019t invalidate the underlying right, but recording makes the change enforceable against third parties). Some jurisdictions require recordal immediately after the change occurs, with late-payment-style interest accruing on delay.</p>`},
+
+{id:"f6", cat:"filing", title:"Trademark filing: national vs Madrid Protocol", tags:["trademark","Madrid Protocol","WIPO","filing"],
+ summary:"Two routes to international trademark protection \u2014 direct national filings, or a single WIPO application under the Madrid Protocol.",
+ body:`<p>Businesses filing trademarks internationally choose between direct national filings in each country, or the Madrid Protocol \u2014 a single international application administered by WIPO that designates multiple member countries at once.</p>
+ <p>Under Madrid, local counsel generally only needs to be engaged if a designated country\u2019s trademark office raises an objection to the extension of protection. Designated offices have 18 months to object, which accelerates registration in many jurisdictions compared to filing nationally everywhere. One registration also means one renewal date and centralised ownership-change filings, versus juggling multiple registrations with different requirements.</p>
+ <p>Direct national filing remains preferable in jurisdictions with unusual local requirements or where strong local enforcement strategy matters, e.g. markets with high counterfeit activity, since applications can be tailored to local nuances from the outset.</p>`},
+
+/* ================= TRADEMARKS ================= */
+{id:"t1", cat:"trademarks", title:"The trademark registration process, step by step", tags:["trademark","examination","opposition","registration process"],
+ summary:"From clearance search through to registration, with a formal public opposition window built into almost every jurisdiction.",
+ body:`<p>Trademark registration follows a broadly consistent global pattern, even though timing and forms vary by office:</p>
+ <ol><li><strong>Pre-application/clearance search</strong> \u2014 checking existing registers (word marks and device/logo marks) to avoid conflicting with an existing right</li>
+ <li><strong>Filing the application</strong> \u2014 applicant details, the mark itself, the relevant Nice class(es), and (in some jurisdictions, like the US) a claim of actual use or a genuine intent to use</li>
+ <li><strong>Examination</strong> \u2014 the registrar reviews the application for absolute grounds (descriptiveness, genericness) and often relative grounds (conflict with earlier marks); an office action/examination report may follow, requiring a formal response</li>
+ <li><strong>Publication</strong> \u2014 accepted marks are published in an official journal/gazette, opening a public opposition window</li>
+ <li><strong>Opposition proceedings</strong> \u2014 third parties can file a formal opposition within the window; if raised, it typically runs through notice, counter-statement, evidence, and a hearing before the registrar decides</li>
+ <li><strong>Registration</strong> \u2014 if unopposed or the opposition fails, the mark registers, generally valid for a first term of 10 years</li>
+ <li><strong>Post-registration</strong> \u2014 ongoing renewal, and recording any assignment, licence, or change of ownership</li></ol>
+ <p>This is the same lifecycle whether the application is national, regional (e.g. EUIPO), or filed via the Madrid Protocol \u2014 Madrid just centralises steps 2 and 7 through WIPO while examination and opposition still happen at the national office level for each designated country.</p>`},
+
+{id:"t2", cat:"trademarks", title:"Opposition windows vary sharply by jurisdiction", tags:["opposition","TTAB","EUIPO","deadlines"],
+ summary:"The US gives 30 days from publication; the EU and China both use a 3-month window \u2014 and missing it usually means losing the right to object entirely.",
+ body:`<p>Once a trademark application is accepted, most offices publish it for a fixed opposition period before registration completes:</p>
+ <ul><li><strong>United States</strong> \u2014 published in the Trademark Official Gazette; any party believing the mark conflicts with theirs has 30 days to object. A filed opposition goes before the Trademark Trial and Appeal Board (TTAB), a proceeding that can take months or longer</li>
+ <li><strong>European Union (EUIPO)</strong> \u2014 3-month opposition period</li>
+ <li><strong>China</strong> \u2014 a similar (roughly 3-month) window</li>
+ <li><strong>India</strong> \u2014 4 months from publication in the Trademark Journal, using Form TM-O, running through notice \u2192 counter-statement \u2192 evidence \u2192 hearing before the Registrar decides</li></ul>
+ <p>For portfolio management purposes, this means opposition-deadline tracking has to be genuinely jurisdiction-aware \u2014 there\u2019s no single global window, and once a national opposition period closes without action, third-party challenge rights are generally lost for that jurisdiction (barring later cancellation actions on separate grounds).</p>`},
+
+{id:"t3", cat:"trademarks", title:"Nice Classification 13th edition (2026) \u2014 what changed", tags:["Nice Classification","WIPO","2026","goods and services classes"],
+ summary:"WIPO's 45-class goods/services system updated on 1 January 2026, reshuffling several product categories and adding new entries for AI and smart-device classification.",
+ body:`<p>The Nice Classification is WIPO\u2019s international system dividing goods and services into 45 classes for trademark registration purposes, used across 150+ jurisdictions to harmonise filing, prior-art searching, opposition, and enforcement. The 13th edition (NCL 13-2026) took effect 1 January 2026, applying to all new applications \u2014 national, regional, or via Madrid \u2014 filed from that date.</p>
+ <h3>What moved</h3>
+ <ul><li>Optical products (prescription/sunglasses, contact lenses, cases) moved from Class 9 to Class 10</li>
+ <li>Firefighting vehicles, liferafts, and evacuation chairs moved from Class 9 to Class 12</li>
+ <li>Electrically heated garments and socks moved from Class 11 to Class 25</li>
+ <li>Products with integrated technology are no longer automatically Class 9 by default \u2014 classification now follows the product\u2019s primary function (a smart fridge is Class 11; a smart toy is Class 28)</li></ul>
+ <h3>What's new</h3>
+ <p>New entries include nicotine preparations for smoking cessation (Class 5), bruxism mouth guards (Class 10), multimedia subscription services (Class 35), delivery-robot rental (Class 39), and Artificial Intelligence as a Service / AIaaS (Class 42).</p>
+ <h3>Practical implications</h3>
+ <p>Applications filed before 1 January 2026 continue to be examined under the prior edition (NCL 12-2025), but objections can still arise where old wording now matches a newly reclassified entry. Offices don\u2019t treat existing registrations consistently: France\u2019s INPI may require reclassification on renewal (with possible extra fees), while EUIPO and WIPO generally do not automatically reclassify existing registrations. Misclassification under the new edition risks office actions, delays, or extra cost \u2014 and search/watch strategies now need to check both editions to avoid gaps.</p>
+ <div class="note">Recent regulatory change, effective 1 January 2026 \u2014 worth checking current office guidance for anything filed close to the transition date.</div>`},
+
+{id:"t4", cat:"trademarks", title:"First-to-file vs first-to-use trademark systems", tags:["first-to-file","first-to-use","China","trademark squatting"],
+ summary:"Most of the world grants trademark rights to whoever files first, regardless of use \u2014 the US, Canada, and a handful of others are the exception.",
+ body:`<h3>First-to-file (the global majority)</h3>
+ <p>China, the EU, Japan, South Korea, and most of the world grant trademark rights to whoever files their application first \u2014 actual use in the market may come later, or never. China takes an especially hard line: the first party to register obtains the rights regardless of who created or used the brand first, and prior use generally offers no protection unless the mark is famous/well-known (a high bar). This creates real exposure for expanding brands: third parties who monitor successful foreign brands can pre-emptively file for the same mark in a first-to-file country and then block \u2014 or hold hostage \u2014 the original brand\u2019s entry into that market ("trademark squatting").</p>
+ <h3>First-to-use (the minority)</h3>
+ <p>The US and Canada base rights on actual use in commerce, with the earliest continuous user generally prevailing. Registration still matters and confers stronger, less disputable rights, but the underlying legal basis is different from the first-to-file model.</p>
+ <h3>Hybrids and middle grounds</h3>
+ <ul><li><strong>UK</strong> \u2014 first-to-file for registration, but the common-law tort of "passing off" gives some protection to unregistered marks with established goodwill, and earlier use can support an opposition on relative grounds</li>
+ <li><strong>Japan/South Korea</strong> \u2014 first-to-file, but registrations are vulnerable to cancellation for continued non-use, so proof of use still matters if challenged</li>
+ <li><strong>India</strong> \u2014 hybrid: common-law rights through use are recognised, but registration still strengthens the legal position, and courts weigh both</li></ul>
+ <p>Practical upshot for portfolio strategy: in first-to-file territories, filing early \u2014 ideally before market entry \u2014 is the priority; relying on brand reputation built elsewhere is a real risk.</p>`},
+
+/* ================= RECORDALS ================= */
+{id:"r1", cat:"recordals", title:"IP case vs recordal case", tags:["IP case","recordal case","definitions"],
+ summary:"An IP case is the underlying right; a recordal case is a discrete administrative action recording a change to it.",
+ body:`<table><tr><th></th><th>IP Case</th><th>Recordal Case</th></tr>
+ <tr><td>What it represents</td><td>The IP right itself</td><td>A change to be recorded with an IP office</td></tr>
+ <tr><td>Lifecycle</td><td>Long \u2014 years/decades</td><td>Short \u2014 a single transaction</td></tr>
+ <tr><td>Trigger</td><td>Filing / registration</td><td>An event: assignment, name change, merger</td></tr>
+ <tr><td>Parties</td><td>Owner, applicant</td><td>Assignor \u2192 assignee, or updated owner</td></tr>
+ <tr><td>Output</td><td>Granted right</td><td>Official register updated</td></tr>
+ <tr><td>Volume</td><td>One per right</td><td>Can be many per IP case over its life</td></tr></table>
+ <p>A single IP case can generate multiple recordal cases across its lifetime \u2014 one when the owning company rebrands, another when the right is sold to a subsidiary, and so on. Recordals update the administrative record; they don\u2019t alter the scope of protection itself.</p>`},
+
+{id:"r2", cat:"recordals", title:"Common recordal types", tags:["recordal types","assignment","license","merger","name change"],
+ summary:"The standard set of changes that get recorded against a patent, trademark, or design after grant/registration.",
+ body:`<ul><li><strong>Change of name</strong> \u2014 the owner\u2019s legal name changes (rebrand, corporate restructuring) but ownership itself doesn\u2019t transfer</li>
+ <li><strong>Change of address</strong> \u2014 the registered address on file needs updating</li>
+ <li><strong>Change of legal entity</strong> \u2014 the entity type or structure changes</li>
+ <li><strong>Assignment / transfer</strong> \u2014 ownership moves from one party to another (sale, corporate transfer)</li>
+ <li><strong>Merger</strong> \u2014 ownership changes as a result of two entities combining</li>
+ <li><strong>License</strong> \u2014 a licensing agreement is recorded against the right</li>
+ <li><strong>Security interest / pledge</strong> \u2014 the right is used as collateral</li>
+ <li><strong>Correction of name or inventor details</strong> \u2014 fixing an error rather than reflecting a real-world change</li></ul>
+ <p>Recordals matter because they ensure legal enforceability against third parties, keep the public record accurate, and are often required before a right can be licensed or litigated. Missed deadlines can carry real financial consequences depending on jurisdiction.</p>`},
+
+{id:"r3", cat:"recordals", title:"Recording an assignment or name change (USPTO example)", tags:["USPTO","assignment","recordation","process"],
+ summary:"The mechanics of recording an ownership or name change with a national office, using the USPTO as a worked example.",
+ body:`<p>In the U.S., the owner records an assignment or name change with the USPTO\u2019s Assignment Recordation Branch via Assignment Center, filing a Recordation Cover Sheet with a copy of the supporting document (assignment deed, certificate of name change, etc.). Only true copies are needed \u2014 originals aren\u2019t returned.</p>
+ <p>The office assigns reel and frame numbers and stamps the processed document, but recording a name change at the corporate level doesn\u2019t automatically update the assignee name on every individual patent or application \u2014 separate requests are often needed per case.</p>
+ <p>For a patent to issue directly to an assignee, the assignment must be submitted for recordation, with the assignee name provided, at or before the issue fee is paid (or shortly after, via petition).</p>
+ <h3>Ownership triggers</h3>
+ <p>Common reasons an assignment recordal is needed: an employee inventor assigning rights to their employer, a newly added inventor on a continuation-in-part needing to assign their share, or a company re-assigning rights to another entity after grant. Deceased or unreachable inventors require additional evidence (executor statements, proof of attempted contact).</p>`},
+
+{id:"r4", cat:"recordals", title:"Name and address change recordals \u2014 the evidence problem", tags:["name change","address change","evidence","cost"],
+ summary:"A name or address change looks simple but multiplies fast across a global portfolio, and foreign offices often demand certified proof.",
+ body:`<p>Recording a change of name or address sounds administrative, but it\u2019s easy to underestimate. Most national offices require evidence from the local trade registry confirming the change, and depending on the country that proof may need to be scanned, notarised, certified, apostilled, or legalised \u2014 with some countries demanding additional documents on top.</p>
+ <p>In foreign jurisdictions, a straightforward name change can cost anywhere from a few hundred to several thousand dollars once local taxes (e.g. VAT-style charges) and fixed foreign-attorney fees are factored in \u2014 a cost that scales painfully across a large multi-country portfolio.</p>
+ <h3>Centralising at WIPO/EPO</h3>
+ <p>For PCT and European (EP) applications, it can be worth centralising the name/address change at WIPO and/or the EPO before it cascades into the national phase \u2014 ideally before national phase entry \u2014 rather than repeating the recordal separately in every designated country. Managed carefully, this avoids multiplying costs across jurisdictions.</p>`},
+
+{id:"r5", cat:"recordals", title:"Declaratory vs constitutive effect, and jurisdictional urgency", tags:["declaratory effect","constitutive effect","deadlines","risk"],
+ summary:"In most places a missed recordal doesn\u2019t invalidate the right \u2014 but enforceability against third parties, and sometimes penalties, are on the line.",
+ body:`<p>In the majority of jurisdictions, recordals have a <strong>declaratory</strong> effect: failing to record a change doesn\u2019t affect the underlying validity of the IP right. What a successful recordal does is make the change enforceable against third parties \u2014 settling any conflict between multiple parties who might claim an interest in the same right.</p>
+ <p>That said, urgency varies significantly by country. In some jurisdictions a recordal must be filed immediately after the underlying change occurs; in those countries, delay can trigger late-payment-style interest that increases proportionally the longer the recordal is outstanding. This is one of the reasons recordal tracking tends to be jurisdiction-aware rather than following one global rule.</p>`},
+
+/* ================= RENEWALS & ANNUITIES ================= */
+{id:"n1", cat:"renewals", title:"Why patent annuities became a specialist outsourced service", tags:["annuities","outsourcing","risk","law firms"],
+ summary:"Law firms have largely exited annuity management over the last decade, handing it to dedicated third-party providers.",
+ body:`<p>Patent annuities \u2014 the recurring fees due to keep a granted patent alive \u2014 have moved decisively toward specialist third-party providers over roughly the last ten years. Law firms have stepped back from managing annuities directly and now typically refer clients to dedicated providers, largely because of the high risk inherent in annuity management: a single missed payment can permanently and irreversibly kill a patent, with real financial consequences for the owner.</p>
+ <p>A rights holder choosing an annuity provider is essentially deciding between a fully outsourced solution and enhancing an existing in-house system, weighing factors like portfolio size, the ability to combine trademark, patent, and foreign-filing services under one provider, and how much flexibility they need.</p>`},
+
+{id:"n2", cat:"renewals", title:"Leading patent annuity & trademark renewal providers", tags:["CPI","Clarivate","Dennemeyer","Questel","CPA Global","providers"],
+ summary:"The main names in the global renewals market, and how the market has consolidated.",
+ body:`<ul><li><strong>CPI (Computer Packages Inc.)</strong> \u2014 annuity management across 100+ countries with automation, in-country expert review, and no setup/onboarding fees; also offers patent audit services for due diligence work</li>
+ <li><strong>Clarivate</strong> (formerly CPA Global) \u2014 acquired CPA Global; syncs client data automatically, validates it across multiple data points, and uses a network of local agents to resolve payment discrepancies; markets itself on 50+ years of annuities experience</li>
+ <li><strong>Dennemeyer & Company</strong> \u2014 60 years in the industry, 20+ offices worldwide, manages 3M+ IP rights for ~8,000 customers; combines annuities with IP strategy consulting and management software</li>
+ <li><strong>Questel</strong> \u2014 automation-driven, positioned as more accessibly priced than the largest enterprise platforms</li>
+ <li><strong>Thomson Reuters IP Management, Envoy, MaxVal, Novagraaf, SHIP Global IP, Murgitroyd</strong> \u2014 round out the market, with niche players carving out strong regional/specialist positions</li></ul>
+ <div class="note">The market has consolidated: Clarivate\u2019s acquisition of CPA Global and Dennemeyer\u2019s acquisitions of smaller regional providers are the two headline moves reshaping the sector.</div>`},
+
+{id:"n3", cat:"renewals", title:"How annuity providers actually process a payment", tags:["annuities","payment process","validation","local agents"],
+ summary:"A four-step pattern common across major providers: sync data, validate, review discrepancies, pay via a local agent network.",
+ body:`<p>Most large annuity providers follow a broadly similar operational pattern:</p>
+ <ol><li>Portfolio data is received and automatically synchronised, validated against multiple independent data points to catch errors</li>
+ <li>A dedicated team manually verifies any discrepancies against public register records, calculating and comparing renewal/expiry dates</li>
+ <li>At the payment stage, a network of local agents manages any inconsistencies that surface when actually submitting payment to a national office</li>
+ <li>Itemised, finance-friendly invoices and budgeting tools are provided, often with API/docketing-system integration so the annuity service can plug into whatever platform the client already uses</li></ol>
+ <p>This local-agent layer is the same office-agent network that underpins filing and recordals work \u2014 renewals, recordals, and filings all ultimately depend on relationships with in-country representatives who can act with national offices.</p>`},
+
+{id:"n4", cat:"renewals", title:"Trademark renewals under the Madrid Protocol", tags:["Madrid Protocol","trademark renewal","WIPO","fees"],
+ summary:"A 10-year renewal cycle managed centrally through WIPO, with a 6-month grace period and country-specific fee add-ons.",
+ body:`<p>International trademark registrations under the Madrid Protocol run in 10-year cycles. Renewal is managed through WIPO rather than separately in each country, which simplifies deadline tracking considerably versus a portfolio of purely national registrations.</p>
+ <h3>Fees</h3>
+ <p>The WIPO base renewal fee is currently CHF 653, plus a country-specific fee for each designated jurisdiction still active on the registration, which varies by country and by the number of goods/services classes covered. Reviewing which designations are still commercially relevant before renewing is a common cost-optimisation step for large portfolios.</p>
+ <h3>Grace period</h3>
+ <p>The Madrid Protocol allows a 6-month grace period after the official expiry date before the registration is permanently lost, though filing within that window incurs additional fees \u2014 it\u2019s a safety net, not a strategy.</p>
+ <h3>Direct national renewals</h3>
+ <p>Trademarks filed nationally (outside Madrid) each carry their own renewal schedule and cost, typically \$300\u2013\$1,000+ per country \u2014 which is exactly the administrative burden Madrid centralisation is designed to avoid for portfolios spanning many countries.</p>`},
+
+{id:"n5", cat:"renewals", title:"Madrid Protocol filing fee structure", tags:["Madrid Protocol","fees","WIPO","filing"],
+ summary:"The base international filing fee, subsequent designation fee, and how country-specific charges stack on top.",
+ body:`<p>The base international registration filing fee is currently CHF 653 for a standard trademark (CHF 903 if the mark is in colour), on top of which jurisdiction-specific fees apply per Table A of the Madrid fee schedule. Adding a country to an existing international registration later costs a CHF 300 subsequent designation fee, plus that country\u2019s specific fee.</p>
+ <p>A practical wrinkle: the scope of goods/services on the international registration must be identical to, or narrower than, the underlying national application it\u2019s based on. Since the USPTO requires relatively specific goods/services descriptions, an international registration built on a U.S. base application may end up narrower than what other jurisdictions would otherwise permit \u2014 something to watch when a U.S. filing is the anchor for a global Madrid strategy.</p>`},
+
+/* ================= IPMS & PORTAL SYSTEMS ================= */
+{id:"i1", cat:"ipms", title:"What is an IPMS, and what does it actually cover", tags:["IPMS","docketing","definition"],
+ summary:"IP management systems split into three broad use cases: operational docketing, IP analytics, and holistic portfolio management.",
+ body:`<p>An IPMS (IP Management System) is software for tracking and managing intellectual property assets \u2014 patents, trademarks, designs \u2014 through their lifecycle. The market splits roughly into three categories:</p>
+ <ul><li><strong>Operational docketing & deadline management</strong> \u2014 tracking filing, response, and renewal deadlines across jurisdictions</li>
+ <li><strong>IP analytics & competitive intelligence</strong> \u2014 patent search, landscape mapping, competitor tracking</li>
+ <li><strong>Holistic portfolio management</strong> \u2014 combining docketing, financials, workflow, and reporting for enterprise IP teams</li></ul>
+ <p>Filing, renewals, recordals, and CPQ (configure-price-quote) workflows all sit squarely within what a modern IPMS is expected to cover \u2014 digitalising these from legacy manual processes is exactly where the industry has been heading.</p>`},
+
+{id:"i2", cat:"ipms", title:"PatOrg \u2014 the German/European IPMS incumbent", tags:["PatOrg","Br\u00fcgmann Software","Germany","modules"],
+ summary:"PatOrg is the market-leading IP management software in Germany, built by Br\u00fcgmann Software since 1984, used by 400+ organisations.",
+ body:`<p>PatOrg is a modular IP management platform for digitising and automating the management of patents, trademarks, designs, and related rights. It\u2019s developed by Br\u00fcgmann Software, a company building IP software since 1984, and is used by more than 400 organisations \u2014 corporations, law firms, and research institutions, predominantly in Germany and continental Europe.</p>
+ <h3>What makes it distinctive</h3>
+ <ul><li>Case view integrates directly with online patent registers in 150+ jurisdictions, showing internal and official register data side by side</li>
+ <li>Connected PatOrg systems (e.g. a corporate IP department and their external law firm) can automatically exchange data and documents, cutting manual re-entry and error</li>
+ <li>Universal, flexible file management covering patents, trademarks, oppositions, contracts, and projects in one structure</li>
+ <li>An IP portal module gives clients secure self-service access to their own files, documents, deadlines, and invoices, brandable to look like a seamless extension of the firm\u2019s own web presence</li>
+ <li>Built-in integrations with the annuity payment providers Dennemeyer and Questel/Pavis, automating the reminder \u2192 payment instruction \u2192 billing-import cycle</li>
+ <li>Available on-premises or as "PatOrg Cloud", a Desktop-as-a-Service offering hosted in a German data centre with preconfigured Windows workstations</li></ul>
+ <p>PatOrg is well-established and deeply embedded in European IP practice, but is far less prominent in UK and global enterprise contexts, where Anaqua or Clarivate tend to dominate. Any organisation with German or European patent-firm relationships has a fair chance of encountering it on the other side of a matter.</p>`},
+
+{id:"i3", cat:"ipms", title:"Anaqua \u2014 the enterprise IPMS leader", tags:["Anaqua","enterprise","AQX"],
+ summary:"A unified enterprise platform for patents, trademarks, and designs, widely cited as the top pick in industry comparisons.",
+ body:`<p>Anaqua is consistently ranked as the leading enterprise IP management platform, covering patents, trademarks, and designs within one system, with advanced automated docketing, workflow automation, and analytics. It suits corporations and larger law firms wanting a single unified platform rather than stitched-together point solutions.</p>
+ <p>Anaqua has also been highlighted for building its renewals capability on newer technology than some legacy competitors, which some users cite as reducing renewal costs (passed on to clients) and giving more reliable deadline tracking, since the system auto-advances to the next payment date once a payment clears.</p>`},
+
+{id:"i4", cat:"ipms", title:"Clarivate / CPA Global \u2014 renewals heritage plus analytics", tags:["Clarivate","CPA Global","Derwent Innovation","acquisition"],
+ summary:"Clarivate absorbed CPA Global, inheriting a 50+ year renewals track record, and layers this on top of its Derwent Innovation analytics suite.",
+ body:`<p>Clarivate\u2019s patent annuities service is the same business formerly known as CPA Global \u2014 one of the market-leading renewals providers, with over 50 years of annuities experience and a global network of local agents. Clarivate has continued to invest in the platform since the acquisition rather than folding it away.</p>
+ <p>Separately, Clarivate has assembled a broad IP analytics suite largely through acquisition, including the well-known Derwent Innovation platform for patent search and landscaping \u2014 making Clarivate one of the few providers with genuine strength in both operational renewals and analytics/search.</p>`},
+
+{id:"i5", cat:"ipms", title:"Questel, Dennemeyer DIAMS iQ, and mid-market platforms", tags:["Questel","Dennemeyer","DIAMS iQ","mid-market"],
+ summary:"Beyond the enterprise leaders, Questel and Dennemeyer\u2019s DIAMS iQ serve mid-sized firms and law-firm-specific needs respectively.",
+ body:`<p><strong>Questel</strong> offers an end-to-end IP platform (docketing, search, analytics) with pricing that scales more accessibly than the top enterprise platforms, making it a common choice for mid-sized firms and corporate IP departments that need real capability without enterprise-level investment.</p>
+ <p><strong>Dennemeyer DIAMS iQ</strong> is positioned as best-suited to IP law firms specifically. Its annuity and renewals management is one of the most widely used services in the industry and integrates directly into the DIAMS iQ platform, rather than being a bolt-on.</p>`},
+
+{id:"i6", cat:"ipms", title:"Smaller & specialist IPMS platforms", tags:["FoundationIP","Patricia","IPfolio","AppColl","Alt Legal"],
+ summary:"A tier of smaller, often cheaper or more specialised docketing tools sits below the enterprise leaders.",
+ body:`<ul><li><strong>FoundationIP (now part of Clarivate)</strong> \u2014 cloud-based docketing and collaboration for global IP teams, automating deadline harvesting from 150+ global patent offices</li>
+ <li><strong>Patricia</strong> \u2014 a fully customisable case-management system built specifically by and for IP professionals, with an extensive Country & Law database updated four times a year and automatic due-date calculation for annuities, examination, and opposition periods</li>
+ <li><strong>IPfolio</strong> \u2014 cloud-based docketing, reporting, and collaboration aimed at mid-sized teams</li>
+ <li><strong>AppColl</strong> \u2014 affordable cloud IP management for small-to-mid firms, covering docketing, invention disclosure, and portfolio tracking</li>
+ <li><strong>Alt Legal</strong> \u2014 automated trademark-specific docketing with direct USPTO monitoring and reminders</li></ul>
+ <p>These tend to trade some of the enterprise platforms\u2019 depth for lower cost, faster setup, or a narrower, sharper focus (e.g. trademark-only).</p>`},
+
+{id:"i7", cat:"ipms", title:"PatSnap \u2014 AI-driven IP intelligence, not docketing", tags:["PatSnap","analytics","AI","patent search"],
+ summary:"A different category of tool: patent search, landscaping, and competitive scouting rather than deadline/case management.",
+ body:`<p>PatSnap is consistently categorised separately from the docketing platforms above \u2014 it\u2019s an AI-driven IP intelligence platform focused on patent analytics, scouting, and competitive landscape mapping, rather than case docketing or renewals. Organisations often run PatSnap-style analytics tools alongside (not instead of) a docketing/portfolio-management IPMS like Anaqua or PatOrg.</p>`},
+
+/* ================= OTHER IP RIGHTS ================= */
+{id:"o1", cat:"otherip", title:"Industrial designs and the Hague System", tags:["designs","Hague System","WIPO","industrial design"],
+ summary:"A single WIPO application can register a design in 90+ countries \u2014 no prior national filing required \u2014 with an initial 5-year term renewable twice.",
+ body:`<p>The Hague System is WIPO\u2019s international mechanism for registering industrial designs across multiple countries through one application filed directly with WIPO (or indirectly via a national office, including the USPTO). It covers 82 contracting parties spanning 99 countries, including the whole EU. There\u2019s no requirement to file a national or regional design application first \u2014 Hague can be a genuine "global-first" filing route.</p>
+ <h3>How it works</h3>
+ <ul><li>One application, in one language, with one set of fees (in Swiss Francs), can protect up to 100 designs and designate as many contracting parties as needed</li>
+ <li>WIPO checks formal compliance and issues a certificate of international registration; by default, designs publish in the International Designs Bulletin 12 months after the registration date</li>
+ <li>Each designated office can still refuse protection in its own territory on substantive grounds \u2014 a refusal in one country doesn\u2019t affect the registration in the others</li>
+ <li>Ongoing management \u2014 renewals, recordals of changes \u2014 is a single centralised step through WIPO rather than repeated nationally</li></ul>
+ <h3>Duration</h3>
+ <p>Initial protection is 5 years, renewable twice for a guaranteed minimum of 15 years total; individual contracting parties\u2019 own laws may allow longer.</p>
+ <h3>Jurisdictional wrinkles</h3>
+ <p>Even under one Hague filing, national formalities still bite. Partial designs (protecting only part of a product) are accepted in many Hague jurisdictions including the UK, but disclosure requirements differ \u2014 for example, Mexico requires the unclaimed parts of a partial design to still be shown (in dashed/dotted lines) rather than omitted, while other jurisdictions handle this differently.</p>`},
+
+{id:"o2", cat:"otherip", title:"Copyright \u2014 automatic protection, registration is optional (mostly)", tags:["copyright","automatic protection","Berne Convention"],
+ summary:"Unlike patents, trademarks, and designs, copyright typically exists the moment a work is created \u2014 no filing required, though registering can still matter for enforcement.",
+ body:`<p>Copyright protects original expression \u2014 not the underlying idea, algorithm, functionality, or method behind it. In most of the world (under the Berne Convention framework), copyright arises automatically the moment a qualifying work is fixed in a tangible form; there\u2019s no application, examination, or registration step required to have the right exist.</p>
+ <p>Registration is still available in many countries (e.g. with the U.S. Copyright Office) and, while not mandatory, provides real enforcement advantages \u2014 in the US specifically, registration is generally a prerequisite before a copyright owner can bring an infringement lawsuit. For software, source code and object code are treated as literary works and protected automatically, but the underlying functionality is not \u2014 someone can legally write different code that achieves the same result.</p>
+ <p>Because copyright and patent protection rarely overlap, some works (notably certain computer programs) can be protected by both simultaneously: copyright covers the literal expression of the code, while a patent (where obtainable) can cover the functional, technical aspects the copyright doesn\u2019t reach.</p>`},
+
+{id:"o3", cat:"otherip", title:"Trade secrets \u2014 protection without registration", tags:["trade secrets","confidentiality","no registration","NDA"],
+ summary:"No filing, no fee, no time limit \u2014 but protection depends entirely on actually keeping the information secret.",
+ body:`<p>Trade secrets are protected without any registration or procedural formality \u2014 there\u2019s no office to file with and no government fee. Protection can, in principle, last indefinitely, for as long as the information stays secret. That makes trade secrets look attractively cheap next to a patent\u2019s formal application process, but the underlying conditions are demanding.</p>
+ <h3>What it takes to qualify</h3>
+ <ul><li><strong>Independent economic value</strong> from not being generally known or readily discoverable by people who could benefit from it</li>
+ <li><strong>Reasonable secrecy efforts</strong> \u2014 active, appropriate measures to keep the information confidential (NDAs, access controls, need-to-know policies)</li></ul>
+ <p>Lose either element \u2014 the economic value from secrecy, or the ongoing effort to protect it \u2014 and the protection lapses. Trade secret law also doesn\u2019t stop someone from independently discovering the same information, including through legitimate reverse engineering of a product on the open market; only patents and utility models give a true right to exclude others from independently arriving at, and using, the same solution.</p>
+ <p>In the UK there\u2019s no formal statutory definition of a trade secret; protection is largely built from case law on breach of confidence, with remedies available where a secret has been improperly acquired, disclosed, or used.</p>`},
+
+{id:"o4", cat:"otherip", title:"Domain name disputes \u2014 the UDRP process", tags:["UDRP","domain names","cybersquatting","WIPO"],
+ summary:"A faster, cheaper alternative to litigation for reclaiming a domain name registered in bad faith against an existing trademark.",
+ body:`<p>The Uniform Domain Name Dispute Resolution Policy (UDRP), adopted by ICANN in 1999 based on WIPO recommendations, gives trademark owners a streamlined administrative route to challenge domain names that infringe their mark \u2014 typically cybersquatting, where a third party registers a domain in bad faith to exploit an established brand.</p>
+ <h3>What has to be proven</h3>
+ <p>A complainant must establish all three elements:</p>
+ <ol><li>The domain name is identical or confusingly similar to a trademark the complainant holds rights in</li>
+ <li>The domain registrant has no rights or legitimate interest in the domain name</li>
+ <li>The domain was registered <em>and</em> is being used in bad faith</li></ol>
+ <p>If any one element can\u2019t be proven, the complaint fails \u2014 UDRP tends to fail, in particular, in disputes rooted in a broken business relationship (e.g. a former licensee refusing to hand back a domain registered in good faith at the time), since the bad-faith registration element isn\u2019t met.</p>
+ <h3>Scope and mechanics</h3>
+ <p>The UDRP is mandatory for all registrars handling generic top-level domains (.com, .net, .org, and the newer gTLDs like .xyz), and voluntary for country-code domains \u2014 though many ccTLD registries (including a number WIPO administers) have adopted it anyway; the UK instead runs its own broadly similar Dispute Resolution Service (DRS) via Nominet. Complaints are filed with an accredited provider (WIPO is the leading one) and decided by an expert panel rather than a court, which is faster and cheaper than litigation \u2014 though pursuing a UDRP complaint doesn\u2019t prevent also pursuing (or having already pursued) the matter in court.</p>`},
+
+/* ================= PEOPLE & ROLES ================= */
+{id:"p1", cat:"roles", title:"Patent attorney vs patent agent", tags:["patent attorney","patent agent","differences"],
+ summary:"Within the USPTO, both do essentially the same technical work \u2014 the difference is legal qualification, not day-to-day duties.",
+ body:`<p>A patent agent is not a lawyer, and specialises specifically in the technical side of patent prosecution: searching prior art, drafting applications, filing them, arguing with examiners, and handling post-grant maintenance. A patent attorney has done all of that <em>and</em> is admitted to practice law, so can also advise on licensing, litigation, and broader legal strategy that falls outside the patent office\u2019s jurisdiction.</p>
+ <p>Within the USPTO itself, patent agents and patent attorneys do essentially identical work \u2014 this is the distinction that trips people up most. A "patent associate" is a different thing again: typically a junior-level patent <em>attorney</em> at a law firm, handling both legal and technical matters.</p>
+ <p>Because agents don\u2019t carry a law license, firms can often bill their time at a lower hourly rate than attorneys, which is one reason larger corporate IP departments hire agents in-house alongside attorneys \u2014 agents coordinate with engineers/scientists, draft applications, and handle USPTO correspondence, while attorneys cover the legal strategy layer.</p>`},
+
+{id:"p2", cat:"roles", title:"Foreign associates, office agents, and the role they play", tags:["office agent","foreign associate","local correspondent"],
+ summary:"The in-country professional who bridges a client\u2019s home counsel and a national patent or trademark office.",
+ body:`<p>An "office agent" (also called a foreign associate or local correspondent) is the professional retained in a given country to handle the local end of a filing, prosecution, recordal, or renewal matter \u2014 someone registered or admitted to represent parties before that specific national office. For patent work, this typically means a locally qualified patent attorney or agent; for recordals and renewals, it can also mean a specialist local agent working within the annuity-provider network described above.</p>
+ <p>Their role generally covers:</p>
+ <ul><li>Receiving instructions from the client\u2019s home-country counsel and translating them into locally compliant filings</li>
+ <li>Handling local formalities \u2014 notarisation, apostille/legalisation of documents, trade-registry evidence for name changes</li>
+ <li>Responding to local office actions and managing examiner correspondence in that jurisdiction</li>
+ <li>Flagging local-law nuances that don\u2019t exist in the client\u2019s home jurisdiction (e.g. proof-of-use requirements, additional recordal deadlines)</li></ul>
+ <p>For a portal or CPQ workflow, office agents are typically the layer that determines actual local pricing and turnaround time \u2014 which is why agent-fee data sits underneath most quote-generation logic in an IPMS.</p>`},
+
+{id:"p3", cat:"roles", title:"IP paralegal \u2014 responsibilities and skills", tags:["IP paralegal","patent paralegal","trademark paralegal"],
+ summary:"The operational backbone of a patent/trademark practice: docketing, filings support, and client status reporting.",
+ body:`<p>An IP paralegal supports attorneys and agents across patents, trademarks, copyrights, and sometimes trade secrets. Typical responsibilities include:</p>
+ <ul><li>Searching USPTO (or equivalent) databases and reviewing dockets</li>
+ <li>Resolving patent/trademark data discrepancies</li>
+ <li>Preparing and submitting applications, office action responses, and IP-related filings</li>
+ <li>Managing attorney/agent calendars and multi-client deadlines</li>
+ <li>Coordinating with foreign associates on international matters</li>
+ <li>Filing renewals and tracking compliance deadlines</li>
+ <li>Providing status reports to attorneys and clients</li></ul>
+ <h3>IP paralegal vs trademark paralegal</h3>
+ <p>An IP paralegal works across all IP disciplines \u2014 breadth over depth. A trademark paralegal specialises exclusively in trademark law (USPTO filings, office actions, TTAB filings) and typically operates with less attorney oversight on complex trademark matters as a result. Neither role, however, is authorised to handle the more technical parts of patent prosecution \u2014 claims drafting support or double-patenting analysis \u2014 without attorney supervision, since that\u2019s governed by USPTO practice rules.</p>`},
+
+{id:"p4", cat:"roles", title:"Patent administrator / records & formalities roles", tags:["patent administrator","formalities","records"],
+ summary:"A more administrative, process-heavy role sitting alongside (and sometimes overlapping with) the paralegal function.",
+ body:`<p>Patent administrator and formalities/records roles focus on the operational mechanics that keep a portfolio compliant \u2014 docket accuracy, deadline calendars, document filing, correspondence generation from templates, and data integrity checks between a firm\u2019s internal case management system and the official register. Paralegals sometimes assist patent administrators on special projects, and the two roles often overlap in smaller organisations, splitting apart into distinct functions as a firm or team scales and specialises (formalities/records vs. substantive paralegal support).</p>`},
+
+/* ================= COMPANIES & MARKET ================= */
+{id:"c1", cat:"companies", title:"Market consolidation in renewals & docketing", tags:["consolidation","acquisitions","market trends"],
+ summary:"The IP services software and renewals market has consolidated hard around a small number of players over the past several years.",
+ body:`<p>Two acquisitions define recent structure in this market: Clarivate\u2019s acquisition of CPA Global (folding a 50+ year renewals heritage into Clarivate\u2019s broader analytics business), and Dennemeyer\u2019s ongoing acquisition of smaller regional annuity/recordal providers to expand its footprint. Alongside this, tech-driven platforms like Questel and CPI compete on automation and workflow efficiency rather than scale alone, and niche regional specialists (SHIP Global IP, Murgitroyd) have carved out strong positions serving specific geographies with more localised expertise.</p>
+ <p>The top handful of renewals/annuity providers collectively hold the large majority of market share, offering integrated docketing + annuity + portfolio analytics as a bundle \u2014 which is the direction most large corporate IP departments are being steered toward when choosing a provider.</p>`},
+
+{id:"c2", cat:"companies", title:"Niche and regional specialist providers", tags:["SHIP Global IP","Murgitroyd","Novagraaf","MaxVal"],
+ summary:"Smaller providers competing on regional depth or specific service niches rather than global scale.",
+ body:`<ul><li><strong>Murgitroyd</strong> \u2014 UK/European IP firm with strong regional patent and trademark practice</li>
+ <li><strong>Novagraaf</strong> \u2014 European IP services group covering trademarks, patents, and portfolio management, with particular strength in continental Europe</li>
+ <li><strong>MaxVal Group</strong> \u2014 IP outsourcing and annuity/renewal services, competes on cost-efficiency and process depth</li>
+ <li><strong>SHIP Global IP</strong> \u2014 regionally focused annuity and recordal specialist</li></ul>
+ <p>These providers typically compete with the larger platforms (Clarivate, Dennemeyer, CPI) on local relationship depth, jurisdiction-specific expertise, or willingness to serve portfolio sizes the enterprise players consider too small to prioritise.</p>`},
+
+{id:"c3", cat:"companies", title:"Why law firms handed annuity risk to specialists", tags:["risk","law firms","annuities","business model"],
+ summary:"The economics behind the shift from law-firm-managed annuities to dedicated third-party providers.",
+ body:`<p>Missing a single annuity payment can permanently kill a patent \u2014 an outcome with real financial and reputational consequences for whoever was responsible for paying it. Over roughly the last decade, most law firms have concluded that carrying that liability isn\u2019t worth it relative to the (comparatively low) fee they can charge for the service, and have instead referred annuity management to specialist third parties who build their entire business model, systems, and risk controls around getting it right at scale.</p>
+ <p>This is the underlying reason the annuity/renewals market looks so different from the filing and prosecution market: filing and prosecution remain firmly law-firm/attorney territory (they require legal judgment), while renewals have become a largely process-and-systems business dominated by dedicated technology-and-operations providers.</p>`},
+
+/* ================= COMPARING & MANAGING RIGHTS ================= */
+{id:"m1", cat:"compare", title:"Patents vs trademarks vs designs vs copyright vs trade secrets, side by side", tags:["comparison","registration requirement","duration","overview"],
+ summary:"The one-page version: what each right protects, whether it needs registering, and how long it lasts.",
+ body:`<table><tr><th>Right</th><th>Protects</th><th>Registration needed?</th><th>Typical duration</th><th>Renewal needed?</th></tr>
+ <tr><td>Patent</td><td>New, inventive, useful inventions</td><td>Yes \u2014 examined application</td><td>Up to 20 years from filing</td><td>Yes \u2014 periodic annuities/maintenance fees</td></tr>
+ <tr><td>Utility model</td><td>Smaller/incremental inventions (not available everywhere)</td><td>Yes, often unexamined/faster</td><td>6\u201315 years, jurisdiction-dependent</td><td>Yes, in most jurisdictions offering it</td></tr>
+ <tr><td>Trademark</td><td>Brand identifiers \u2014 names, logos, sounds</td><td>Yes for registered rights (some unregistered common-law/passing-off protection exists)</td><td>10-year terms, indefinitely renewable</td><td>Yes \u2014 every 10 years, indefinitely</td></tr>
+ <tr><td>Design</td><td>The visual appearance of a product</td><td>Yes \u2014 registration (examined or unexamined depending on office)</td><td>Typically 15\u201325 years depending on jurisdiction</td><td>Yes \u2014 periodic (e.g. every 5 years under Hague)</td></tr>
+ <tr><td>Copyright</td><td>Original creative/literary/artistic expression</td><td>No \u2014 arises automatically; registration optional but strengthens enforcement (e.g. required to sue in the US)</td><td>Typically life of the author + 50\u201370 years, or a fixed term for corporate/anonymous works</td><td>No</td></tr>
+ <tr><td>Trade secret</td><td>Confidential information with economic value</td><td>No \u2014 no formal registration exists</td><td>Indefinite, as long as secrecy is maintained</td><td>No \u2014 but ongoing secrecy effort is required</td></tr></table>
+ <p>The practical divide: patents, trademarks, and designs are all <em>registration-dependent</em> rights requiring active portfolio management (filing, prosecution, renewal deadlines). Copyright and trade secrets are largely <em>self-executing</em> \u2014 copyright arises automatically, and trade secrets depend on internal confidentiality discipline rather than any office interaction at all.</p>`},
+
+{id:"m2", cat:"compare", title:"Jurisdictional filing-system differences that actually change strategy", tags:["jurisdiction","first-to-file","novelty","grace period"],
+ summary:"Beyond trademarks, patents themselves have jurisdiction-specific quirks around novelty, grace periods, and who \u201cowns\u201d a filing race.",
+ body:`<h3>Patents: first-to-file is now nearly universal</h3>
+ <p>Following the America Invents Act (2013), the US moved from first-to-invent to a first-inventor-to-file system, aligning it with most of the rest of the world. The remaining jurisdictional differences are less about who wins a filing race and more about:</p>
+ <ul><li><strong>Grace periods</strong> \u2014 the US and some other jurisdictions allow an inventor a grace period (commonly 12 months) to file after their own public disclosure without destroying novelty; many jurisdictions, including most of Europe, apply an absolute novelty standard with no such grace period, meaning an inventor\u2019s own pre-filing disclosure can kill patentability outright</li>
+ <li><strong>Subject-matter eligibility</strong> \u2014 what counts as patentable varies (software and business methods are treated quite differently between the US, Europe, and China, for example)</li>
+ <li><strong>Local representation requirements</strong> \u2014 as of July 2026 the USPTO now requires U.S. counsel involvement across the full lifecycle for foreign-domiciled applicants (see the Filing section), mirroring a requirement many other major offices already impose on non-resident applicants</li></ul>
+ <h3>Trademarks: first-to-file vs first-to-use</h3>
+ <p>Covered in depth in the Trademarks section \u2014 the short version is that China, the EU, and most of the world are first-to-file, while the US and Canada are first-to-use, with the UK and India sitting in hybrid positions that still give some weight to unregistered use.</p>
+ <h3>Designs: examined vs unexamined</h3>
+ <p>Some offices substantively examine design applications for novelty before granting (e.g. the US design patent system); others register designs with only a formal/procedural check, leaving novelty to be tested later if challenged (much of the EU/Hague-designated territory works this way) \u2014 which materially changes how much confidence a rights holder should place in a granted design registration on day one.</p>`},
+
+{id:"m3", cat:"compare", title:"Renewal and annuity cadence differs by right \u2014 and by country, even for the same right", tags:["renewal cadence","annuities","annual fees","milestone fees"],
+ summary:"Patent maintenance isn't even structured the same way everywhere: some offices charge annually, others at fixed milestone years.",
+ body:`<p>Even within a single right type, the payment rhythm varies by office:</p>
+ <ul><li><strong>Patents \u2014 Europe and most of the world</strong>: annuities are due annually, typically starting from the filing or grant date, continuing for the life of the patent (up to 20 years)</li>
+ <li><strong>Patents \u2014 United States</strong>: maintenance fees are due at fixed milestone points only \u2014 3.5, 7.5, and 11.5 years after grant \u2014 not annually, which is a real structural difference from most of the rest of the world and a common source of confusion in global annuity tracking</li>
+ <li><strong>Trademarks</strong>: renewal is on a 10-year cycle almost everywhere, whether filed nationally or via Madrid, though some offices (e.g. France\u2019s INPI, following the 2026 Nice Classification update) may require reclassification at renewal, adding cost and complexity that other offices don\u2019t impose</li>
+ <li><strong>Designs</strong>: under the Hague System, an initial 5-year term is renewable twice for a 15-year guaranteed minimum, but individual contracting parties\u2019 domestic law can extend this further \u2014 so the "true" maximum term still needs a country-by-country check</li></ul>
+ <p>This is exactly the kind of variation that makes a rules-based IPMS (rather than a spreadsheet) valuable at scale \u2014 the underlying due-date logic genuinely differs by right type <em>and</em> by jurisdiction, not just the fee amount.</p>`},
+
+{id:"m4", cat:"compare", title:"Centralised filing systems don't create one global right \u2014 they centralise process, not law", tags:["Madrid Protocol","Hague System","PCT","centralization","EPO"],
+ summary:"PCT, Madrid, and Hague all streamline the paperwork of filing in many countries at once \u2014 none of them grant a single unitary right enforceable everywhere.",
+ body:`<p>It\u2019s easy to conflate "filed centrally" with "protected globally" \u2014 they\u2019re not the same thing:</p>
+ <ul><li><strong>PCT (patents)</strong> \u2014 one international filing and search report, but it only delays and streamlines the decision of where to seek protection; actual examination and grant still happen separately, country by country, once national phase begins</li>
+ <li><strong>Madrid Protocol (trademarks)</strong> \u2014 one WIPO application and one renewal date, but each designated national/regional office still examines and can refuse the mark under its own local law; a Madrid registration is really a bundle of national rights administered centrally, not one right</li>
+ <li><strong>Hague System (designs)</strong> \u2014 the same pattern as Madrid: one filing, one renewal cycle, but each designated territory can still refuse protection under its own domestic design law</li>
+ <li><strong>EPO / Unitary Patent (a partial exception)</strong> \u2014 the European Patent Office does centralise examination and grant for its member states, and the newer EU Unitary Patent goes further, creating a single patent right with uniform effect across participating EU states \u2014 the closest thing to a genuinely unitary regional right in this list, though still not global</li></ul>
+ <p>For portfolio management, the practical consequence is the same across all of these systems: centralisation reduces the <em>administrative</em> burden of filing and renewing in many places, but it doesn\u2019t remove the need to track jurisdiction-specific risk \u2014 a refusal, opposition, or invalidation in one designated country generally doesn\u2019t affect the right\u2019s status anywhere else.</p>`},
+
+];
+
+const ARTICLES_RWS = [
+/* ================= RWS (from Loles' own conversations) ================= */
+{id:"w1", cat:"overview", title:"The IP Portal Digitalisation Programme", tags:["RWS","programme","Recordals","Renewals","CPQ","Filings"],
+ summary:"Loles leads this programme across four business units \u2014 Recordals, Renewals, CPQ, and Filings \u2014 reporting into the Protect platform team.",
+ body:`<p>Loles is the Digital Delivery Manager (Technical Programme Manager) leading the IP Portal Digitalisation Programme at RWS Group, Sheffield, across four business units:</p>
+ <ul><li><strong>Recordals</strong> \u2014 workflow digitalisation, portal integration, training materials</li>
+ <li><strong>Renewals</strong> \u2014 process alignment and delivery coordination</li>
+ <li><strong>CPQ</strong> \u2014 configure/price/quote digitalisation</li>
+ <li><strong>Filings</strong> \u2014 end-to-end filing workflow digitalisation</li></ul>
+ <p>She reports into the Protect platform team under Product Director Paul Thompson, with Hillary Davidson as her delivery line manager. The Azure DevOps structure reflects this: a single Programme project with an area per business unit (each with its own Business Hub, Decisions Log, and Actions Log), linked out to separate development-team projects that handle technical delivery \u2014 one dev project currently covers both Recordals and Renewals implementation work.</p>
+ <div class="note rws">From our conversations, not public information.</div>`},
+
+{id:"w2", cat:"overview", title:"IP Programme vs HAI \u2014 related but separate", tags:["RWS","HAI","IP Programme","scope"],
+ summary:"HAI is a separate programme with its own portal, scope, and audience \u2014 though it currently shares underlying technology with the IP Programme.",
+ body:`<p>The IP Portal Digitalisation Programme (Recordals, Renewals, CPQ, Filings) is distinct from HAI, RWS\u2019s AI-powered self-service portal, which has its own portal, scope, and audience. Both currently share underlying technology, which is why HAI-related deliverables (support model design, escalation tiers) sometimes cross over with IP Programme work, but they should be treated as separate programmes.</p>
+ <p>Loles has produced HAI-side deliverables including a 10-slide IP Portal Support Model deck (RWS teal brand palette: primary #00A89F, deep teal #0B4F4A), covering a tiered escalation model (Tier 0 / Tier 1&2 / Tier 3 across Infrastructure, Portal, API, Docal, PatOrg, and Business/Renewals), an L0\u2013L4 support-level framework, SLA definitions for standard and Cloud Ops priorities, and contact-routing by topic and product line. Key named collaborators on that work include James Lacey, Neil Price, Amanda Cash, Yannick Douheret, Hillary Davidson, and Paul Stead.</p>
+ <p>Separately, she has mapped a detailed HAI end-to-end process as a swimlane diagram, spanning Customers, the HAI platform, Helix, Trados Enterprise, RWS LXD/TD/DTP, certified translators, and the payment/finance systems Worldpay, Mulesoft, Empower, and Great Plains (GP).</p>
+ <div class="note rws">From our conversations, not public information.</div>`},
+
+{id:"w3", cat:"overview", title:"RWS PatOrg configuration: recordal types & ID structure", tags:["RWS","PatOrg","recordal IDs","project ID"],
+ summary:"How recordal cases and folder IDs are structured inside RWS\u2019s PatOrg instance.",
+ body:`<h3>Recordal type IDs</h3>
+ <table><tr><th>Recordal type</th><th>PatOrg ID</th><th>Country folder suffix</th></tr>
+ <tr><td>Main recordal case (project)</td><td>REC</td><td>N/A \u2014 project level</td></tr>
+ <tr><td>Change of name</td><td>RECCNA</td><td>CNA</td></tr>
+ <tr><td>Change of address</td><td>RECCAD</td><td>CAD</td></tr>
+ <tr><td>Change of legal entity</td><td>RECCLE</td><td>CLE</td></tr>
+ <tr><td>Correction of name</td><td>RECCRN</td><td>CRN</td></tr>
+ <tr><td>Correction of inventor details</td><td>RECIVD</td><td>IVD</td></tr>
+ <tr><td>Merger</td><td>RECMER</td><td>MER</td></tr>
+ <tr><td>Assignment</td><td>RECTRF</td><td>TRF</td></tr>
+ <tr><td>License</td><td>RECLIC</td><td>LIC</td></tr></table>
+ <h3>Project ID structure: XXXXXX-RXXXXX-NN</h3>
+ <p>Client ID (inherited across everything for that client) + sequential recordal project number for that client (R00001 = first project, R00002 = second, etc.) + NN, indicating this is a project-level case rather than country-specific.</p>
+ <h3>Country folder ID structure: XXXXXX-RXXXXX-XX-XXX</h3>
+ <p>Client ID + project sequential number (both inherited from the project) + application country code (e.g. DE, GB, US) + recordal type suffix from the table above (e.g. CNA, TRF, LIC).</p>
+ <div class="note rws">From our conversations \u2014 this is RWS/PatOrg-specific configuration, not a general PatOrg standard.</div>`},
+
+{id:"w4", cat:"overview", title:"Data Integrity process for portal recordal submissions", tags:["RWS","data integrity","portal","process"],
+ summary:"How submissions coming through the client portal get validated before handing off to the Recordals team.",
+ body:`<p>Portal submissions create a task in the <strong>[Data Integrity] \u2013 New Recordal Projects</strong> filter view, appearing in chronological order. Each submission includes a Quote Output Excel file with five sheets: SubChain Steps (project case summary), SubChain SingleSheet (full recordal detail \u2014 bibliographic data, quote details, application countries, From/To applicants, recordal types), Data_Integrity_sheet (a snapshot of the original client upload, which may not reflect later edits), Quote Pricing Breakdown (agent data behind the price calculation), and PatOrg_Client_Portfolio (currently blank for portal submissions).</p>
+ <h3>Data Integrity team steps</h3>
+ <ol><li>Validate that portal client details match the case details in SubChain SingleSheet; raise discrepancies to the Portal team</li>
+ <li>Log any discrepancies per the existing process and inform the Recordals team</li>
+ <li>If there are no issues, swap client name, agent, representative, and applicant names for PatOrg User IDs in the relevant fields</li>
+ <li>Ensure all IP cases have RWS References in the Recordals file</li>
+ <li>Save changes to SubChain SingleSheet and close the Excel file</li>
+ <li>Return to the original task in PatOrg to progress it</li></ol>
+ <div class="note rws">From our conversations \u2014 internal RWS process detail.</div>`},
+
+{id:"w5", cat:"overview", title:"The PatOrg Interactive Knowledge Base (built by Loles)", tags:["RWS","PatOrg","knowledge base","GitHub Pages"],
+ summary:"A searchable tool Loles built and hosted for free to consolidate three disconnected sources of PatOrg knowledge.",
+ body:`<p>Loles identified that PatOrg knowledge at RWS was scattered across a colleague\u2019s Word document, vendor PDFs from Br\u00fcgmann Software, and a set of AI-generated guides \u2014 with no single source of truth. She built a searchable, browsable knowledge base tool consolidating all three sources, with full-text search, category filtering, a video library linking to 11 SharePoint training recordings, and a "Read me" tab explaining source reliability for each entry.</p>
+ <p>It\u2019s hosted for free on GitHub Pages and embedded into SharePoint via iframe \u2014 a deliberate workaround for RWS\u2019s basic SharePoint access tier, which doesn\u2019t include Power Apps or Sway. It\u2019s in active use by the Recordals team. This current document you\u2019re reading follows the same pattern, extended to cover the broader external IP-services landscape alongside RWS-specific content.</p>
+ <div class="note rws">From our conversations \u2014 describes a tool Loles built, not a vendor product.</div>`},
+
+{id:"w6", cat:"overview", title:"IP Meetings Hub \u2014 internal tool for meeting intelligence", tags:["RWS","IP Meetings Hub","Lovable","Supabase"],
+ summary:"A Lovable/React/Supabase app Loles built to extract and manage actions, risks, decisions, and open questions from IP workstream meetings.",
+ body:`<p>IP Meetings Hub is a tool Loles has built and iterated extensively, using AI to extract meeting intelligence \u2014 actions, risks, issues, decisions, open questions, and dependencies \u2014 across IP workstream meetings, with a Library card layout, collapsible detail sections, a consolidated Logs page, re-extract-with-AI functionality, standalone log entries, an Admin console, and duplicate detection. It was developed as part of her AiCore Level 4 AI & Automation Practitioner apprenticeship, and was heading toward publishing to a small internal RWS test group, with personal Lovable/Supabase/Anthropic accounts intended to transfer to RWS on formal adoption.</p>
+ <div class="note rws">From our conversations \u2014 an internally built tool, not a vendor product.</div>`},
+
+{id:"w7", cat:"overview", title:"The Obviously acquisition and what it means for IP strategy", tags:["RWS","Obviously","acquisition","brand protection"],
+ summary:"RWS acquired Obviously Group for up to \u00a340M in May 2026 \u2014 a brand-protection/portfolio-visibility platform, distinct from transactional recordals/renewals/filing services.",
+ body:`<p>RWS acquired Obviously Group for up to £40M in May 2026. Loles has explored what this means for IP portal strategy, and the key distinction she\u2019s drawn is that Obviously is a brand-protection and portfolio-visibility platform \u2014 not a transactional filing, recordals, or renewals service like the IP Portal Programme delivers. The two sit adjacent in RWS\u2019s broader IP offering rather than overlapping directly.</p>
+ <div class="note rws">From our conversations \u2014 worth revisiting as integration plans firm up, since this is recent and evolving.</div>`},
+
+{id:"w8", cat:"overview", title:"Support model: tiers, SLAs, and escalation routing", tags:["RWS","support model","SLA","escalation"],
+ summary:"The tiered support structure Loles designed for the IP Portal, spanning infrastructure through to business/renewals.",
+ body:`<p>The IP Portal Support Model uses a tiered escalation structure: Tier 0, Tier 1&2, and Tier 3, cutting across six functional columns \u2014 Infrastructure, Portal, API, Docal, PatOrg, and Business/Renewals. Layered on top is an L0\u2013L4 support-level framework with SLA definitions split between standard priorities and Cloud Ops-specific priorities.</p>
+ <p>Contact routing is organised by topic and product line, with a Pilot team distribution list, documented best practices for raising cases, Hypercare support arrangements for early post-go-live periods, and a readiness snapshot tracking open actions before go-live. Per-environment email routing (DEV/QA/UAT/PREPROD) exists underneath this but is typically summarised down to production rules for stakeholder-facing material.</p>
+ <div class="note rws">From our conversations \u2014 internal RWS process/design detail; PatOrg/Docal terminology in this model may need revisiting as scope evolves.</div>`},
+/* ================= GETTING STARTED ================= */
+{id:"g1", cat:"getting-started", title:"Logging in & the PatOrg dashboard", tags:["PatOrg","login","dashboard","Citrix"],
+ summary:"PatOrg runs through Citrix; the dashboard is organised into seven functional sections that filter automatically by user role.",
+ body:`<h3>Logging in</h3>
+ <p>Every licensed PatOrg user is provisioned a username and password. Access runs through Citrix Workspace \u2014 any access issues go to the IT Helpdesk, not PatOrg support. Clicking the PatOrg icon in the Citrix desktop opens the login screen.</p>
+ <p>All dates in PatOrg display in European format (dd.mm.yyyy) regardless of where the user is logging in from.</p>
+ <h3>Dashboard sections</h3>
+ <p>Once logged in, the dashboard shows different filter views depending on the user's role and permissions:</p>
+ <ul><li><strong>General</strong> \u2014 configurable filter views for the user's own tasks (e.g. Completed cases, Projects where they're Person in Charge)</li>
+ <li><strong>Recordals</strong> \u2014 filter views for new tasks, new projects, ongoing projects, and country folders; the Data Integrity Team's Portal task views also live here</li>
+ <li><strong>Portal Task(s)</strong> \u2014 activity between internal teams and the client portal, including discrepancy management for portfolio uploads (currently Renewals-team only)</li>
+ <li><strong>E-mail Management</strong> \u2014 all email correspondence the user has initiated in PatOrg</li>
+ <li><strong>Task Management</strong> \u2014 open/completed tasks assigned to the user, plus a bucket for all open tasks regardless of assignee</li>
+ <li><strong>Document Management</strong> \u2014 documents pending review/validation</li>
+ <li><strong>Messages</strong> \u2014 in-app messages, open and completed</li></ul>
+ <div class="note rws">From the PatOrg Recordals Process Training Documentation (v3.0, May 2025).</div>`},
+
+{id:"g2", cat:"getting-started", title:"Firms in PatOrg", tags:["firms","firm switching","billing currency"],
+ summary:"RWS's PatOrg instance is segregated into currency-based firms \u2014 get the firm wrong and case search silently returns nothing.",
+ body:`<h3>What a firm is</h3>
+ <p>RWS's PatOrg instance is split into several "firms," representing the client's billing currency. The three firms relevant to Recordals are USD, EUR, and GBP \u2014 if a client bills in EUR, every recordal process for them must be carried out in the EUR firm.</p>
+ <p>Some modules are shared across firms and some are firm-specific: <strong>Person Management</strong> cuts across all firms, while <strong>Case Management</strong> is restricted to the firm the user is currently in.</p>
+ <div class="note rws">Troubleshooting tip: if a case search returns no results, check you're in the right firm before doing anything else \u2014 it's the single most common cause.</div>
+ <h3>Switching firms</h3>
+ <ol><li>Navigate to the Dashboard</li>
+ <li>Select the second option in the top navigation bar \u2014 this shows the current firm</li>
+ <li>Choose the target firm from the drop-down</li>
+ <li>Select "Switch Firm"</li>
+ <li>The system refreshes into the new firm</li></ol>`},
+
+/* ================= NAVIGATION ================= */
+{id:"n1", cat:"navigation", title:"Case Management: searching and creating cases", tags:["case management","search","case mask","IP case","recordal case"],
+ summary:"IP cases and recordal cases share the same Case Management module but use different case masks.",
+ body:`<p>Case Management lets a user search for or create both IP cases and recordal cases. The two case types share the same module but are built on different case masks \u2014 different fields display depending on whether the record is an IP case or a recordal case.</p>
+ <h3>Searching for a case</h3>
+ <ol><li>Double-click Case Management to open the filter screen</li>
+ <li>Enter search criteria into the filter fields \u2014 "Limit Query" caps how many records return; the default returns everything matching, which can slow the system down on a broad search</li>
+ <li>Press Enter</li>
+ <li>Select the record from the results list</li></ol>
+ <div class="note rws">If no results come back, check the active firm first (see Firms in PatOrg) before troubleshooting anything else.</div>`},
+
+{id:"n2", cat:"navigation", title:"Person Management: person types and linking cases", tags:["person management","person types","client","applicant","agent"],
+ summary:"Every party on a case \u2014 client, applicant, agent, patent office \u2014 has to exist as a Person record first, tagged with the right type.",
+ body:`<p>Person Management stores every party that can be linked to a matter, categorised by person type: Client, Applicant, Intercompany Office, Sales Rep, Patent Office, or Local Agent (which includes Recordal Agents). A person must exist in this module, tagged with the correct type, before they can be associated with an IP case or a recordal project/case.</p>
+ <h3>Searching for a person</h3>
+ <ol><li>Double-click Person Management to open the filter screen</li>
+ <li>A single dot (.) in the results indicates an Active record</li>
+ <li>Limit Query defaults to 300 records \u2014 increase it to see more</li>
+ <li>Press Enter to run the search</li></ol>
+ <h3>Finding all cases linked to a client</h3>
+ <ol><li>Open the Person record (double-click)</li>
+ <li>Go to Linked Programs \u2192 Connected Cases</li>
+ <li>PatOrg opens Case Management showing every IP case or recordal case connected to that person</li></ol>`},
+
+/* ================= RECORDALS OVERVIEW ================= */
+{id:"ro1", cat:"recordals-overview", title:"Recordal project sources & the Quote Output file", tags:["portal submission","Quote Output file","five sheets","Data Integrity"],
+ summary:"Every portal-originated recordal project arrives as a Data Integrity task with a five-tab Quote Output Excel file attached.",
+ body:`<p>Recordal projects start one of two ways: a submission through the IP Platform (portal) \u2014 by the client directly, or by an RWS employee submitting on their behalf \u2014 or a manual project created directly by the Recordals Team with no portal submission behind it.</p>
+ <p>Both self-submitted and RWS-assisted portal submissions log as a task in the <strong>[Data Integrity] \u2013 New Recordal Projects</strong> bucket for initial review.</p>
+ <h3>The Quote Output file's five sheets</h3>
+ <table><tr><th>Sheet</th><th>What it contains</th></tr>
+ <tr><td>SubChain Steps</td><td>Summary of cases in the project; Total Cases should match the SingleSheet record count</td></tr>
+ <tr><td>SubChain SingleSheet</td><td>The full recordal detail \u2014 bibliographic data, quote details, application countries, From/To applicants, recordal types/steps</td></tr>
+ <tr><td>Data_Integrity_sheet</td><td>A snapshot of the client's original upload at quoting time \u2014 doesn't reflect later client edits, so it can drift from the SingleSheet</td></tr>
+ <tr><td>Quote Pricing Breakdown</td><td>Quote detail for the whole project, including the agent data used in price calculation</td></tr>
+ <tr><td>PatOrg_Client_Portfolio</td><td>Blank for portal submissions; usable by Data Integrity as an inventory dump of the client's PatOrg cases</td></tr></table>
+ <div class="note rws">From the PatOrg Recordals Process Training Documentation (v3.0, May 2025).</div>`},
+
+{id:"ro2", cat:"recordals-overview", title:"Recordals dashboard list views", tags:["list views","dashboard","filters"],
+ summary:"Seven pre-built filter views cover a recordal from creation through completion, all groupable/sortable by any column.",
+ body:`<ul><li><strong>New Recordals Project</strong> \u2014 projects created in the last 7 days, regardless of Person in Charge</li>
+ <li><strong>New Country Folders</strong> \u2014 country folders created in the last 7 days</li>
+ <li><strong>Recordals All Due Dates</strong> \u2014 every due-date task tied to a country folder in progress</li>
+ <li><strong>[ONGOING] Recordals Projects</strong> \u2014 all in-progress projects, team-wide</li>
+ <li><strong>[ONGOING] Recordals Country Folders</strong> \u2014 all open country folders, team-wide</li>
+ <li><strong>[Recordals] My Due Dates</strong> \u2014 due dates assigned to the current user; items drop off once completed or cancelled</li>
+ <li><strong>[Recordals] Completed Recordals Cases</strong> \u2014 country folders with status Recordals Complete, team-wide</li></ul>
+ <p>Every list can be grouped or sorted by any column, and the Column Selector adds or removes columns from the default view.</p>`},
+
+/* ================= RECORDALS PROJECTS ================= */
+{id:"rp1", cat:"recordals-projects", title:"Manual project creation", tags:["manual project","REC","matter type","project creation"],
+ summary:"A project can bundle an unlimited number of country folders, and can be created by hand even without a portal submission behind it.",
+ body:`<p>The main recordal project bundles every required change under one umbrella; a single project can hold an unlimited number of country folders (sub-projects). To create one manually:</p>
+ <ol><li>Navigate to Case Management \u2192 Create</li>
+ <li>Enter REC as Matter Type, NN as Country, select Proceed</li>
+ <li>Select Main Recordal Case from the list</li>
+ <li>An empty case mask opens for the fields to be completed \u2014 the Reference field auto-populates on save, so it doesn't need entering</li>
+ <li>Set Person in Charge as applicable</li>
+ <li>Add C02 persons \u2014 at minimum, the CL (Client) function with Former Applicant/Applicant must be completed for the record to save</li>
+ <li>Complete any remaining fields, then Save</li></ol>
+ <p>On save, PatOrg auto-populates the Our Reference and Status of Proceeding fields.</p>
+ <div class="note rws">If a project doesn't originate from the portal, the Data Integrity journey can be bypassed entirely \u2014 but the Quote Output file must still be created and populated with the pre-requisite data manually, saved somewhere in the user's Citrix workspace so PatOrg can access it during the workflow.</div>`},
+
+{id:"rp2", cat:"recordals-projects", title:"From Data Integrity task to Recordals Portal Task", tags:["Recordals Portal Task","Start Workflow","firm validation"],
+ summary:"Once Data Integrity clears a submission, the Recordals Team Manager gets a task that triggers project creation with a single keystroke \u2014 or a hard stop if the firm is wrong.",
+ body:`<p>When the Data Integrity Team completes their review, a new task appears for the Recordals Team Manager in the <strong>[Recordals] Portal Task</strong> filter.</p>
+ <ol><li>Navigate to the task and confirm the project's firm matches the firm the user is currently in \u2014 if not, the system errors when the workflow triggers</li>
+ <li>Validate that all required data exists; escalate gaps back to the Data Integrity Team</li>
+ <li>Click into the task (without opening it) and either press Ctrl+S, or select Start Workflow (top right) \u2014 either creates the Recordal Project automatically from the task</li></ol>
+ <p>If the workflow is triggered from the wrong firm, PatOrg displays an error naming the client's Expected Currency against the task's Quote currency \u2014 the project won't initiate until they match.</p>
+ <h3>Closing out the portal task</h3>
+ <ol><li>Open the task, find the project reference under 02 Associations \u2192 Case</li>
+ <li>Click into the case field to view the created project</li>
+ <li>To clear the task from the Portal Task list: Modify \u2192 set Completed By date \u2192 Apply \u2192 enter the User ID in the UID field \u2192 Save</li></ol>`},
+
+/* ================= COUNTRY FOLDERS ================= */
+{id:"cf1", cat:"country-folders", title:"Country folder pre-requisites and initiating the workflow", tags:["country folders","pre-requisites","Case Family Tree","workflow"],
+ summary:"Five data points must exist before a country folder can be created; the resulting Case Family Tree groups every folder created together.",
+ body:`<h3>Pre-requisites</h3>
+ <p>Before the Country Folder creation workflow can run successfully, these must exist in the source file (Quote Output file, either already attached to the project or uploaded during the workflow):</p>
+ <ul><li>Client ID</li><li>Recordal Agent ID (if applicable)</li><li>Affected IP cases</li><li>Client Preferred Agent ID (if applicable)</li><li>Applicant ID (both former and new applicant)</li></ul>
+ <p>Same restriction applies as with manual projects: the file must be saved somewhere in the Citrix workspace, because RWS security policy blocks access to anything outside it during the workflow.</p>
+ <p>The initial build doesn't allow two country folders of the <em>same recordal type</em> within the <em>same application country</em> in one project \u2014 that has to split into separate projects (a logic improvement is planned for a future release).</p>
+ <h3>Initiating the workflow</h3>
+ <ol><li>Click Create Country Folders in the project's workflow starter</li>
+ <li>If a Quote file already exists on the project, PatOrg shows the SubChain SingleSheet data for the user to select all or a subset of rows; if not, it opens a file picker for the user to select the file</li>
+ <li>Select the rows/cases to include, click Continue</li>
+ <li>PatOrg runs the workflow: creates every required country folder, associated due dates, and country-specific document templates</li>
+ <li>An orange confirmation banner appears when the workflow completes</li></ol>
+ <h3>The Case Family Tree</h3>
+ <p>To verify what was created: Linked Programs \u2192 Show Case Family. This view isn't customisable and is shared with Renewals cases \u2014 folders are ordered by creation time, not by recordal type or country. Key fields:</p>
+ <table><tr><th>Field</th><th>Meaning</th></tr>
+ <tr><td>Our Reference</td><td>The country folder ID</td></tr>
+ <tr><td>Level</td><td>Auto-assigned; all folders for the same application country share a Level</td></tr>
+ <tr><td>Rel</td><td>The recordal type the folder relates to</td></tr>
+ <tr><td>Grp</td><td>Group \u2014 user-assigned work priority, G1 to G9</td></tr>
+ <tr><td>M.T</td><td>Matter Type \u2014 always RC for Recordal</td></tr>
+ <tr><td>Ctry</td><td>Application country (NN = the project case itself)</td></tr>
+ <tr><td>Info</td><td>Which recordal workflow journey the folder follows: REC0000, REC1000, or REC2000</td></tr></table>`},
+
+{id:"cf2", cat:"country-folders", title:"The three recordal workflow journeys: REC0000 / REC1000 / REC2000", tags:["REC0000","REC1000","REC2000","workflow journeys","file direct","agent countries"],
+ summary:"Which workflow a country folder follows depends on whether RWS files direct, needs translation, or routes through a third-party agent \u2014 each has its own status ladder.",
+ body:`<p>Every country folder follows one of three journeys, tracked via the Status of Proceeding field:</p>
+ <h3>REC0000 \u2014 File-direct, no translation</h3>
+ <p>For countries RWS files directly with no translation needed (e.g. GB). Broad flow: add the Patent Office as a C02 person \u2192 Request Documents from client (system builds a document-requirements Excel and a case-data Excel automatically, bundles requested files, generates an editable email) \u2192 mark Documents Received when the client replies \u2192 validate and mark Documents Validated \u2192 Submit Order to the PO \u2192 Acknowledgement Received \u2192 Client Invoicing \u2192 Patent Office Confirmation \u2192 mark Recordal Complete, which spins off a task to update the related IP cases once the PO's own record is updated.</p>
+ <h3>REC1000 \u2014 File-direct, with translation</h3>
+ <p>Same shape as REC0000 with a translation step inserted between document validation and submission: download validated documents \u2192 Sent for Translation (creates an external tracking task with an SLA-based due date) \u2192 Translation Received once the translated set comes back \u2192 then Submit Order onward, following the same remaining steps as REC0000.</p>
+ <p>If the Translation Needed flag is set to TRUE on a folder that started as REC0000, it resets to REC1000 automatically.</p>
+ <h3>REC2000 \u2014 Agent/vendor countries</h3>
+ <p>For countries handled through a third-party vendor. Additional steps at the front: confirm a Recordal Agent (person type <strong>LA</strong>, not FA) is on the case \u2014 search Person type RECA + country code if one needs adding \u2014 then Send E-mail to Agent for Validation. When the agent responds, Agent Validation Received prompts a Yes/No on whether the documentation list was correct; No routes back to PatOrg Support to fix the Due Date Terms, and can reset the workflow to an earlier step (REC2000/REC2001) via Modify. Yes proceeds into the same Request Documents \u2192 Validate \u2192 Submit Order pattern as the other two journeys, except submission goes to the agent rather than direct to the PO, and the agent's invoice is logged before Client Invoicing.</p>
+ <div class="note rws">Each journey ends the same way: Recordal Complete, which creates a due-date task to update the related IP cases once the Patent Office's own record reflects the change \u2014 timed to the PO's typical turnaround.</div>`},
+
+{id:"cf3", cat:"country-folders", title:"Discrepancy management and the REC2007 status", tags:["discrepancies","REC2007","status of proceeding"],
+ summary:"A discrepancy found mid-project gets its own status code, so it's visible at a glance where a country folder actually sits.",
+ body:`<p>Discrepancies can surface two ways:</p>
+ <ul><li><strong>Before the project starts</strong> \u2014 an IP data discrepancy identified pre-initiation follows the existing Discrepancy Management/Discrepancy Report process the Data Integrity team already runs; the Recordals team is informed so they can flag cost implications to the client</li>
+ <li><strong>Mid-project</strong> \u2014 identified by the vendor or during document review after the project is already underway. This must be flagged to the client immediately, since it can affect project cost</li></ul>
+ <p>Mid-project discrepancies get a dedicated status: <strong>REC2007 \u2014 Discrepancies</strong>. To set it: Navigate to the Country folder \u2192 Modify \u2192 set Status of Proceeding to REC2007 (or simply change the last digit of the existing REC2xxx code to 7) \u2192 Save. This signals that the next step is re-requesting the correct documents from the client.</p>
+ <p>All discrepancies should also be logged as notes in the Recordal notes section, with details shared with the client for sign-off on any additional cost.</p>`},
+
+/* ================= DUE DATES ================= */
+{id:"dd1", cat:"due-dates", title:"Due Date Management", tags:["due dates","1ALM","Person in Charge"],
+ summary:"PatOrg's Due Date module tracks the document requirements behind each recordal type \u2014 viewable per case, and extendable one-off per case.",
+ body:`<h3>Viewing existing due dates</h3>
+ <p>Navigate to the case \u2192 Due Date Terms in the top nav \u2192 the system lists the documents held for that change under Action/Reason Description. If the list looks wrong, that's a PatOrg System Admin fix, not something to correct locally.</p>
+ <h3>Adding a one-off due date</h3>
+ <ol><li>Navigate to the case \u2192 Due Date Terms \u2192 Note</li>
+ <li>Click the blue corner on Due Date Rule to see configured rules; if nothing specific fits, use 1ALM (General Due Date rule)</li>
+ <li>In Manual Data \u2192 S-ID: DAA, pick the due date (no past dates allowed) \u2192 Apply</li>
+ <li>Select Compute Due Dates \u2014 additional page sections appear</li>
+ <li>In 04 Due Date Data, amend the Description (what shows in the due-date list) and assign Person(s) in Charge \u2014 multiple people can be assigned, each sees it in their own due-date list</li>
+ <li>Save Due Dates \u2192 OK on the confirmation</li></ol>
+ <p>All due-date tasks surface on the dashboard in the Recordals Due Date bucket. A permanent rule, or one that should auto-generate whenever a country folder is created, needs to go through PatOrg Support rather than being set case-by-case.</p>`},
+
+/* ================= DOCUMENTS ================= */
+{id:"doc1", cat:"documents", title:"Document management and client correspondence", tags:["drag and drop","Outlook Addin","correspondence","10MAILAG"],
+ summary:"Documents load via drag-and-drop from the Citrix workspace or the Outlook Addin; outbound emails from a case file themselves automatically.",
+ body:`<h3>Adding documents (Drag and Drop)</h3>
+ <ol><li>The source document must already exist in the Citrix/VDU workspace \u2014 RWS security policy blocks uploading from outside it</li>
+ <li>Navigate to the case \u2192 open File Explorer \u2192 drag the document onto the case</li>
+ <li>Select the Document mask matching the file format, add Description/Document Category</li>
+ <li>Save</li></ol>
+ <p>Documents can also be uploaded via the integrated Outlook Addin, which every user needs enabled and configured (raise with PatOrg System Admins if it's missing) \u2014 it's recommended to start Outlook right after logging into Citrix, before starting project work.</p>
+ <h3>Sending correspondence from a case</h3>
+ <ol><li>Navigate to the project or country folder</li>
+ <li>Select Create New Email from Case to Client (Workflow Starter)</li>
+ <li>The system opens the Processing Form Letters dialog with the general client email template (10MAILAG) as default</li>
+ <li>Choose an Address Variant if applicable, edit the content, click Execute</li>
+ <li>PatOrg reminds the user to set the From line to iprecordals@rws.com</li>
+ <li>Edit and send the resulting blank email</li></ol>
+ <p>The sent email is automatically stored on the case as Client Correspondence.</p>`},
+
+/* ================= INVOICING ================= */
+{id:"inv1", cat:"invoicing", title:"Billing codes and the two-tier invoice structure", tags:["billing codes","single case invoice","collective invoice","D365"],
+ summary:"Every Recordals invoice is built from a fixed set of billing codes kept in sync with D365, rolled up into two levels: single case, then collective.",
+ body:`<h3>Billing codes</h3>
+ <table><tr><th>Code</th><th>What it covers</th></tr>
+ <tr><td>Agent Fee</td><td>Vendor's contractual fee for the recordal type/case count \u2014 rolled into Country Fee, not shown separately to the client</td></tr>
+ <tr><td>Agent Disbursement Fee</td><td>Agent out-of-pocket costs (postage etc.) \u2014 also rolled into Country Fee</td></tr>
+ <tr><td>Country Fee</td><td>Agent Fee + Agent Disbursement Fee + any country margin \u2014 the only fee the client actually sees on the invoice</td></tr>
+ <tr><td>Service Fee</td><td>RWS's own charge for managing the recordal</td></tr>
+ <tr><td>RWS Disbursement Fee</td><td>RWS out-of-pocket costs not covered by the Service Fee</td></tr>
+ <tr><td>Official Fee</td><td>The government/registry fee for the action itself</td></tr>
+ <tr><td>Translation Fee</td><td>Translation cost, where applicable</td></tr>
+ <tr><td>FX Mark Up</td><td>Auto-calculated when the fee currency differs from the client's billing currency; rolled into the parent line, never shown separately</td></tr></table>
+ <p>These codes stay aligned with D365 \u2014 any change has to go through formal change management on both sides to keep them in sync.</p>
+ <h3>Two-tier structure</h3>
+ <ul><li><strong>Single case invoice</strong> \u2014 one per country, per recordal action (a Belgium name change and a Belgium address change get two separate invoices)</li>
+ <li><strong>Collective invoice</strong> \u2014 one client-facing document amalgamating all eligible single case invoices; the client only ever sees this. Underlying single invoices stay in the system for traceability and supplementary billing</li></ul>
+ <p>This structure is what enables RWS to raise supplementary invoices later against a case if extra charges surface after the original invoice.</p>`},
+
+{id:"inv2", cat:"invoicing", title:"Creating a single case invoice", tags:["invoice creation","fee dialogue","final invoice"],
+ summary:"A fixed workflow \u2014 'Create Manual Record Invoice with Dialogue' \u2014 walks through fee selection, amount entry, and finalisation.",
+ body:`<ol><li>Open the country folder case (via Case Management or the History view, recommended for recently-worked cases)</li>
+ <li>In the Workflows panel, run <strong>Create Manual Record Invoice with Dialogue</strong> \u2014 this is the only correct workflow for a Recordals invoice</li>
+ <li>Review the invoice-recipient preview, adjusting the Address Variant if needed, then Execute</li>
+ <li>In the fee dialogue (billing codes prefixed REC), select only the codes that actually apply \u2014 e.g. skip Translation Fee if none was incurred; select RECCOUNTRYF to add vendor/agent costs</li>
+ <li>For each selected fee, a separate dialog collects amount and currency \u2014 PatOrg auto-converts to the billing currency at the latest FX rate and applies any configured markup</li>
+ <li>The Country Fee dialogue has two lines \u2014 Country Fee itself and Agent Fee. Only fill Agent Fee if there's no country margin; fill both if there is</li>
+ <li>Once all lines are entered, review the summary list; double-click any line to open, Modify, and adjust the amount if needed</li>
+ <li>Click Create Invoice Document, then choose: <strong>Proceed without change of status</strong> (stays editable, for review only) or <strong>OK</strong> (finalises \u2014 PatOrg assigns an invoice number; only finalised invoices can go into a Collective Invoice)</li></ol>
+ <h3>What the generated letter contains</h3>
+ <p>Page 1: itemised fees and RWS bank details. Page 2 (multi-case only): the linked cases from the C07 Reference field \u2014 worth double-checking C07 is accurate before generating, since that's what drives Page 2.</p>
+ <div class="note rws">The D365 export runs automatically every day at 5:00 PM Eastern Standard Time. A Final invoice can still be amended right up until that export runs \u2014 after it runs, the invoice is locked. PO numbers for vendors are the country reference (e.g. XXXXXX-RXXXXX-TR), shared at the point of instruction; vendor invoices route to the standard invoice-capture email (same as Patents and Renewals) with the Recordals Team copied for automatic D365 matching.</div>`},
+
+{id:"inv3", cat:"invoicing", title:"Collective invoices and client billing reports", tags:["collective invoice","list definitions","billing report"],
+ summary:"One client-facing invoice can pull together single case invoices from multiple projects \u2014 even multiple projects, same country.",
+ body:`<p>A collective invoice consolidates multiple finalised single case invoices into one client-facing document \u2014 it's even possible to amalgamate country folder invoices from different projects into a single collective invoice for that country (e.g. all GB invoices across several projects, one GB collective invoice).</p>
+ <ol><li>Invoice Management \u2192 Collective Invoice Construction from Single Invoices \u2192 Collective Recordal Invoice Construction from Single Invoices (or via Favourites, if configured)</li>
+ <li>Enter Client ID and a date range in the filter screen</li>
+ <li>PatOrg lists every finalised (status: Final Invoice/E) single case invoice for that client/range not yet in a collective invoice \u2014 drafts don't appear, and general case invoices are excluded</li>
+ <li>Select the invoices to include, click Forward \u2014 PatOrg confirms creation (this confirmation currently displays in German; translation is planned)</li>
+ <li>Find the new record under Collective Invoice Management (search by Client ID)</li>
+ <li>To adjust membership before finalising: Modify \u2192 remove/re-add single invoices via the arrow controls in the Related Single Invoices section \u2192 Save</li>
+ <li>Generate the document via the Text of Collective Invoice icon, then choose Proceed without Change of Status (review) or OK (finalise) \u2014 same logic as single case invoices</li></ol>
+ <p>The finished letter shows a consolidated fee summary plus a per-case breakdown (case count per country) on page 2. Adjustments remain possible any time before the collective invoice is exported to D365.</p>
+ <h3>Client billing reports</h3>
+ <p>Client-facing Excel exports of invoice data (separate from the invoice document itself) are generated from Invoice Management using List Definitions \u2014 configurable report templates that show only client-appropriate fields (internal fields excluded). These need setting up per client; date-range shorthand includes W (week to date) and D (today).</p>
+ <div class="note rws">Nicola Henkes can provide training on configuring client-facing List Definitions for Recordals, using the existing Renewals setup as the reference model.</div>`},
+
+/* ================= PORTAL & MVP PROCESS ================= */
+{id:"mvp1", cat:"portal-mvp", title:"MVP Portal Release 1 \u2014 the end-to-end flow at a glance", tags:["MVP","portal","end-to-end","swimlanes"],
+ summary:"Nine swimlanes \u2014 Customer, Portal, Admin Portal, Salesforce, Recordals, Data Integrity, Sales, IP Data/Azure Pricing, Onboarding, PatOrg \u2014 cover everything from first sign-up to reconciled invoice.",
+ body:`<p>The MVP Portal Release 1 process diagram maps the full journey from a customer's first self-registration through to reconciled PatOrg billing, across nine actors/systems: <strong>Customer</strong>, <strong>Portal</strong>, <strong>Admin Portal</strong>, <strong>Salesforce</strong>, <strong>Recordals Team</strong>, <strong>Data Integrity Team</strong>, <strong>Sales Team</strong>, <strong>IP Data / Azure Pricing Tables</strong>, <strong>Onboarding Team</strong>, and the <strong>PatOrg</strong> function itself.</p>
+ <p>At a high level, it runs through six phases, each covered in its own article in this category:</p>
+ <ol><li><strong>Onboarding & registration</strong> \u2014 self-registration or admin invite, linking the customer to a business/account record</li>
+ <li><strong>Recordals module entry</strong> \u2014 instant quote, portfolio upload, or both, bundled into a submission package for Sales</li>
+ <li><strong>IP data matching</strong> \u2014 API matching against public IP databases, customer-built chain of title, price recalculation</li>
+ <li><strong>Contracting</strong> \u2014 MSA/SOW acceptance (standard or negotiated), DocuSign, Salesforce activation</li>
+ <li><strong>Data Integrity handoff</strong> \u2014 portal-generated files formatted and split to PatOrg's country-folder structure, task created in the Data Integrity bucket</li>
+ <li><strong>Project execution & billing</strong> \u2014 the Recordals/country-folder process (see the Recordals categories) through to D365 invoice reconciliation</li></ol>
+ <div class="note rws">Sourced from the MVP Version R2 end-to-end process diagram. Two open questions are marked directly on the diagram: what the BDM's responsibility is after adding an opportunity to Salesforce, and whether the Onboarding Team will handle adding contracts into Salesforce \u2014 worth confirming before treating this as final.</div>`},
+
+{id:"mvp2", cat:"portal-mvp", title:"Customer onboarding and registration", tags:["self-registration","admin invite","business record"],
+ summary:"Two entry paths \u2014 self-registration or an admin-created invite \u2014 both converge on a linked customer/business/account record before the customer ever reaches the portal.",
+ body:`<h3>Self-registration path</h3>
+ <ol><li>Customer visits the portal and completes the sign-up form</li>
+ <li>A verification email is sent and must be confirmed (with a resend option if it doesn't arrive)</li>
+ <li>On confirmation, a Customer record and a Contact record are created, and a dummy account is assigned</li></ol>
+ <h3>Admin invite path</h3>
+ <ol><li>An admin creates the user directly in the Admin Portal</li>
+ <li>If a business record already exists, it's selected; if not, a new one is created</li>
+ <li>The business record is assigned to the user record</li></ol>
+ <h3>Where both paths converge</h3>
+ <p>Once registration is complete, an account/business record is created and assigned to the customer, and an IP Portal invite email is sent. The customer follows the link, logs in, and lands in the portal proper \u2014 ready to navigate to the Recordals module.</p>`},
+
+{id:"mvp3", cat:"portal-mvp", title:"Recordals module entry: instant quote vs portfolio upload", tags:["instant quote","portfolio upload","submission package","Sales mailbox"],
+ summary:"Customers either build a quote directly in the portal, upload a portfolio template, or do both \u2014 either way, the result lands as a task in the Sales team's mailbox.",
+ body:`<p>From the Recordals module, the customer chooses between an instant quote (built using the portal's quoting parameters) or a portfolio upload (download a template, fill it with portfolio data, upload it). Both routes can be combined \u2014 the customer can build an instant quote and then also upload a portfolio.</p>
+ <p>Whichever combination is submitted, the resulting <strong>submission package</strong> \u2014 flagged as portfolio-only or instant-quote-plus-portfolio \u2014 is sent to the Sales team mailbox, where a Sales BDM reviews it and creates an opportunity in Salesforce.</p>
+ <div class="note rws">This is also where the IP Data matching process kicks off in parallel \u2014 see the next article \u2014 since the portal triggers an IP Data API call using the applicant data from the portfolio as soon as it's uploaded.</div>`},
+
+{id:"mvp4", cat:"portal-mvp", title:"IP data matching and building the chain of title", tags:["chain of title","IP data API","price recalculation"],
+ summary:"The portal automatically checks uploaded applicant data against public IP registers, and the customer confirms or corrects the match before a final price is issued.",
+ body:`<ol><li>On portfolio upload, the portal triggers an API call against public IP databases using the applicant data supplied</li>
+ <li>The API returns matched IP cases, grouped by entity/applicant name</li>
+ <li>The portal combines the API results with the new applicant information the customer provided</li>
+ <li>The customer reviews the grouped cases \u2014 if any are wrong, they're removed from the set</li>
+ <li>The customer builds and confirms a <strong>chain of title</strong> from the remaining, correct cases</li>
+ <li>Once confirmed, the portal requests an updated price from the pricing API based on the confirmed chain of title</li>
+ <li>The updated price is shown to the customer, who accepts or declines it</li></ol>
+ <p>A decline ends the journey at this point; acceptance moves into the contracting phase.</p>`},
+
+{id:"mvp5", cat:"portal-mvp", title:"Contracting: MSA/SOW acceptance and DocuSign", tags:["MSA","SOW","DocuSign","standard terms","Onboarding Team"],
+ summary:"Standard terms flow straight to DocuSign; anything negotiated routes through BDM/Legal before contracts generate.",
+ body:`<p>Once the customer accepts a quote, the portal checks whether a valid MSA and Recordals SOW already exist for that customer.</p>
+ <ul><li><strong>If yes</strong> \u2014 the project is ready to initiate directly</li>
+ <li><strong>If no</strong> \u2014 the customer is shown the standard SOW & MSA terms</li></ul>
+ <h3>Standard terms accepted</h3>
+ <p>The customer accepts as-is \u2192 contracts generate in DocuSign \u2192 sent to the customer for signing \u2192 on signature confirmation (via DocuSign email), the contract is added to Salesforce, and the PatOrg Onboarding Team is looped in for client account setup.</p>
+ <h3>Changes requested</h3>
+ <p>The customer requests changes \u2192 the request is emailed to the Onboarding Team \u2192 the change request is liaised on and passed to the BDM/Legal team for negotiation \u2192 if agreement is reached, updated contracts generate in DocuSign for signing (same as the standard path from there); if no agreement is reached, the contract is manually moved to Declined status in the Admin Portal and the journey ends.</p>
+ <div class="note rws">Once contracts are signed and added to Salesforce and made active, the portal checks contract status via API before allowing the customer to initiate a project.</div>`},
+
+{id:"mvp6", cat:"portal-mvp", title:"Portal-to-PatOrg handoff and Data Integrity task creation", tags:["Data Integrity task","country folder structure","project initiation"],
+ summary:"The portal formats and splits the customer's data to PatOrg's own country-folder structure before it ever reaches a human \u2014 that's what the Data Integrity Team actually opens.",
+ body:`<p>Once a customer with active contracts initiates a project, the portal generates individual files structured to PatOrg's Records creation format, automatically splitting them by the country folder structure PatOrg expects. These formatted files are submitted directly to PatOrg, with an email notification to the Recordals Team, and a task is published into the Data Integrity task bucket (with the task count updated) \u2014 this is the exact task the Data Integrity Process picks up (see Recordals \u2014 Overview).</p>
+ <p>In parallel, once a project is ready to initiate, the workflow also runs a firm check: if the workflow was started in the wrong firm, the system displays a notification prompting the user to restart it in the correct firm before proceeding \u2014 the same firm-matching guardrail that applies to manually-created projects.</p>
+ <div class="note rws">On the billing side, the process closes the loop through a daily batch export of billing line records to D365 (including Quote ID and Vendor PO), matched against vendor invoices received, ending in invoice and payment reconciliation.</div>`},
+
+/* ================= RELEASE NOTES ================= */
+{id:"rn1", cat:"release-notes", title:"Release 3 update: what this documentation doesn't yet cover", tags:["Release 3","documentation gap","portal integration"],
+ summary:"The core process documentation describes the non-portal workflow as of May 2025 \u2014 several things were still pending at time of writing.",
+ body:`<p>As of the source documentation (v3.0, dated 19/05/2025), several things were explicitly flagged as incomplete or pending:</p>
+ <ul><li><strong>Invoicing was "yet to be built"</strong> at several points in the country-folder workflow description (the "Progress to Client Invoicing" step) \u2014 later sections of the same document (Invoice Management) describe a working two-tier invoicing system, suggesting this was built out between the writing of different sections</li>
+ <li><strong>Portal integration of project management</strong> was flagged as a Release 3 change still needing documentation \u2014 the recordal workflow described across most of this section is explicitly the <em>non-portal</em> version</li>
+ <li><strong>Several system-generated confirmation messages display in German</strong> (e.g. collective invoice creation confirmations), with translation to English noted as planned but not yet done</li>
+ <li><strong>The schedule of related single invoices/IP cases</strong> in a collective invoice is not yet shown as a separate Excel attachment \u2014 this was noted as a backlog item to prevent invoice documents becoming too large</li></ul>
+ <div class="note rws">Treat any Recordals process documentation as a snapshot in time rather than a permanently current source \u2014 cross-check specifics (especially around invoicing and portal integration) against the live PatOrg build or PatOrg Support before relying on them for a live case.</div>`},
+];
+
+
+/* ---------- render logic ---------- */
+const catList = document.getElementById("catList");
+const grid = document.getElementById("grid");
+const emptyState = document.getElementById("emptyState");
+const viewTitle = document.getElementById("viewTitle");
+const viewSubtitle = document.getElementById("viewSubtitle");
+const resultCount = document.getElementById("resultCount");
+const searchInput = document.getElementById("searchInput");
+const brandTitle = document.getElementById("brandTitle");
+const modeBtnIp = document.getElementById("modeBtnIp");
+const modeBtnRws = document.getElementById("modeBtnRws");
+
+let mode = "ip";
+let activeCat = "all";
+let query = "";
+
+function CATEGORIES(){ return mode === "rws" ? CATEGORIES_RWS : CATEGORIES_IP; }
+function ARTICLES(){ return mode === "rws" ? ARTICLES_RWS : ARTICLES_IP; }
+
+function setMode(newMode){
+  mode = newMode;
+  activeCat = "all";
+  query = "";
+  searchInput.value = "";
+  document.body.classList.toggle("mode-rws", mode === "rws");
+  modeBtnIp.classList.toggle("active", mode === "ip");
+  modeBtnRws.classList.toggle("active", mode === "rws");
+  brandTitle.innerHTML = mode === "rws" ? "RWS PatOrg<br>Knowledge Base" : "IP Services<br>Knowledge Base";
+  searchInput.placeholder = mode === "rws" ? "Search recordals, PatOrg, portal…" : "Search filing, recordals, PatOrg…";
+  renderSidebar();
+  renderGrid();
+}
+modeBtnIp.onclick = () => setMode("ip");
+modeBtnRws.onclick = () => setMode("rws");
+
+function counts(){
+  const cats = CATEGORIES();
+  const arts = ARTICLES();
+  const c = {all: arts.length};
+  cats.slice(1).forEach(cat => c[cat.id] = arts.filter(a=>a.cat===cat.id).length);
+  return c;
+}
+
+function renderSidebar(){
+  const c = counts();
+  catList.innerHTML = "";
+  CATEGORIES().forEach(cat => {
+    const li = document.createElement("li");
+    const btn = document.createElement("button");
+    btn.className = "cat-btn" + (cat.id===activeCat ? " active" : "");
+    btn.innerHTML = `<span class="cat-name"><span class="cat-dot" style="background:${cat.id==='all'?(mode==='rws'?'#E60054':'#F56565'):cat.color}"></span>${cat.name}</span><span class="cat-count">${c[cat.id]}</span>`;
+    btn.onclick = () => { activeCat = cat.id; renderSidebar(); renderGrid(); };
+    li.appendChild(btn);
+    catList.appendChild(li);
+  });
+}
+
+function matchesQuery(a, q){
+  if(!q) return true;
+  const hay = (a.title + " " + a.summary + " " + a.tags.join(" ") + " " + a.body).toLowerCase();
+  return q.toLowerCase().split(/\s+/).filter(Boolean).every(term => hay.includes(term));
+}
+
+function catMeta(id){ return CATEGORIES().find(c=>c.id===id); }
+
+function renderGrid(){
+  const filtered = ARTICLES().filter(a => (activeCat==="all" || a.cat===activeCat) && matchesQuery(a, query));
+  const activeMeta = catMeta(activeCat);
+  viewTitle.textContent = activeCat==="all" ? "All entries" : activeMeta.name;
+  viewSubtitle.textContent = query ? `Search results for \u201c${query}\u201d` : (activeCat==="all" ? "Browse by category on the left, or search across everything." : `Everything tagged ${activeMeta.name.toLowerCase()}.`);
+  resultCount.textContent = filtered.length + (filtered.length===1 ? " entry" : " entries");
+
+  grid.innerHTML = "";
+  if(filtered.length===0){
+    emptyState.style.display = "block";
+    return;
+  }
+  emptyState.style.display = "none";
+
+  filtered.forEach(a => {
+    const meta = catMeta(a.cat);
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <span class="card-tag" style="background:var(--c-${a.cat}-bg, #F1EEE7); color:${meta.color}">${meta.name}</span>
+      <h3>${a.title}</h3>
+      <p>${a.summary}</p>
+      <div class="tags">${a.tags.slice(0,4).map(t=>`<span class="chip">${t}</span>`).join("")}</div>
+    `;
+    card.onclick = () => openDetail(a);
+    grid.appendChild(card);
+  });
+}
+
+const overlay = document.getElementById("overlay");
+const dTag = document.getElementById("dTag");
+const dTitle = document.getElementById("dTitle");
+const dBody = document.getElementById("dBody");
+const dTags = document.getElementById("dTags");
+const closeBtn = document.getElementById("closeBtn");
+
+function openDetail(a){
+  const meta = catMeta(a.cat);
+  dTag.textContent = meta.name;
+  dTag.style.background = `var(--c-${a.cat}-bg)`;
+  dTag.style.color = meta.color;
+  dTitle.textContent = a.title;
+  dBody.innerHTML = a.body;
+  dTags.innerHTML = a.tags.map(t=>`<span class="chip">${t}</span>`).join("");
+  overlay.classList.add("open");
+  overlay.scrollTop = 0;
+}
+function closeDetail(){ overlay.classList.remove("open"); }
+closeBtn.onclick = closeDetail;
+overlay.onclick = (e) => { if(e.target === overlay) closeDetail(); };
+document.addEventListener("keydown", (e) => { if(e.key === "Escape") closeDetail(); });
+
+searchInput.addEventListener("input", (e) => {
+  query = e.target.value.trim();
+  renderGrid();
+});
+
+setMode("ip");
+</script>
+</body>
+</html>
