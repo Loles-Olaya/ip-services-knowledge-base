@@ -83,6 +83,12 @@
   .search-box svg{position:absolute; left:10px; top:11px; opacity:.6;}
 
   .cat-list{list-style:none; margin:0; padding:0;}
+  .cat-group-heading{
+    font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+    color:#8B96A5; padding:14px 10px 6px; margin:0;
+  }
+  .cat-group-heading:first-child{ padding-top:2px; }
+  body.mode-rws .cat-group-heading{ color:rgba(255,255,255,.5); }
   .cat-list li{margin-bottom:4px;}
   .cat-btn{
     width:100%; text-align:left; background:transparent; border:none; color:#CBD5E0;
@@ -170,7 +176,7 @@
     <h1 id="brandTitle">IP Services<br>Knowledge Base</h1>
     <div class="mode-switch">
       <button class="mode-btn active" id="modeBtnIp">IP Services<br>Knowledge Base</button>
-      <button class="mode-btn" id="modeBtnRws">RWS PatOrg<br>Knowledge Base</button>
+      <button class="mode-btn" id="modeBtnRws">RWS Internal<br>Knowledge Base</button>
     </div>
     <div class="search-box">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9AA5B1" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -222,20 +228,20 @@ const CATEGORIES_IP = [
 ];
 
 const CATEGORIES_RWS = [
-  {id:"all", name:"All entries", color:"#E60054"},
-  {id:"overview", name:"Programme Overview", color:"var(--c-overview)"},
-  {id:"getting-started", name:"Getting Started in PatOrg", color:"var(--c-getting-started)"},
-  {id:"navigation", name:"Cases, Persons & Firms", color:"var(--c-navigation)"},
-  {id:"recordals-overview", name:"Recordals \u2014 Overview", color:"var(--c-recordals-overview)"},
-  {id:"recordals-projects", name:"Recordals \u2014 Project Creation", color:"var(--c-recordals-projects)"},
-  {id:"country-folders", name:"Country Folders & Workflows", color:"var(--c-country-folders)"},
-  {id:"due-dates", name:"Due Dates & Deadlines", color:"var(--c-due-dates)"},
-  {id:"documents", name:"Document Management", color:"var(--c-documents)"},
-  {id:"invoicing", name:"Recordals \u2014 Invoicing", color:"var(--c-invoicing)"},
-  {id:"portal-mvp", name:"Portal & MVP End-to-End Process", color:"var(--c-portal-mvp)"},
-  {id:"architecture", name:"System Architecture", color:"var(--c-architecture)"},
-  {id:"support", name:"Support & Troubleshooting", color:"var(--c-support)"},
-  {id:"release-notes", name:"Release Notes & Caveats", color:"var(--c-release-notes)"},
+  {id:"all", name:"All entries", color:"#E60054", group:null},
+  {id:"overview", name:"Programme Overview", color:"var(--c-overview)", group:"Programme Overview"},
+  {id:"getting-started", name:"Getting Started", color:"var(--c-getting-started)", group:"PatOrg"},
+  {id:"navigation", name:"Cases, Persons & Firms", color:"var(--c-navigation)", group:"PatOrg"},
+  {id:"recordals-overview", name:"Recordals \u2014 Overview", color:"var(--c-recordals-overview)", group:"PatOrg"},
+  {id:"recordals-projects", name:"Recordals \u2014 Project Creation", color:"var(--c-recordals-projects)", group:"PatOrg"},
+  {id:"country-folders", name:"Country Folders & Workflows", color:"var(--c-country-folders)", group:"PatOrg"},
+  {id:"due-dates", name:"Due Dates & Deadlines", color:"var(--c-due-dates)", group:"PatOrg"},
+  {id:"documents", name:"Document Management", color:"var(--c-documents)", group:"PatOrg"},
+  {id:"invoicing", name:"Recordals \u2014 Invoicing", color:"var(--c-invoicing)", group:"PatOrg"},
+  {id:"portal-mvp", name:"MVP End-to-End Process", color:"var(--c-portal-mvp)", group:"IP Portal & Platform"},
+  {id:"architecture", name:"System Architecture", color:"var(--c-architecture)", group:"IP Portal & Platform"},
+  {id:"support", name:"Support & Troubleshooting", color:"var(--c-support)", group:"IP Portal & Platform"},
+  {id:"release-notes", name:"Release Notes & Caveats", color:"var(--c-release-notes)", group:"Release Notes"},
 ];
 
 const ARTICLES_IP = [
@@ -1330,7 +1336,7 @@ function setMode(newMode){
   document.body.classList.toggle("mode-rws", mode === "rws");
   modeBtnIp.classList.toggle("active", mode === "ip");
   modeBtnRws.classList.toggle("active", mode === "rws");
-  brandTitle.innerHTML = mode === "rws" ? "RWS PatOrg<br>Knowledge Base" : "IP Services<br>Knowledge Base";
+  brandTitle.innerHTML = mode === "rws" ? "RWS Internal<br>Knowledge Base" : "IP Services<br>Knowledge Base";
   searchInput.placeholder = mode === "rws" ? "Search recordals, PatOrg, portal…" : "Search filing, recordals, PatOrg…";
   renderSidebar();
   renderGrid();
@@ -1349,7 +1355,15 @@ function counts(){
 function renderSidebar(){
   const c = counts();
   catList.innerHTML = "";
+  let lastGroup = undefined;
   CATEGORIES().forEach(cat => {
+    if(cat.group !== lastGroup && cat.group){
+      const heading = document.createElement("li");
+      heading.className = "cat-group-heading";
+      heading.textContent = cat.group;
+      catList.appendChild(heading);
+      lastGroup = cat.group;
+    }
     const li = document.createElement("li");
     const btn = document.createElement("button");
     btn.className = "cat-btn" + (cat.id===activeCat ? " active" : "");
