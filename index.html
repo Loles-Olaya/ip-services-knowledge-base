@@ -37,6 +37,8 @@
     --c-invoicing:#E60054;           --c-invoicing-bg:#FDE8F0;
     --c-portal-mvp:#0F766E;          --c-portal-mvp-bg:#E6F5F3;
     --c-release-notes:#92400E;       --c-release-notes-bg:#FBEEE0;
+    --c-architecture:#2563EB;        --c-architecture-bg:#EAF1FD;
+    --c-support:#B91C1C;             --c-support-bg:#FDECEA;
   }
   body.mode-rws .sidebar{ background:linear-gradient(180deg, #2a004d 0%, #3E016F 100%); }
   body.mode-rws .search-box input:focus{ border-color:#E60054; }
@@ -231,6 +233,8 @@ const CATEGORIES_RWS = [
   {id:"documents", name:"Document Management", color:"var(--c-documents)"},
   {id:"invoicing", name:"Recordals \u2014 Invoicing", color:"var(--c-invoicing)"},
   {id:"portal-mvp", name:"Portal & MVP End-to-End Process", color:"var(--c-portal-mvp)"},
+  {id:"architecture", name:"System Architecture", color:"var(--c-architecture)"},
+  {id:"support", name:"Support & Troubleshooting", color:"var(--c-support)"},
   {id:"release-notes", name:"Release Notes & Caveats", color:"var(--c-release-notes)"},
 ];
 
@@ -709,6 +713,9 @@ const ARTICLES_RWS = [
  <p>Client ID (inherited across everything for that client) + sequential recordal project number for that client (R00001 = first project, R00002 = second, etc.) + NN, indicating this is a project-level case rather than country-specific.</p>
  <h3>Country folder ID structure: XXXXXX-RXXXXX-XX-XXX</h3>
  <p>Client ID + project sequential number (both inherited from the project) + application country code (e.g. DE, GB, US) + recordal type suffix from the table above (e.g. CNA, TRF, LIC).</p>
+ <h3>Recordal type vs matter type</h3>
+ <p>The table above is the <em>recordal type</em> \u2014 the change being made. Separately, the IP Solutions Platform Support SOP defines <em>matter type</em> codes for the underlying right the recordal applies to: <strong>PT</strong> (Patents), <strong>DS</strong> (Designs), <strong>UM</strong> (Utility Models), <strong>TM</strong> (Trademarks). Portfolio uploads validate the Matter Type field against exactly these four values \u2014 see Support & Troubleshooting \u2192 "Portfolio upload troubleshooting checklist" for the full validation rule set.</p>
+ <div class="note rws">Matter type codes added from the IP Solutions Platform Support SOP (v1.0, 16 Jul 2026).</div>
  <div class="note rws">From our conversations \u2014 this is RWS/PatOrg-specific configuration, not a general PatOrg standard.</div>`},
 
 {id:"w4", cat:"overview", title:"Data Integrity process for portal recordal submissions", tags:["RWS","data integrity","portal","process"],
@@ -975,17 +982,19 @@ const ARTICLES_RWS = [
  <div class="note rws">Nicola Henkes can provide training on configuring client-facing List Definitions for Recordals, using the existing Renewals setup as the reference model.</div>`},
 
 /* ================= PORTAL & MVP PROCESS ================= */
-{id:"mvp1", cat:"portal-mvp", title:"MVP Portal Release 1 \u2014 the end-to-end flow at a glance", tags:["MVP","portal","end-to-end","swimlanes"],
+{id:"mvp1", cat:"portal-mvp", title:"MVP Portal Release 1 \u2014 the end-to-end flow at a glance", tags:["MVP","portal","end-to-end","swimlanes","DOCAL"],
  summary:"Nine swimlanes \u2014 Customer, Portal, Admin Portal, Salesforce, Recordals, Data Integrity, Sales, IP Data/Azure Pricing, Onboarding, PatOrg \u2014 cover everything from first sign-up to reconciled invoice.",
  body:`<p>The MVP Portal Release 1 process diagram maps the full journey from a customer's first self-registration through to reconciled PatOrg billing, across nine actors/systems: <strong>Customer</strong>, <strong>Portal</strong>, <strong>Admin Portal</strong>, <strong>Salesforce</strong>, <strong>Recordals Team</strong>, <strong>Data Integrity Team</strong>, <strong>Sales Team</strong>, <strong>IP Data / Azure Pricing Tables</strong>, <strong>Onboarding Team</strong>, and the <strong>PatOrg</strong> function itself.</p>
- <p>At a high level, it runs through six phases, each covered in its own article in this category:</p>
+ <p>The IP Solutions Platform Support SOP (v1.0) frames the same journey as one continuous chain:</p>
+ <p style="font-weight:600;">Customer Registration \u2192 Quote \u2192 Portfolio Upload \u2192 Salesforce Opportunity \u2192 IP Data Validation \u2192 Chain of Title \u2192 Final Quote \u2192 Contracting (MSA/SOW) \u2192 Salesforce Contract Activation \u2192 Project Initiation \u2192 PatOrg Handoff</p>
+ <p>Salesforce is the CRM \u2014 Opportunity, Account, and Contract system \u2014 throughout; PatOrg only becomes the operational execution platform once the customer has actually committed to the work. At a high level, it runs through six phases, each covered in its own article in this category:</p>
  <ol><li><strong>Onboarding & registration</strong> \u2014 self-registration or admin invite, linking the customer to a business/account record</li>
  <li><strong>Recordals module entry</strong> \u2014 instant quote, portfolio upload, or both, bundled into a submission package for Sales</li>
  <li><strong>IP data matching</strong> \u2014 API matching against public IP databases, customer-built chain of title, price recalculation</li>
  <li><strong>Contracting</strong> \u2014 MSA/SOW acceptance (standard or negotiated), DocuSign, Salesforce activation</li>
- <li><strong>Data Integrity handoff</strong> \u2014 portal-generated files formatted and split to PatOrg's country-folder structure, task created in the Data Integrity bucket</li>
+ <li><strong>Data Integrity handoff</strong> \u2014 DOCAL-generated files formatted and split to PatOrg's country-folder structure, task created in the Data Integrity bucket</li>
  <li><strong>Project execution & billing</strong> \u2014 the Recordals/country-folder process (see the Recordals categories) through to D365 invoice reconciliation</li></ol>
- <div class="note rws">Sourced from the MVP Version R2 end-to-end process diagram. Two open questions are marked directly on the diagram: what the BDM's responsibility is after adding an opportunity to Salesforce, and whether the Onboarding Team will handle adding contracts into Salesforce \u2014 worth confirming before treating this as final.</div>`},
+ <div class="note rws">Sourced from the MVP Version R2 end-to-end process diagram and the IP Solutions Platform Support SOP (v1.0, 16 Jul 2026). Two open questions are marked directly on the process diagram: what the BDM's responsibility is after adding an opportunity to Salesforce, and whether the Onboarding Team will handle adding contracts into Salesforce \u2014 worth confirming before treating this as final. For the underlying technical architecture behind this flow (services, data stores, event queues), see the System Architecture category; for how Support actually investigates a stuck case, see Support & Troubleshooting.</div>`},
 
 {id:"mvp2", cat:"portal-mvp", title:"Customer onboarding and registration", tags:["self-registration","admin invite","business record"],
  summary:"Two entry paths \u2014 self-registration or an admin-created invite \u2014 both converge on a linked customer/business/account record before the customer ever reaches the portal.",
@@ -1028,11 +1037,259 @@ const ARTICLES_RWS = [
  <p>The customer requests changes \u2192 the request is emailed to the Onboarding Team \u2192 the change request is liaised on and passed to the BDM/Legal team for negotiation \u2192 if agreement is reached, updated contracts generate in DocuSign for signing (same as the standard path from there); if no agreement is reached, the contract is manually moved to Declined status in the Admin Portal and the journey ends.</p>
  <div class="note rws">Once contracts are signed and added to Salesforce and made active, the portal checks contract status via API before allowing the customer to initiate a project.</div>`},
 
-{id:"mvp6", cat:"portal-mvp", title:"Portal-to-PatOrg handoff and Data Integrity task creation", tags:["Data Integrity task","country folder structure","project initiation"],
- summary:"The portal formats and splits the customer's data to PatOrg's own country-folder structure before it ever reaches a human \u2014 that's what the Data Integrity Team actually opens.",
- body:`<p>Once a customer with active contracts initiates a project, the portal generates individual files structured to PatOrg's Records creation format, automatically splitting them by the country folder structure PatOrg expects. These formatted files are submitted directly to PatOrg, with an email notification to the Recordals Team, and a task is published into the Data Integrity task bucket (with the task count updated) \u2014 this is the exact task the Data Integrity Process picks up (see Recordals \u2014 Overview).</p>
- <p>In parallel, once a project is ready to initiate, the workflow also runs a firm check: if the workflow was started in the wrong firm, the system displays a notification prompting the user to restart it in the correct firm before proceeding \u2014 the same firm-matching guardrail that applies to manually-created projects.</p>
- <div class="note rws">On the billing side, the process closes the loop through a daily batch export of billing line records to D365 (including Quote ID and Vendor PO), matched against vendor invoices received, ending in invoice and payment reconciliation.</div>`},
+{id:"mvp6", cat:"portal-mvp", title:"Portal-to-PatOrg handoff and Data Integrity task creation", tags:["Data Integrity task","country folder structure","project initiation","DOCAL","workbook"],
+ summary:"Project creation is an asynchronous, event-driven handoff \u2014 Azure hands off to DOCAL, DOCAL builds the workbook, PatOrg consumes it \u2014 not a direct portal-to-PatOrg file drop.",
+ body:`<p>Once a customer with active contracts initiates a project, the mechanics are more layered than a simple file handoff. Per the IP Solutions Platform Support SOP: when a quote is approved (in the quoting system, Kestrel), a project creation request is generated and persisted as a JSON document in Amazon S3, with a lightweight event published to an Azure-to-DOCAL queue. The <strong>DOCAL Recordals service</strong> picks this up, validates and persists the orchestration request, downloads the source JSON, and generates the actual project workbook \u2014 a standardised five-sheet Excel file (see Recordals \u2014 Overview for the sheet breakdown) \u2014 which it uploads to S3 before publishing a project-creation event to a DOCAL-to-PatOrg queue. <strong>PatOrg</strong> consumes that event, retrieves the workbook, validates its contents, and creates the project and its tasks \u2014 this is the exact task the Data Integrity Process picks up.</p>
+ <p>If payload validation fails, or the workbook fails to transfer to PatOrg, automated email notifications are triggered rather than the process failing silently. Once PatOrg acknowledges receipt, the Data Integrity and Recordals teams complete their reviews, after which the project is initiated, country folders are created, and the project becomes visible to the customer in the portal.</p>
+ <div class="note rws">Full technical detail \u2014 the SQS queues, S3 storage, Correlation IDs, and idempotency/retry behaviour behind this handoff \u2014 is covered in System Architecture \u2192 "Azure-to-PatOrg project creation flow via DOCAL". For diagnosing a project that's stuck partway through this chain, see Support & Troubleshooting \u2192 "Project visibility troubleshooting". On the billing side, the process separately closes the loop through a daily batch export of billing line records to D365 (including Quote ID and Vendor PO), matched against vendor invoices received, ending in invoice and payment reconciliation.</div>`},
+
+/* ================= SYSTEM ARCHITECTURE ================= */
+{id:"arch1", cat:"architecture", title:"System components and the data-flow narrative", tags:["architecture","DOCAL","components","data flow"],
+ summary:"Every component connection has a defined direction and payload \u2014 this is the source of truth for what actually talks to what.",
+ body:`<p>The platform's component-interaction diagram color-codes ownership: DOCAL-owned components use a solid teal border; external/vendor systems use a dashed coral border. The diagram intentionally omits inline arrow labels to avoid overstating what each integration carries \u2014 the table below is the source of truth for that detail.</p>
+ <table><tr><th>Connection</th><th>Type</th><th>What moves across it</th></tr>
+ <tr><td>IP Portal UI \u2192 Authentication Svc</td><td>Sync / REST</td><td>Session token validation on every authenticated request from the customer-facing portal</td></tr>
+ <tr><td>IP Portal UI \u2192 Recordals Svc</td><td>Sync / REST</td><td>All recordal business operations from the customer UI: create Quote, upload portfolio data, discrepancy resolution, check status, load Project Screen data</td></tr>
+ <tr><td>Admin Portal UI \u2192 Authentication Svc</td><td>Sync / REST</td><td>Session token validation for internal/admin users</td></tr>
+ <tr><td>Admin Portal UI \u2192 Admin Svc</td><td>Sync / REST</td><td>Contract management actions \u2014 viewing/updating MSA/SOW status via the Manage Contract screen; contract activity viewable via Audit Detail with Business Contract Activity filtering</td></tr>
+ <tr><td>Recordals Svc \u2192 Azure Svc</td><td>Sync / REST</td><td>Triggers the discrepancy-check process against submitted recordal data before a quote can move forward</td></tr>
+ <tr><td>Azure Svc \u2192 IP Data Svc</td><td>Sync / REST</td><td>Cross-references recordal details for discrepancies</td></tr>
+ <tr><td>Azure Svc \u2192 Recordals Svc</td><td>Async callback</td><td>Calls back once a contract is in place and Initiate Project is submitted on the quote, triggering the final movement step \u2014 no direct Azure-to-PatOrg connection exists</td></tr>
+ <tr><td>Recordals Svc \u2192 PatOrg Svc</td><td>Sync / REST or GraphQL</td><td>Bidirectional: writes new projects on quote conversion, reads project data back for the Project Screen</td></tr>
+ <tr><td>Recordals Svc \u2192 Customer Svc</td><td>Sync / REST</td><td>Reads/writes customer and account data associated with a recordal</td></tr>
+ <tr><td>Recordals Svc \u2192 Notification Svc</td><td>Sync / REST or async</td><td>Triggers outbound emails tied to recordal status and lifecycle events</td></tr>
+ <tr><td>Admin Svc \u2192 Customer Svc</td><td>Sync / REST</td><td>Contract-creation flow writes to the same Customer Svc instance Recordals Svc uses \u2014 a shared write target</td></tr>
+ <tr><td>Admin Svc \u2192 Mule Svc</td><td>Sync / REST</td><td>Triggers the SFDC business create/update flow as part of contract creation</td></tr>
+ <tr><td>Customer Svc \u2192 Mongo DB</td><td>Direct DB access</td><td>Customer Svc's own persistence layer \u2014 not accessed directly by any other component</td></tr>
+ <tr><td>Mule Svc \u2192 Salesforce</td><td>Sync / REST (SFDC API)</td><td>Creates or updates the business record in SFDC as part of contract creation</td></tr></table>`},
+
+{id:"arch2", cat:"architecture", title:"Integration points: who reaches whom", tags:["integration boundaries","PatOrg","Salesforce","Azure Svc"],
+ summary:"PatOrg and Salesforce are each reachable through exactly one path \u2014 useful to know before assuming a direct connection exists.",
+ body:`<ul><li><strong>IPS (IP Portal UI, Admin Portal UI)</strong> \u2014 both authenticate through the shared Authentication Svc; IP Portal UI talks to Recordals Svc, Admin Portal UI talks to Admin Svc</li>
+ <li><strong>PatOrg</strong> \u2014 reached only through Recordals Svc; no other component connects to it directly. The relationship is bidirectional: write on project creation, read for the Project Screen</li>
+ <li><strong>SFDC (Salesforce)</strong> \u2014 reached only through Mule Svc, which is itself invoked only by Admin Svc as part of contract creation</li>
+ <li><strong>Azure services</strong> \u2014 Azure Svc is invoked by Recordals Svc for discrepancy checks, and independently calls IP Data Svc and calls back into Recordals Svc; Azure Svc has no direct PatOrg connection</li>
+ <li><strong>Other dependent systems</strong> \u2014 Customer Svc's Mongo DB is a component-owned datastore, not shared infrastructure; no other component reads or writes it directly</li></ul>
+ <div class="note rws">The practical takeaway for support: a "PatOrg isn't getting the data" complaint is always a Recordals Svc question, never a direct PatOrg-connectivity question \u2014 and a "Salesforce isn't updating" complaint always routes through Mule Svc and Admin Svc, never directly.</div>`},
+
+{id:"arch3", cat:"architecture", title:"Azure-to-PatOrg project creation flow via DOCAL", tags:["event-driven","SQS","S3","Project_Orchestration","Correlation ID"],
+ summary:"Project creation after quote approval runs as an event-driven pipeline across Azure, DOCAL, and PatOrg \u2014 decoupled, traceable, and idempotent by design.",
+ body:`<p>The Project Creation Integration enables project creation within PatOrg following quote approval in Kestrel (the quoting system). It uses an event-driven architecture to decouple the Azure and AWS sides, providing reliable message delivery, end-to-end traceability, and resilient processing.</p>
+ <h3>The flow</h3>
+ <ol><li>A quote is approved in Kestrel, generating a project creation request</li>
+ <li>The request payload is persisted as a JSON document in Amazon S3, while a lightweight event containing the object reference publishes to the <strong>Azure-to-DOCAL SQS Queue</strong></li>
+ <li>The DOCAL Recordals service listens continuously, validates and persists the orchestration request in the <strong>Project_Orchestration</strong> MongoDB collection, and downloads the source JSON from S3</li>
+ <li>DOCAL generates the project workbook (Excel) from the business information in the request, uploads it to S3, updates orchestration status, and publishes a project-creation event to the <strong>DOCAL-to-PatOrg SQS Queue</strong></li>
+ <li>PatOrg consumes the event, retrieves the Excel workbook from S3, validates its contents, and creates the corresponding project and tasks</li></ol>
+ <h3>Key architectural characteristics</h3>
+ <ul><li>Event-driven asynchronous architecture using Amazon SQS to decouple Azure and AWS processing</li>
+ <li>Amazon S3 as durable storage for JSON requests and generated Excel workbooks</li>
+ <li>End-to-end orchestration state persisted in the Project_Orchestration MongoDB collection</li>
+ <li>Correlation IDs provide complete traceability across Kestrel, DOCAL, and PatOrg</li>
+ <li>Document generation is separated from project creation, so each system can operate independently</li>
+ <li>Idempotent processing prevents duplicate project creation during retries</li>
+ <li>Resilient retries for transient failures, without infinite-retrying permanent business errors</li>
+ <li>A secured Auth0-protected callback API lets PatOrg publish generated Task IDs back to DOCAL</li>
+ <li>Complete processing history, retry information, and status transitions are maintained for support and monitoring</li>
+ <li>DOCAL and PatOrg consumers can scale independently without tight coupling</li></ul>
+ <div class="note rws">This is the accurate mechanism behind what the Portal & MVP category describes at process level as "the portal-to-PatOrg handoff" \u2014 see that category's "Portal-to-PatOrg handoff" article for the customer-facing view of the same flow.</div>`},
+
+{id:"arch4", cat:"architecture", title:"Manage Contract: the SF Business Contract Synchronization Scheduler", tags:["scheduler","MuleSoft","Contract Status API","Azure Contract Activation"],
+ summary:"A scheduled (or manually-triggered) job keeps DOCAL's view of MSA/SOW status in sync with Salesforce, and fires contract activation the moment both go Active.",
+ body:`<p>The SF Business Contract Synchronization Scheduler synchronizes contract status between Salesforce and DOCAL, and initiates downstream contract activation once predefined conditions are met. It can run manually from the Admin Portal, or automatically via an AWS EventBridge scheduled trigger.</p>
+ <h3>How it runs</h3>
+ <ol><li>A distributed lock is acquired before processing begins, to prevent concurrent executions; scheduler status is persisted in MongoDB throughout</li>
+ <li>The scheduler retrieves every configured business from MongoDB and processes each independently</li>
+ <li>For each business, its Salesforce Account Id is used to call the MuleSoft Contract Status API, retrieving the latest MSA and SOW status from Salesforce</li>
+ <li>Retrieved status is compared against DOCAL's existing data; changes update the business contract information in MongoDB</li>
+ <li>If both MSA and SOW are ACTIVE and the business hasn't previously been activated, the scheduler calls the Azure Contract Activation API</li>
+ <li>On successful Azure activation, DOCAL updates the affected Quote records, sends contract-activation notifications via the Notification Service, and marks the business as activated to prevent duplicate activation on future runs</li></ol>
+ <h3>Key architectural characteristics</h3>
+ <ul><li>Supports both manual and scheduled execution</li>
+ <li>Distributed locking prevents concurrent scheduler runs</li>
+ <li>Each business is processed independently within a run</li>
+ <li>Synchronizes contract status from Salesforce via the MuleSoft Contract Status API</li>
+ <li>Updates DOCAL business contract information in MongoDB</li>
+ <li>Triggers Azure Contract Activation only when both MSA and SOW are ACTIVE and the business isn't already activated</li>
+ <li>Updates Quote information from the Azure activation response</li>
+ <li>Sends contract-activation emails via the Notification Service</li>
+ <li>Publishes real-time scheduler status to the Admin Portal via the IPS Push Notification Service</li>
+ <li>Retries Azure contract activation on subsequent runs if a prior attempt didn't complete</li></ul>
+ <div class="note rws">This is the scheduler referenced throughout Support & Troubleshooting \u2192 "Business contract troubleshooting" \u2014 when a contract status looks stuck in the portal, this job is very often the fix.</div>`},
+
+{id:"arch5", cat:"architecture", title:"Quote state lifecycle: Estimate vs Quote", tags:["quote states","Estimate","Ready for Project Initiation","Expired"],
+ summary:"A recordal quote moves through two named phases \u2014 Estimate, then Quote \u2014 with contract status determining whether it skips straight to project initiation.",
+ body:`<p>A Recordals quote can be initiated either through the Instant Quote Builder or by direct portfolio upload; both routes converge into one common workflow covering portfolio validation, Chain of Title preparation, contract negotiation, approval, and project initiation.</p>
+ <h3>The two states</h3>
+ <ul><li><strong>Estimate</strong> \u2014 covers quote creation, portfolio submission, and portfolio review activities</li>
+ <li><strong>Quote</strong> \u2014 covers Chain of Title completion, contract management, approval, and project initiation activities</li></ul>
+ <h3>Branching after Chain of Title</h3>
+ <p>Once Chain of Title activities complete, the system checks whether a valid customer contract already exists:</p>
+ <ul><li><strong>Valid contract exists</strong> \u2192 the quote progresses directly to <strong>Ready for Project Initiation</strong></li>
+ <li><strong>No valid contract</strong> \u2192 the quote enters <strong>Contracts In-Progress</strong>, then <strong>Ready for Approval</strong>, then <strong>Ready for Project Initiation</strong></li></ul>
+ <p>Once a quote reaches <strong>Project Initiated</strong>, responsibility transfers to the downstream project execution process. Quotes not acted on within their validity window may transition to <strong>Expired</strong>.</p>
+ <div class="note rws">Even if a customer starts with an Instant Quote, a full portfolio upload is still required later \u2014 the Instant Quote alone never carries a quote all the way to Project Initiation.</div>`},
+
+/* ================= SUPPORT & TROUBLESHOOTING ================= */
+{id:"sup1", cat:"support", title:"How Support should start investigating an issue", tags:["masquerade","incident","support process"],
+ summary:"Before anything reaches Engineering, Support reproduces the issue as the user and gathers a defined evidence set.",
+ body:`<h3>Masquerade as the user</h3>
+ <p>Log in to the IP Portal, masquerade as the affected user, and verify whether the issue can be reproduced. Compare the user's actual experience with expected behaviour, and confirm whether the issue is user-specific or system-wide.</p>
+ <h3>Information to collect before raising an incident</h3>
+ <p><strong>Customer details:</strong> customer name, account name, user email address, contact person.</p>
+ <p><strong>Business information:</strong> contract type (MSA/SOW), country/jurisdiction, current Salesforce status, contract portal status displayed.</p>
+ <p><strong>Issue details:</strong> detailed description, expected result, actual result, timestamp, steps performed before the issue occurred.</p>
+ <p><strong>Evidence:</strong> screenshots, error messages, browser console errors (if available), notification emails received.</p>
+ <p><strong>Troubleshooting already performed:</strong> was user masquerading performed? Was Admin Override performed? Was the issue reproduced? Were permissions validated? Were workflow statuses verified?</p>`},
+
+{id:"sup2", cat:"support", title:"Component ownership matrix", tags:["ownership","escalation routing","DOCAL","Azure Team"],
+ summary:"Every platform component has exactly one owning team \u2014 this table is the fastest way to route an issue correctly.",
+ body:`<table><tr><th>Component</th><th>Owner</th></tr>
+ <tr><td>IP Portal UI</td><td>DOCAL</td></tr>
+ <tr><td>Recordals Service</td><td>DOCAL</td></tr>
+ <tr><td>Admin Service</td><td>DOCAL</td></tr>
+ <tr><td>Customer Service</td><td>DOCAL</td></tr>
+ <tr><td>Notification Service</td><td>DOCAL</td></tr>
+ <tr><td>Authentication</td><td>DOCAL</td></tr>
+ <tr><td>Azure Service</td><td>Azure Team</td></tr>
+ <tr><td>MuleSoft</td><td>Integration Team</td></tr>
+ <tr><td>Salesforce</td><td>CRM Team</td></tr>
+ <tr><td>PatOrg</td><td>PatOrg Team</td></tr>
+ <tr><td>RWS ID</td><td>Auth0 Identity Team</td></tr></table>`},
+
+{id:"sup3", cat:"support", title:"Self-registration troubleshooting: RWS ID Team vs Admin Portal", tags:["self-registration","RWS ID","Admin Portal","unauthorized access"],
+ summary:"One rule of thumb splits every login/access issue in two: can't authenticate at all \u2192 RWS ID; authenticates fine but blocked inside \u2192 Admin Portal.",
+ body:`<p>Self-registration gives users access to the Recordals module through the IP Portal; depending on existing account status, the system may create or update a DOCAL profile and grant portal access.</p>
+ <h3>Order of checks</h3>
+ <p>Can the user authenticate through RWS ID? Does the user have a profile in DOCAL (Admin Portal)? Does the user have IPS Platform access? Is Portal Status = Active? Is the user's domain restricted? What role is assigned, and does it contain the required permissions?</p>
+ <h3>Contact the RWS ID Team when\u2026</h3>
+ <p>The user can't sign up, can't log in, password reset isn't working, the verification email never arrived, the account is locked/disabled, or authentication errors appear before the user even reaches the IPS Platform. <strong>Rule of thumb:</strong> if the user cannot successfully authenticate, contact the RWS ID Team.</p>
+ <h3>Check the Admin Portal when\u2026</h3>
+ <p>The user logs in fine but hits an Unauthorized message, can't access the IPS Platform or specific features after login, has limited functionality, needs additional permissions, needs a role change, or needs Portal Status/domain restriction verified. Support should confirm: profile exists, Portal Status is Active, the user isn't Terminated, the domain isn't restricted, and the assigned role has the required permissions. <strong>Rule of thumb:</strong> if login succeeds but access/functionality fails, investigate via the Admin Portal.</p>
+ <h3>Quick decision matrix</h3>
+ <table><tr><th>Issue</th><th>Team / Tool</th></tr>
+ <tr><td>Cannot sign up</td><td>RWS ID Team</td></tr>
+ <tr><td>Cannot log in</td><td>RWS ID Team</td></tr>
+ <tr><td>Password/MFA issues</td><td>RWS ID Team</td></tr>
+ <tr><td>Unauthorized page</td><td>Admin Portal</td></tr>
+ <tr><td>Cannot access IPS Platform</td><td>Admin Portal</td></tr>
+ <tr><td>User status verification</td><td>Admin Portal</td></tr>
+ <tr><td>Domain restriction check</td><td>Admin Portal</td></tr>
+ <tr><td>Role assignment check</td><td>Admin Portal</td></tr>
+ <tr><td>Permission issue</td><td>Admin Portal</td></tr></table>
+ <h3>Why "unauthorized access" happens</h3>
+ <p>Usually one of three causes: the IPS profile was never provisioned, Portal Status is Terminated, or the user's domain is restricted.</p>`},
+
+{id:"sup4", cat:"support", title:"Portfolio upload troubleshooting checklist", tags:["portfolio upload","template validation","matter type codes"],
+ summary:"Almost every portfolio failure traces back to someone touching the template structure \u2014 headers, columns, or matter type codes.",
+ body:`<p>Check, in order:</p>
+ <ol><li>Is the uploaded file the original template (recordal_portfolio_template)? Header name changes, header reordering, column deletion, column duplication, and additional columns are all disallowed and will produce a validation error</li>
+ <li>Are headers unchanged and in the correct order?</li>
+ <li>Are Matter Type, Application Number, Applicant, New Applicant, and New Applicant Address all populated?</li>
+ <li><strong>Matter Type</strong> must be one of: <strong>PT</strong> (Patent), <strong>UM</strong> (Utility Model), <strong>DS</strong> (Design), <strong>TM</strong> (Trademark)</li>
+ <li><strong>New Applicant Address</strong> must be consistent for the same New Applicant across every row \u2014 check specifically whether the same New Applicant is using different addresses</li>
+ <li>Is Country or WIPO Code available and valid? At least one of Country Name or WIPO Code must exist</li>
+ <li>If populated, is Case Status one of Filed, Granted, or Closed?</li>
+ <li>Does the file contain suspicious script/HTML/SQL content?</li>
+ <li>Did the portfolio actually progress to "Portfolio In-Review"?</li></ol>`},
+
+{id:"sup5", cat:"support", title:"Business contract troubleshooting", tags:["MSA","SOW","contract status","scheduler"],
+ summary:"The contract workflow is identical regardless of quote value \u2014 what differs is only whether MSA/SOW are Active, In Progress, or Not Active.",
+ body:`<p>The contract management workflow applies to every recordals quote regardless of value \u2014 it doesn't vary by quote amount. MSA and Recordal SOW together form the legal framework behind every Recordal engagement.</p>
+ <h3>Status rules</h3>
+ <ul><li><strong>MSA and SOW Active</strong> \u2014 the quote converts directly to project creation; the user proceeds with next steps</li>
+ <li><strong>MSA and/or SOW Not Active</strong> (not available, expired, rejected) \u2014 contract documents generate; the user reviews and submits them; approval/execution begins</li>
+ <li><strong>MSA and/or SOW In Progress or Generated</strong> \u2014 the user can view current status and complete any pending actions</li></ul>
+ <h3>Support checklist</h3>
+ <p>Verify MSA/SOW status in Salesforce, then in the Digital PaaS Admin Portal (Business module \u2192 Manage Contract tab) \u2014 if status shows In Progress, run the scheduler. Check the contract synchronization scheduler's run status for failures or delays. Review application logs for synchronization errors. Review audit history in both the Digital PaaS Admin Portal (Audit Details \u2192 "Business Contract" activity) and the IP Solutions Portal (same activity name, to confirm whether the user actually initiated/generated the contract). As a last resort with business-critical impact, and only with L2+ support sign-off, use Admin Override to manually update status once the correct status is confirmed externally.</p>
+ <h3>"Customer says contract is approved but portal still shows 'In Review'"</h3>
+ <p>The portal relies on the Mule integration to receive Salesforce updates \u2014 a failure in either component delays synchronization. Confirm status in Salesforce, check MSA/SOW status in the Admin Portal, then manually trigger the scheduled job: Admin Portal \u2192 Maintenance module \u2192 Manage Scheduler \u2192 run "Sf Business Contract Sync Scheduler".</p>
+ <h3>"User did not receive contract activation email"</h3>
+ <p>Activation emails fire only once a contract is actually active. If nothing arrived, either the contract isn't active yet, or notification failed. Verify contract activation status in the Admin Portal (Businesses & Contract module), then check notification logs.</p>
+ <h3>"Contract status is missing in portal"</h3>
+ <p>Contract status only becomes available once it's been initiated for at least one quote. Check whether the business has an SFDC Account ID linked in the Admin Portal \u2014 if missing, manually trigger the "SF Business Syn" job, then "Sf Business Contract Sync Scheduler" (both via Admin Portal \u2192 Maintenance \u2192 Manage Scheduler). If Salesforce data is temporarily unavailable or sync has failed, an administrator can manually update MSA and/or Recordal SOW status directly from Business & Contract \u2192 Manage Contracts to unblock the user.</p>`},
+
+{id:"sup6", cat:"support", title:"Project visibility troubleshooting", tags:["project visibility","workflow stages","DOCAL workbook"],
+ summary:"An eleven-stage checklist pinpoints exactly where a 'my project isn't showing up' complaint is actually stuck.",
+ body:`<p>When a user initiates a project, Azure prepares the chain and sub-chain data and sends it to DOCAL. DOCAL validates the payload, generates the standardised five-sheet workbook, and transfers it to PatOrg. If payload validation fails, or workbook delivery to PatOrg fails, automated email notifications trigger. Once PatOrg acknowledges receipt, the Data Integrity and Recordal teams complete their reviews, the project is initiated, country folders are created, and the project becomes visible in the portal.</p>
+ <h3>The eleven-point workflow-position checklist</h3>
+ <p>Initiated? Data Preparation Complete? Sent to DOCAL? Workbook Generated? Transferred to PatOrg? PatOrg Acknowledged? Data Integrity Review Complete? Recordal Review Complete? Project Created? Country Folder Created? Visible in Portal?</p>
+ <h3>"I initiated a project, but it's not visible in the portal"</h3>
+ <p>Covers the same underlying question asked several ways \u2014 "created yesterday but I can't find it," "why isn't it in My Projects," "the project ID generated but nothing's showing," "has PatOrg received the workbook," "has processing even started." Response steps:</p>
+ <ul><li>Collect user details, quote name, and the date/time of quote approval</li>
+ <li>Confirm project files were actually sent to PatOrg</li>
+ <li>Check whether a payload-failure email was triggered</li>
+ <li>Check whether an "unable to transfer to PatOrg" email was received</li>
+ <li>Validate that the project files are present in the PatOrg area</li>
+ <li>Follow up with the Recordals business team on when the project should become visible to the client</li></ul>`},
+
+{id:"sup7", cat:"support", title:"Audit logs: Session, Profile, Activity & Renewal", tags:["audit logs","session logs","renewal logs"],
+ summary:"Four audit log categories cover the platform \u2014 Renewal Logs are unique to the IP Solutions Portal and originate from PatOrg itself.",
+ body:`<p>The Audit section gives a centralised view of user and system activity across the IP Solutions Portal and Digital PaaS Admin Portal, useful whenever reviewing historical user actions, system activity, profile changes, or login sessions.</p>
+ <ul><li><strong>Session Logs</strong> \u2014 login/logout activity: login time, logout time, IP address, browser, portal access</li>
+ <li><strong>Profile Logs</strong> \u2014 changes to user profiles, account associations, portal access, roles, permissions, statuses, and other user configuration</li>
+ <li><strong>Activity Logs</strong> \u2014 operational actions: report generation, document downloads, query submissions, role management, cache operations, and other business/admin activity</li>
+ <li><strong>Renewal Logs</strong> (IP Solutions Portal only) \u2014 renewal instructions, discrepancy resolutions, case additions/updates, and renewal document events; these originate from PatOrg, which is the system of record for renewal processing</li></ul>
+ <h3>What each audit entry captures</h3>
+ <p><strong>Who:</strong> User, Acting User. <strong>When:</strong> Action Date Time. <strong>What:</strong> Activity. <strong>Action:</strong> Add / Update / Delete / Generate / Download / Accept, etc. <strong>Context:</strong> Portal, Source. <strong>Change details:</strong> Field Name, Previous Value, New Value. <strong>Security flag:</strong> whether the action was performed while Masqueraded.</p>`},
+
+{id:"sup8", cat:"support", title:"Application logs and evidence collection before escalating", tags:["CloudWatch","correlation ID","escalation","Application Insights"],
+ summary:"DOCAL logs live in CloudWatch, PatOrg/Azure services live in Application Insights \u2014 and every escalation should arrive with a Correlation ID already attached.",
+ body:`<h3>DOCAL application logs (Amazon CloudWatch)</h3>
+ <p>DOCAL service logs capture startup events, scheduler execution, REST API requests, business processing, async job execution, exception stack traces, and integration calls. Use the Correlation ID, Quote ID, Business ID, or Project/Task identifiers to trace a transaction end-to-end across log entries.</p>
+ <p>There's a common cluster-level log group at <strong>/aws/containerinsights/fra-docal-prod-cluster/application</strong> \u2014 type the service name to find its log streams (e.g. all recordal-service streams live under <strong>ipportal_docal-recordal-service</strong>). The Log Analytics screen can also search across streams. AWS Console access requires SSO login via <strong>https://d-9367945380.awsapps.com/start/</strong>.</p>
+ <h3>Azure / PatOrg application logs (Application Insights)</h3>
+ <p>Log in at <strong>https://portal.azure.com/#home</strong>, select the relevant server, then navigate to Application Insights. The three named production services: <strong>app-prod-euw-quotingapi</strong> (Quoting), <strong>app-prod-euw-pricingapi</strong> (Pricing), <strong>app-prod-euw-poapi</strong> (PatOrg).</p>
+ <h3>Evidence collection checklist</h3>
+ <ul><li><strong>Basic incident info</strong> \u2014 environment (UAT/Preprod/Production), date/time, user name and email, Business/Quote/Project/Task identifiers</li>
+ <li><strong>Application logs</strong> \u2014 relevant CloudWatch entries, exception stack traces, warnings, timestamps covering the failure window</li>
+ <li><strong>Correlation ID</strong> \u2014 capture it and include it in the escalation for end-to-end traceability</li>
+ <li><strong>Audit records</strong> \u2014 check the Audit Details screen to confirm the reported action was recorded; export if relevant</li>
+ <li><strong>External integration details</strong> \u2014 which system was involved (Azure, MuleSoft, Salesforce, PatOrg), plus any HTTP status codes, timeouts, or integration failures observed</li>
+ <li><strong>Supporting evidence</strong> \u2014 screenshots, relevant payloads/identifiers, reproduction steps</li></ul>
+ <h3>What every escalation should include</h3>
+ <p>Environment; date/time; issue summary; reproduction steps (if known); Correlation ID; Business/Quote/Project identifiers; relevant CloudWatch excerpts; exception messages/stack traces; audit log screenshots or exports.</p>`},
+
+{id:"sup9", cat:"support", title:"Appendix: common exceptions, URLs, constraints & acronyms", tags:["error codes","production URLs","acronyms","known constraints"],
+ summary:"The fast-reference appendix \u2014 what a status code means and who to escalate to, the four production URLs, and the acronym glossary.",
+ body:`<h3>Common exceptions</h3>
+ <table><tr><th>Exception</th><th>Meaning</th><th>Action</th></tr>
+ <tr><td>401</td><td>Auth failure</td><td>Contact Auth0 Identity Team</td></tr>
+ <tr><td>403</td><td>Permission issue</td><td>Verify role in Admin Portal \u2014 insufficient privileges</td></tr>
+ <tr><td>404</td><td>Resource not available</td><td>Escalate to DOCAL UI / Tridion</td></tr>
+ <tr><td>Timeout</td><td>External dependency</td><td>Retry / escalate</td></tr>
+ <tr><td>Mongo timeout</td><td>Database issue</td><td>Escalate</td></tr>
+ <tr><td>Azure timeout</td><td>Azure issue</td><td>Retry / escalate</td></tr>
+ <tr><td>400</td><td>Bad data request or missing required data</td><td>Escalate to DOCAL</td></tr>
+ <tr><td>500</td><td>Internal server error</td><td>Escalate to DOCAL</td></tr>
+ <tr><td>502</td><td>Bad gateway</td><td>Escalate to DevOps</td></tr>
+ <tr><td>503</td><td>Service unavailable</td><td>Escalate to DevOps</td></tr>
+ <tr><td>504</td><td>Gateway timeout</td><td>Escalate to DevOps</td></tr></table>
+ <h3>Production URLs</h3>
+ <table><tr><th>System</th><th>URL</th></tr>
+ <tr><td>Admin Portal</td><td>portaladmin.dxp.rws.com</td></tr>
+ <tr><td>IP Portal</td><td>ipportal.rws.com</td></tr>
+ <tr><td>AWS Console</td><td>d-9367945380.awsapps.com/start (via SSO, then select the account)</td></tr>
+ <tr><td>Azure</td><td>portal.azure.com/#home</td></tr></table>
+ <h3>Known constraints</h3>
+ <ul><li>Contract status updates depend on Salesforce synchronization</li>
+ <li>PatOrg projects are not created synchronously</li>
+ <li>Project visibility may be delayed until business review completes</li>
+ <li>Renewal logs originate from PatOrg</li>
+ <li>The signed-in user must be associated with the business, and that business's MSA and SOW must both be Active, to initiate a project</li></ul>
+ <h3>Acronyms</h3>
+ <table><tr><th>Acronym</th><th>Meaning</th></tr>
+ <tr><td>MSA</td><td>Master Service Agreement</td></tr>
+ <tr><td>SOW</td><td>Statement of Work</td></tr>
+ <tr><td>DOCAL</td><td>The framework name for the constellation of platform services (Recordals Svc, Admin Svc, Customer Svc, etc.)</td></tr>
+ <tr><td>SFDC</td><td>Salesforce-domain terms, e.g. SFDC Contract ID, SFDC Contact ID</td></tr>
+ <tr><td>PATORG</td><td>External system of record for patent and project data</td></tr>
+ <tr><td>Mule</td><td>The central integration service connecting to Salesforce</td></tr>
+ <tr><td>SubChain</td><td>Term used in quote creation</td></tr>
+ <tr><td>Group</td><td>Term used in quote creation</td></tr>
+ <tr><td>CorrelationId</td><td>Unique identifier used to trace an end-to-end transaction across systems</td></tr>
+ <tr><td>IPS</td><td>IP Portal Site</td></tr></table>
+ <div class="note rws">Sourced from the IP Solutions Platform Support SOP (v1.0, updated by Nilesh/Abhishek, reviewed by Sachin, 16 Jul 2026).</div>`},
 
 /* ================= RELEASE NOTES ================= */
 {id:"rn1", cat:"release-notes", title:"Release 3 update: what this documentation doesn't yet cover", tags:["Release 3","documentation gap","portal integration"],
