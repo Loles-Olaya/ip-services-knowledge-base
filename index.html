@@ -1918,11 +1918,21 @@ const GLOSSARY_ARTICLES = [
 
 {id:"gl-correlationid", cat:"glossary-rws", title:"Correlation ID", match:["Correlation ID","CorrelationId"], tags:["RWS","architecture","tracing"],
  date:"Reference term", summary:"A unique identifier used to trace one transaction end-to-end across Kestrel, DOCAL, Azure, and PatOrg.",
- body:`<p>Always worth capturing and including when escalating an issue \u2014 see Support & Troubleshooting \u2192 evidence collection.</p>`},
+ body:`<p>Generated once at the start of a transaction (e.g. a quote approval) and passed along with the payload at every step \u2014 included in the JSON, the Excel metadata, and the callback payload. Every service logs it as it processes that transaction, so the whole journey can be traced through logs across systems using a single ID, like a tracking number for a package.</p>
+ <p>In the Docal\u2192PatOrg architecture it's the primary key on the MongoDB <strong>Project_Orchestration</strong> collection, which is how the callback API knows which orchestration record to update when PatOrg reports back (falling back to quoteId + subChainId if the correlationId is missing). Always worth capturing and including when escalating an issue \u2014 see Support & Troubleshooting \u2192 evidence collection.</p>
+ <div class="note ai">Fuller explanation is an AI interpretation from a conversation about the integration architecture diagram, not confirmed against the actual implementation.</div>`},
 
 {id:"gl-sqs", cat:"glossary-rws", title:"SQS", match:["SQS"], tags:["AWS","architecture","event queue"],
  date:"Reference term", summary:"Amazon Simple Queue Service \u2014 the event queue connecting Azure to DOCAL to PatOrg during project creation.",
- body:`<p>Decouples the Azure and AWS sides of the project-creation pipeline; see System Architecture for the full flow.</p>`},
+ body:`<p>A message queue: one system drops a message in (e.g. "quote approved, here's the data") and another picks it up whenever it's ready, without either side needing to know the other's state. This decouples the sender and receiver \u2014 if the receiver is down or slow, messages just wait in the queue instead of getting lost \u2014 and messages aren't deleted until successfully processed, so a failure partway through makes the message visible again (after a visibility timeout) for retry.</p>
+ <p>Standard queues offer high throughput but may deliver a message more than once or out of order; FIFO queues guarantee strict ordering and exactly-once processing at lower throughput. Decouples the Azure and AWS sides of the project-creation pipeline; see System Architecture for the full flow.</p>
+ <div class="note ai">Fuller explanation is an AI interpretation from a conversation about the integration architecture diagram, not confirmed against the actual implementation.</div>`},
+
+{id:"gl-idempotent", cat:"glossary-rws", title:"Idempotent processing", match:["idempotent","idempotency","Idempotent Update"], tags:["architecture","reliability","messaging"],
+ date:"Reference term", summary:"Processing designed so that handling the same message twice produces the same end result as handling it once \u2014 no duplicates, no double side-effects.",
+ body:`<p>Distributed systems that use queues and retries for reliability (like SQS) can end up delivering the same message more than once \u2014 e.g. if a consumer crashes after processing but before deleting the message, or a network call times out and the sender retries "just in case." Idempotent processing means that's safe: reprocessing the same message doesn't create a duplicate task, double-charge something, or corrupt state.</p>
+ <p>Typically achieved by checking a unique ID (like a correlation ID) for "have I already processed this?" before doing the work, and by using upsert (update-if-exists, insert-if-not) rather than blind inserts. In the Docal\u2192PatOrg flow, the SQS Consumer includes an explicit idempotency check step, and the Docal Callback API performs an "Idempotent Update" \u2014 looking up the existing Project_Orchestration record by correlationId and updating it in place, so a duplicate callback (e.g. from a retried request) re-applies the same update rather than creating a duplicate audit entry.</p>
+ <div class="note ai">This is an AI interpretation from a conversation about the integration architecture diagram, not confirmed against the actual implementation.</div>`},
 
 {id:"gl-s3", cat:"glossary-rws", title:"S3", match:["Amazon S3"], tags:["AWS","storage","architecture"],
  date:"Reference term", summary:"Amazon's storage service, used to hold the JSON project requests and generated Excel workbooks in the DOCAL project-creation pipeline.",
