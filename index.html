@@ -66,6 +66,14 @@
   .mode-btn.active{ background:#37414F; color:#fff; }
   body.mode-rws .mode-btn.active{ background:#E60054; color:#fff; }
   .mode-btn.active[data-mode="all"]{ background:#0B7285; }
+  .mode-btn.active[data-mode="glossary"]{ background:#A16207; }
+  body.mode-glossary .sidebar{ background:linear-gradient(180deg, #3d2c00 0%, #78530f 100%); }
+  body.mode-glossary .search-box input:focus{ border-color:#E9B949; }
+  body.mode-glossary .cat-btn.active{ background:#A16207; }
+  body.mode-glossary .card:hover{ box-shadow:0 4px 14px rgba(161,98,7,.18); border-color:#E9C97A; }
+  body.mode-glossary .detail-close{ background:#FEF6E7; }
+  body.mode-glossary .note{ border-left-color:#A16207; background:#FEF6E7; color:#5c3f04; }
+  body.mode-glossary .gloss-term{ border-bottom-color:#78716C; background:rgba(120,113,108,.1); }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
@@ -225,6 +233,7 @@
       <button class="mode-btn active" id="modeBtnIp" data-mode="ip">IP Services<br>Knowledge Base</button>
       <button class="mode-btn" id="modeBtnRws" data-mode="rws">RWS Internal<br>Knowledge Base</button>
       <button class="mode-btn" id="modeBtnAll" data-mode="all">🔍 All Sections<br>(search everywhere)</button>
+      <button class="mode-btn" id="modeBtnGlossary" data-mode="glossary">📖 Glossary<br>& Key Terms</button>
     </div>
     <div class="search-box">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9AA5B1" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -277,7 +286,6 @@ const CATEGORIES_IP = [
   {id:"roles", name:"People & Roles", color:"var(--c-roles)"},
   {id:"companies", name:"Providers & Market", color:"var(--c-companies)"},
   {id:"compare", name:"Comparing & Managing Rights", color:"var(--c-compare)"},
-  {id:"glossary", name:"\ud83d\udcd6 Glossary & Key Terms", color:"var(--c-glossary)"},
 ];
 
 const CATEGORIES_RWS = [
@@ -295,7 +303,6 @@ const CATEGORIES_RWS = [
   {id:"architecture", name:"System Architecture", color:"var(--c-architecture)", group:"IP Portal & Platform"},
   {id:"support", name:"Support & Troubleshooting", color:"var(--c-support)", group:"IP Portal & Platform"},
   {id:"release-notes", name:"Release Notes & Caveats", color:"var(--c-release-notes)", group:"Release Notes"},
-  {id:"glossary", name:"\ud83d\udcd6 Glossary & Key Terms", color:"var(--c-glossary)", group:"\ud83d\udcd6 Reference"},
   {id:"rough-notes", name:"Rough Notes (unverified)", color:"var(--c-rough-notes)", group:"\u26a0\ufe0f Rough Internal Notes (unverified)"},
 ];
 
@@ -1695,263 +1702,262 @@ const ARTICLES_RWS = [
 
 /* ================= GLOSSARY & KEY TERMS ================= */
 const GLOSSARY_ARTICLES = [
-{id:"gl-pct", cat:"glossary", title:"PCT \u2014 Patent Cooperation Treaty", match:["PCT"], tags:["patent","international filing"],
+{id:"gl-pct", cat:"glossary-general", title:"PCT \u2014 Patent Cooperation Treaty", match:["PCT"], tags:["patent","international filing"],
  date:"Reference term", summary:"A single international patent application via WIPO, covering 150+ countries and buying up to 30/31 months before national phase.",
  body:`<p>The Patent Cooperation Treaty route: one international filing, one search report, administered by WIPO, covering 150+ member countries. It doesn't grant a global patent \u2014 it delays and streamlines the decision of where to seek protection, before the applicant enters national phase in chosen countries.</p>`},
 
-{id:"gl-dct", cat:"glossary", title:"DCT \u2014 Direct Country / Paris Convention Filing", match:["DCT","Direct Country Filing","Direct/DCT route"], tags:["patent","filing route"],
+{id:"gl-dct", cat:"glossary-general", title:"DCT \u2014 Direct Country / Paris Convention Filing", match:["DCT","Direct Country Filing","Direct/DCT route"], tags:["patent","filing route"],
  date:"Reference term", summary:"Filing a patent application directly into a specific country's office, without going through the PCT international phase.",
  body:`<p>Also called the Paris Convention route. Based on claiming priority from a home application within a 12-month window, with no international phase \u2014 the applicant goes straight to each national office. Lower upfront cost for a handful of countries; faster in some jurisdictions than PCT.</p>`},
 
-{id:"gl-paris", cat:"glossary", title:"Paris Convention", match:["Paris Convention"], tags:["priority","filing deadline"],
+{id:"gl-paris", cat:"glossary-general", title:"Paris Convention", match:["Paris Convention"], tags:["priority","filing deadline"],
  date:"Reference term", summary:"The international treaty giving a 12-month priority window (6 months for designs/trademarks) to file the same right in other member countries.",
  body:`<p>Filing first in one member country gives the applicant a priority window to file the same right elsewhere (12 months for patents/utility models, 6 months for designs and trademarks) while keeping the original filing date for novelty purposes.</p>`},
 
-{id:"gl-epo", cat:"glossary", title:"EPO \u2014 European Patent Office", match:["EPO"], tags:["patent office","Europe"],
+{id:"gl-epo", cat:"glossary-general", title:"EPO \u2014 European Patent Office", match:["EPO"], tags:["patent office","Europe"],
  date:"Reference term", summary:"The regional office that centrally examines and grants European patents across its member states.",
  body:`<p>Centralises examination and grant for its member states \u2014 the closest thing to a genuinely regional (not just administratively centralised) patent right, especially combined with the EU Unitary Patent.</p>`},
 
-{id:"gl-euipo", cat:"glossary", title:"EUIPO \u2014 EU Intellectual Property Office", match:["EUIPO"], tags:["trademark office","design office","Europe"],
+{id:"gl-euipo", cat:"glossary-general", title:"EUIPO \u2014 EU Intellectual Property Office", match:["EUIPO"], tags:["trademark office","design office","Europe"],
  date:"Reference term", summary:"The EU office handling EU-wide trademark and design registrations.",
  body:`<p>Registers trademarks and designs with effect across the whole EU in a single application, rather than country by country.</p>`},
 
-{id:"gl-wipo", cat:"glossary", title:"WIPO \u2014 World Intellectual Property Organization", match:["WIPO"], tags:["UN agency","international IP"],
+{id:"gl-wipo", cat:"glossary-general", title:"WIPO \u2014 World Intellectual Property Organization", match:["WIPO"], tags:["UN agency","international IP"],
  date:"Reference term", summary:"The UN agency administering PCT, Madrid, and Hague \u2014 the centralised international filing systems for patents, trademarks, and designs.",
  body:`<p>Administers the three main centralised international filing systems referenced throughout this knowledge base: PCT (patents), the Madrid Protocol (trademarks), and the Hague System (designs).</p>`},
 
-{id:"gl-uspto", cat:"glossary", title:"USPTO \u2014 US Patent and Trademark Office", match:["USPTO"], tags:["patent office","trademark office","US"],
+{id:"gl-uspto", cat:"glossary-general", title:"USPTO \u2014 US Patent and Trademark Office", match:["USPTO"], tags:["patent office","trademark office","US"],
  date:"Reference term", summary:"The US federal agency granting patents and registering trademarks.",
  body:`<p>As of July 2026, foreign-domiciled applicants need a US-registered practitioner involved across the full patent lifecycle, not just at filing \u2014 see the Filing category for detail.</p>`},
 
-{id:"gl-madrid", cat:"glossary", title:"Madrid Protocol", match:["Madrid Protocol","Madrid System"], tags:["trademark","international filing"],
+{id:"gl-madrid", cat:"glossary-general", title:"Madrid Protocol", match:["Madrid Protocol","Madrid System"], tags:["trademark","international filing"],
  date:"Reference term", summary:"A single WIPO trademark application designating multiple countries at once, each still examined under its own local law.",
  body:`<p>Centralises filing and renewal (one application, one 10-year renewal date) across designated countries, but each national/regional office still examines and can refuse the mark under its own law \u2014 it's a bundle of national rights administered centrally, not one unitary right.</p>`},
 
-{id:"gl-hague", cat:"glossary", title:"Hague System", match:["Hague System"], tags:["design","international filing"],
+{id:"gl-hague", cat:"glossary-general", title:"Hague System", match:["Hague System"], tags:["design","international filing"],
  date:"Reference term", summary:"A single WIPO application registering an industrial design across up to 100 designs and multiple countries at once.",
  body:`<p>No prior national filing required. Initial 5-year term, renewable twice for a 15-year guaranteed minimum. Each designated office can still refuse protection under its own substantive law.</p>`},
 
-{id:"gl-nice", cat:"glossary", title:"Nice Classification", match:["Nice Classification","NCL"], tags:["trademark","goods and services classes"],
+{id:"gl-nice", cat:"glossary-general", title:"Nice Classification", match:["Nice Classification","NCL"], tags:["trademark","goods and services classes"],
  date:"Reference term", summary:"WIPO's 45-class system for categorising goods/services on a trademark application. 13th edition took effect 1 Jan 2026.",
  body:`<p>Used across 150+ jurisdictions to harmonise filing, searching, and enforcement. See the Trademarks category for detail on the January 2026 update.</p>`},
 
-{id:"gl-f2f", cat:"glossary", title:"First-to-file vs First-to-use", match:["first-to-file","first-to-use"], tags:["trademark","jurisdiction"],
+{id:"gl-f2f", cat:"glossary-general", title:"First-to-file vs First-to-use", match:["first-to-file","first-to-use"], tags:["trademark","jurisdiction"],
  date:"Reference term", summary:"Most of the world grants trademark rights to whoever files first; the US and Canada base rights on actual use instead.",
  body:`<p>China, the EU, Japan, and most of the world are first-to-file \u2014 actual use isn't required to obtain rights, which creates real "trademark squatting" risk. The US and Canada are first-to-use, basing rights on earliest continuous use in commerce. See the Trademarks category for the full breakdown.</p>`},
 
-{id:"gl-graceperiod", cat:"glossary", title:"Grace period", match:["grace period"], tags:["patent","novelty"],
+{id:"gl-graceperiod", cat:"glossary-general", title:"Grace period", match:["grace period"], tags:["patent","novelty"],
  date:"Reference term", summary:"A window (commonly 12 months) some jurisdictions allow an inventor to file after their own public disclosure without destroying novelty.",
  body:`<p>The US allows this; most of Europe applies absolute novelty with no grace period, meaning an inventor's own pre-filing disclosure can kill patentability outright there.</p>`},
 
-{id:"gl-nationalphase", cat:"glossary", title:"National phase", match:["national phase"], tags:["patent","PCT"],
+{id:"gl-nationalphase", cat:"glossary-general", title:"National phase", match:["national phase"], tags:["patent","PCT"],
  date:"Reference term", summary:"The point (around 30 months from priority) where a PCT applicant commits to specific countries and pays national filing costs.",
  body:`<p>Examination and grant happen independently in each country entered \u2014 PCT only delays and streamlines this decision, it doesn't grant a right itself.</p>`},
 
-{id:"gl-officeaction", cat:"glossary", title:"Office Action", match:["office action","office actions"], tags:["prosecution","examiner"],
+{id:"gl-officeaction", cat:"glossary-general", title:"Office Action", match:["office action","office actions"], tags:["prosecution","examiner"],
  date:"Reference term", summary:"A formal objection or rejection issued by a patent/trademark examiner during examination, requiring a response.",
  body:`<p>Core to prosecution \u2014 the applicant's practitioner responds arguing patentability/registrability or amending claims/the application. Missing a response deadline can be fatal to the application.</p>`},
 
-{id:"gl-prosecution", cat:"glossary", title:"Prosecution", match:["prosecution"], tags:["patent","examination"],
+{id:"gl-prosecution", cat:"glossary-general", title:"Prosecution", match:["prosecution"], tags:["patent","examination"],
  date:"Reference term", summary:"The back-and-forth between applicant and examiner from filing through to grant.",
  body:`<p>Distinct from litigation (which deals with infringement after grant). Covers pre-grant examination responses and post-grant maintenance/correction.</p>`},
 
-{id:"gl-um", cat:"glossary", title:"Utility Model", match:["utility model","utility models"], tags:["patent-like right"],
+{id:"gl-um", cat:"glossary-general", title:"Utility Model", match:["utility model","utility models"], tags:["patent-like right"],
  date:"Reference term", summary:"A cheaper, faster, shorter-term patent-like right for smaller inventions. Not available in the US, UK, or Canada.",
  body:`<p>Available in ~76 jurisdictions (China most active), typically 6\u201315 year terms, less stringent patentability requirements than a full patent.</p>`},
 
-{id:"gl-design", cat:"glossary", title:"Design right", match:["design registration","registered design"], tags:["design","industrial design"],
+{id:"gl-design", cat:"glossary-general", title:"Design right", match:["design registration","registered design"], tags:["design","industrial design"],
  date:"Reference term", summary:"Protects the visual/ornamental appearance of a product, distinct from how it works.",
  body:`<p>Registered nationally, regionally (EUIPO), or via the Hague System. Some offices only check formalities before registering (no novelty exam); others (like the US) substantively examine for novelty first.</p>`},
 
-{id:"gl-tm", cat:"glossary", title:"Trademark (TM)", match:["trademark","trademarks"], tags:["brand","registration"],
+{id:"gl-tm", cat:"glossary-general", title:"Trademark (TM)", match:["trademark","trademarks"], tags:["brand","registration"],
  date:"Reference term", summary:"Protects brand identifiers \u2014 names, logos, sounds \u2014 through registration (plus some unregistered common-law protection in a few countries).",
  body:`<p>Unlike patents/designs, a properly renewed trademark never has to expire \u2014 10-year renewable terms, indefinitely.</p>`},
 
-{id:"gl-copyright", cat:"glossary", title:"Copyright", match:["copyright"], tags:["automatic right","creative works"],
+{id:"gl-copyright", cat:"glossary-general", title:"Copyright", match:["copyright"], tags:["automatic right","creative works"],
  date:"Reference term", summary:"Protects original creative expression automatically on creation \u2014 no filing or registration required to exist.",
  body:`<p>Registration (where available) is optional but strengthens enforcement \u2014 e.g. a prerequisite to sue in the US. Typically lasts life of the author + 50\u201370 years.</p>`},
 
-{id:"gl-tradesecret", cat:"glossary", title:"Trade Secret", match:["trade secret","trade secrets"], tags:["confidentiality","no registration"],
+{id:"gl-tradesecret", cat:"glossary-general", title:"Trade Secret", match:["trade secret","trade secrets"], tags:["confidentiality","no registration"],
  date:"Reference term", summary:"Confidential information with economic value from staying secret \u2014 protected without any registration, for as long as secrecy is maintained.",
  body:`<p>Requires ongoing reasonable secrecy efforts. Doesn't stop independent discovery or legitimate reverse engineering \u2014 unlike a patent, it gives no right to exclude others who arrive at the same solution independently.</p>`},
 
-{id:"gl-recordal", cat:"glossary", title:"Recordal", match:["recordal","recordals"], tags:["IP administration","ownership change"],
+{id:"gl-recordal", cat:"glossary-general", title:"Recordal", match:["recordal","recordals"], tags:["IP administration","ownership change"],
  date:"Reference term", summary:"A discrete administrative action recording a change (assignment, name change, merger, licence) against an existing IP right.",
  body:`<p>Distinct from the underlying IP case itself \u2014 one IP right can generate many recordals across its lifetime. See the Recordals category for full detail on types and process.</p>`},
 
-{id:"gl-annuity", cat:"glossary", title:"Annuity / Renewal", match:["annuity","annuities"], tags:["maintenance fee","renewal"],
+{id:"gl-annuity", cat:"glossary-general", title:"Annuity / Renewal", match:["annuity","annuities"], tags:["maintenance fee","renewal"],
  date:"Reference term", summary:"Recurring fees due to keep a granted patent alive \u2014 typically annual, though the US uses fixed 3.5/7.5/11.5-year milestones instead.",
  body:`<p>Missing a payment can permanently kill a patent, which is why most law firms outsource annuity management to specialist providers rather than carrying the risk themselves.</p>`},
 
-{id:"gl-assignment", cat:"glossary", title:"Assignment", match:["assignment","assignments"], tags:["ownership transfer","recordal type"],
+{id:"gl-assignment", cat:"glossary-general", title:"Assignment", match:["assignment","assignments"], tags:["ownership transfer","recordal type"],
  date:"Reference term", summary:"A recordal type recording that ownership of an IP right has transferred from one party to another.",
  body:`<p>In RWS's PatOrg configuration, assignment recordals use the type code TRF (see Programme Overview \u2192 recordal type table).</p>`},
 
-{id:"gl-cot", cat:"glossary", title:"Chain of Title", match:["chain of title"], tags:["ownership history","recordals"],
+{id:"gl-cot", cat:"glossary-general", title:"Chain of Title", match:["chain of title"], tags:["ownership history","recordals"],
  date:"Reference term", summary:"The full documented history of ownership changes for an IP right \u2014 every step (A\u2192B\u2192C) usually has to be shown, not just the final change.",
  body:`<p>If a client wants to change ownership from name X to name Z but records show an intermediate name Y, the law generally requires recording the full chain, not skipping straight from X to Z.</p>`},
 
-{id:"gl-officeagent", cat:"glossary", title:"Foreign Associate / Local / Office Agent", match:["foreign associate","local agent","office agent"], tags:["local representation"],
+{id:"gl-officeagent", cat:"glossary-general", title:"Foreign Associate / Local / Office Agent", match:["foreign associate","local agent","office agent"], tags:["local representation"],
  date:"Reference term", summary:"The locally qualified professional retained to handle a matter's local formalities, filings, and communication with a national office.",
  body:`<p>Bridges a client's home counsel and the national office \u2014 handles translation, local formalities, and office correspondence in that jurisdiction. See People & Roles for detail.</p>`},
 
-{id:"gl-udrp", cat:"glossary", title:"UDRP", match:["UDRP"], tags:["domain name","dispute resolution"],
+{id:"gl-udrp", cat:"glossary-general", title:"UDRP", match:["UDRP"], tags:["domain name","dispute resolution"],
  date:"Reference term", summary:"The administrative process for challenging a domain name registered in bad faith against an existing trademark.",
  body:`<p>Mandatory for gTLDs (.com, .net, etc.), administered by providers like WIPO. Requires proving the domain is confusingly similar to a mark, the registrant has no legitimate interest, and it was registered and used in bad faith.</p>`},
 
-{id:"gl-ttab", cat:"glossary", title:"TTAB", match:["TTAB"], tags:["trademark","US opposition"],
+{id:"gl-ttab", cat:"glossary-general", title:"TTAB", match:["TTAB"], tags:["trademark","US opposition"],
  date:"Reference term", summary:"The USPTO's Trademark Trial and Appeal Board, which decides US trademark opposition and cancellation proceedings.",
  body:`<p>A filed opposition within the US's 30-day publication window goes before the TTAB \u2014 a proceeding that can run for months or longer.</p>`},
 
-{id:"gl-ipms", cat:"glossary", title:"IPMS \u2014 IP Management System", match:["IPMS"], tags:["software","docketing"],
+{id:"gl-ipms", cat:"glossary-general", title:"IPMS \u2014 IP Management System", match:["IPMS"], tags:["software","docketing"],
  date:"Reference term", summary:"Software for tracking patents/trademarks/designs through their lifecycle \u2014 docketing, renewals, analytics, or some combination.",
  body:`<p>Major platforms include PatOrg, Anaqua, Clarivate/CPA Global, Questel, and Dennemeyer DIAMS iQ \u2014 see the IPMS & Portal Systems category.</p>`},
 
 /* ---- RWS / PatOrg specific ---- */
-{id:"gl-patorg", cat:"glossary", title:"PatOrg", match:["PatOrg"], tags:["RWS","IPMS","Br\u00fcgmann"],
+{id:"gl-patorg", cat:"glossary-rws", title:"PatOrg", match:["PatOrg"], tags:["RWS","IPMS","Br\u00fcgmann"],
  date:"Reference term", summary:"The IPMS platform RWS uses for Recordals and Renewals case management, built by Br\u00fcgmann Software.",
  body:`<p>Germany's market-leading IP management software, used by RWS's Recordals and Renewals teams. See Programme Overview and the PatOrg group for full detail.</p>`},
 
-{id:"gl-brugmann", cat:"glossary", title:"Br\u00fcgmann Software", match:["Br\u00fcgmann"], tags:["vendor","PatOrg"],
+{id:"gl-brugmann", cat:"glossary-rws", title:"Br\u00fcgmann Software", match:["Br\u00fcgmann"], tags:["vendor","PatOrg"],
  date:"Reference term", summary:"The German company that builds and maintains PatOrg, RWS's IPMS.",
  body:`<p>Building IP software since 1984. Releases regular bug-fix versions to PatOrg, generally without affecting the tables RWS's connector relies on.</p>`},
 
-{id:"gl-docal", cat:"glossary", title:"DOCAL", match:["DOCAL"], tags:["RWS","platform","microservices"],
+{id:"gl-docal", cat:"glossary-rws", title:"DOCAL", match:["DOCAL"], tags:["RWS","platform","microservices"],
  date:"Reference term", summary:"The umbrella name for RWS's constellation of IP Portal backend services \u2014 Recordals Svc, Admin Svc, Customer Svc, Notification Svc, and more.",
  body:`<p>DOCAL owns most of the IP Portal's core components per the ownership matrix in Support & Troubleshooting. It's the framework connecting the customer-facing portal to PatOrg via an event-driven pipeline \u2014 see System Architecture.</p>`},
 
-{id:"gl-kestrel", cat:"glossary", title:"Kestrel", match:["Kestrel"], tags:["RWS","internal system","filing"],
+{id:"gl-kestrel", cat:"glossary-rws", title:"Kestrel", match:["Kestrel"], tags:["RWS","internal system","filing"],
  date:"Reference term", summary:"The internal database/workflow system the IP Ops team uses to manage filing and translation work \u2014 Inovia is the customer-facing front end for the same work.",
  body:`<p>Holds pricing for filing, and (at time of writing) Recordals pricing too. Pricing was being migrated to Salesforce CPQ, but Kestrel remains where the team actually works day to day.</p>`},
 
-{id:"gl-inovia", cat:"glossary", title:"Inovia", match:["Inovia"], tags:["RWS","filing","translation"],
+{id:"gl-inovia", cat:"glossary-rws", title:"Inovia", match:["Inovia"], tags:["RWS","filing","translation"],
  date:"Reference term", summary:"The customer-facing platform for filing and translation orders \u2014 separate from the main IP Portal, backed by Salesforce.",
  body:`<p>Part of IP Solutions but not part of the main portal. Only some Inovia orders get sent through to Kestrel for internal processing.</p>`},
 
-{id:"gl-sf", cat:"glossary", title:"Salesforce (SF / SFDC)", match:["Salesforce","SFDC"], tags:["CRM","contracts"],
+{id:"gl-sf", cat:"glossary-rws", title:"Salesforce (SF / SFDC)", match:["Salesforce","SFDC"], tags:["CRM","contracts"],
  date:"Reference term", summary:"RWS's CRM \u2014 the source of truth for Opportunity, Account, and Contract (MSA/SOW) status across the IP Portal.",
  body:`<p>Only reachable through Mule Svc, itself only invoked by Admin Svc, in RWS's architecture \u2014 no other component connects to Salesforce directly. See System Architecture.</p>`},
 
-{id:"gl-cpq", cat:"glossary", title:"CPQ", match:["CPQ"], tags:["Salesforce","pricing","quoting"],
+{id:"gl-cpq", cat:"glossary-rws", title:"CPQ", match:["CPQ"], tags:["Salesforce","pricing","quoting"],
  date:"Reference term", summary:"Configure-Price-Quote \u2014 the Salesforce tool RWS is moving pricing/quoting logic into, starting with Filing & Translation.",
  body:`<p>Sequencing at time of writing: Filing & Translation first, then Renewals and Recordals. Intended to eventually replace pricing tables currently duplicated across Kestrel and Salesforce.</p>`},
 
-{id:"gl-sow", cat:"glossary", title:"SOW \u2014 Statement of Work", match:["SOW"], tags:["contract"],
+{id:"gl-sow", cat:"glossary-rws", title:"SOW \u2014 Statement of Work", match:["SOW"], tags:["contract"],
  date:"Reference term", summary:"The contract defining the specific scope of work with a client \u2014 paired with an MSA. Recordal SOWs can expire; MSAs don't.",
  body:`<p>Required above the £20K quote threshold before a project can proceed without upfront payment. Status is tracked in Salesforce, synced to DOCAL via the SF Business Contract Sync Scheduler.</p>`},
 
-{id:"gl-msa", cat:"glossary", title:"MSA \u2014 Master Service Agreement", match:["MSA"], tags:["contract"],
+{id:"gl-msa", cat:"glossary-rws", title:"MSA \u2014 Master Service Agreement", match:["MSA"], tags:["contract"],
  date:"Reference term", summary:"The overarching legal agreement with a client, paired with one or more SOWs. Never expires.",
  body:`<p>Both MSA and SOW need to be Active for a quote to convert straight to a project without requiring upfront payment.</p>`},
 
-{id:"gl-d365", cat:"glossary", title:"D365", match:["D365"], tags:["finance system","Microsoft Dynamics"],
+{id:"gl-d365", cat:"glossary-rws", title:"D365", match:["D365"], tags:["finance system","Microsoft Dynamics"],
  date:"Reference term", summary:"Microsoft Dynamics 365 \u2014 RWS's finance system, used for invoicing, sales orders, and billing reconciliation.",
  body:`<p>PatOrg invoice numbers become D365 Sales Order numbers for Renewals; a similar per-country invoice pattern is being built for Recordals via the SKG credit card module.</p>`},
 
-{id:"gl-skg", cat:"glossary", title:"SKG", match:["SKG"], tags:["D365","credit card module","consultancy"],
+{id:"gl-skg", cat:"glossary-rws", title:"SKG", match:["SKG"], tags:["D365","credit card module","consultancy"],
  date:"Reference term", summary:"The consultancy implementing the D365 credit card reconciliation module for Recordals payments.",
  body:`<p>Building the connector logic that matches WorldPay transactions to D365 invoices/sales orders for reconciliation \u2014 see Rough Internal Notes for cost/timeline detail.</p>`},
 
-{id:"gl-worldpay", cat:"glossary", title:"WorldPay", match:["WorldPay","Worldpay"], tags:["payments","provider"],
+{id:"gl-worldpay", cat:"glossary-rws", title:"WorldPay", match:["WorldPay","Worldpay"], tags:["payments","provider"],
  date:"Reference term", summary:"The payment provider handling card and bank transfer payments for the IP Portal.",
  body:`<p>Bank transfer for upfront payment is currently Europe-only, which is a gap given most Recordals customers are US/APAC.</p>`},
 
-{id:"gl-mid", cat:"glossary", title:"MID \u2014 Merchant ID", match:["MID","MIDs"], tags:["payments","WorldPay"],
+{id:"gl-mid", cat:"glossary-rws", title:"MID \u2014 Merchant ID", match:["MID","MIDs"], tags:["payments","WorldPay"],
  date:"Reference term", summary:"The merchant identifier a payment provider (like WorldPay) uses per legal entity/bank account combination.",
  body:`<p>IP needed its own new MIDs rather than reusing SDL's, since IP is a different legal entity.</p>`},
 
-{id:"gl-ob", cat:"glossary", title:"Open Banking (OB)", match:["Open Banking"], tags:["payments"],
+{id:"gl-ob", cat:"glossary-rws", title:"Open Banking (OB)", match:["Open Banking"], tags:["payments"],
  date:"Reference term", summary:"A bank-transfer payment method that can't simply be reused from HAI, since ownership sits under a different legal entity (SDL).",
  body:`<p>Carries a recurring minimum monthly charge (~£4K) and can't be switched off for at least 12 months once enabled, per the original WorldPay commercial terms.</p>`},
 
-{id:"gl-citrix", cat:"glossary", title:"Citrix", match:["Citrix"], tags:["RWS","access","PatOrg"],
+{id:"gl-citrix", cat:"glossary-rws", title:"Citrix", match:["Citrix"], tags:["RWS","access","PatOrg"],
  date:"Reference term", summary:"The virtual desktop environment PatOrg is accessed through at RWS.",
  body:`<p>Slower than a local install due to VPN/latency, but easier to implement across regions and required for running important batch jobs.</p>`},
 
-{id:"gl-tridion", cat:"glossary", title:"Tridion", match:["Tridion"], tags:["RWS","content management"],
+{id:"gl-tridion", cat:"glossary-rws", title:"Tridion", match:["Tridion"], tags:["RWS","content management"],
  date:"Reference term", summary:"The content management system behind the IP Portal's Dev/QA/UAT/Live content and translation pipeline.",
  body:`<p>Content flows Dev \u2192 QA \u2192 UAT (translation triggers here) \u2192 Live, ideally in that order, though UAT-first shortcuts exist under time pressure.</p>`},
 
-{id:"gl-ado", cat:"glossary", title:"ADO \u2014 Azure DevOps", match:["ADO"], tags:["RWS","project tracking"],
+{id:"gl-ado", cat:"glossary-rws", title:"ADO \u2014 Azure DevOps", match:["ADO"], tags:["RWS","project tracking"],
  date:"Reference term", summary:"RWS's work-tracking tool \u2014 IP runs two separate ADO projects: a business backlog and a development backlog.",
  body:`<p>"IP Services" = business actions/user stories (not used by Dev directly); "IP Service Portal" = the actual development project with sprints and bugs.</p>`},
 
-{id:"gl-environments", cat:"glossary", title:"Environments: DEV / QA / UAT / PREPROD / PROD", match:["UAT","preprod","pre-production"], tags:["RWS","release pipeline"],
+{id:"gl-environments", cat:"glossary-rws", title:"Environments: DEV / QA / UAT / PREPROD / PROD", match:["UAT","preprod","pre-production"], tags:["RWS","release pipeline"],
  date:"Reference term", summary:"The standard promotion pipeline for both code and content changes before reaching production.",
  body:`<p>Content/changes are meant to promote Dev\u2192QA\u2192UAT\u2192PreProd\u2192Prod in order; Cloud Ops owns Production, so any prod-bound release change needs to go through them.</p>`},
 
-{id:"gl-diteam", cat:"glossary", title:"Data Integrity (DI) Team", match:["Data Integrity team","DI team"], tags:["RWS","PatOrg team"],
+{id:"gl-diteam", cat:"glossary-rws", title:"Data Integrity (DI) Team", match:["Data Integrity team","DI team"], tags:["RWS","PatOrg team"],
  date:"Reference term", summary:"The team that validates portal submissions and creates the pre-requisite client/case records in PatOrg before a Recordals project can start.",
  body:`<p>Picks up tasks from the Data Integrity task bucket \u2014 see Recordals \u2014 Overview and Portal & MVP End-to-End Process for the full handoff mechanics.</p>`},
 
-{id:"gl-nncase", cat:"glossary", title:"NN case", match:["NN case"], tags:["RWS","PatOrg","project structure"],
+{id:"gl-nncase", cat:"glossary-rws", title:"NN case", match:["NN case"], tags:["RWS","PatOrg","project structure"],
  date:"Reference term", summary:"The dummy/arbitrary case in PatOrg that acts as the parent project, holding all the country-specific sub-cases together.",
  body:`<p>NN itself isn't a real country code \u2014 it's the identifier for the project-level case that all country folders (each with a real ISO country code) roll up under.</p>`},
 
-{id:"gl-rwsref", cat:"glossary", title:"RWS Reference", match:["RWS Reference","RWS References"], tags:["RWS","PatOrg","identifier"],
+{id:"gl-rwsref", cat:"glossary-rws", title:"RWS Reference", match:["RWS Reference","RWS References"], tags:["RWS","PatOrg","identifier"],
  date:"Reference term", summary:"A key identifier that has to correctly flow from the Data Integrity team's file through to the Recordals team's project-creation file.",
  body:`<p>Getting the RWS Reference to carry through automatically was flagged as a specific unsolved gap at time of writing \u2014 without it, country-folder creation can't be fully automated.</p>`},
 
-{id:"gl-countryfolder", cat:"glossary", title:"Country Folder", match:["country folder","country folders"], tags:["RWS","PatOrg","recordals"],
+{id:"gl-countryfolder", cat:"glossary-rws", title:"Country Folder", match:["country folder","country folders"], tags:["RWS","PatOrg","recordals"],
  date:"Reference term", summary:"A sub-case within a recordal project representing the work needed in one specific country.",
  body:`<p>Each follows one of three workflow journeys (REC0000, REC1000, REC2000) depending on whether RWS files direct, needs translation, or routes through a vendor agent.</p>`},
 
-{id:"gl-rectypes", cat:"glossary", title:"Recordal type codes (CNA/CAD/CLE/CRN/IVD/MER/TRF/LIC)", match:["CNA","CAD","CLE","CRN","IVD","MER","TRF","LIC"], tags:["RWS","PatOrg","recordal type"],
+{id:"gl-rectypes", cat:"glossary-rws", title:"Recordal type codes (CNA/CAD/CLE/CRN/IVD/MER/TRF/LIC)", match:["CNA","CAD","CLE","CRN","IVD","MER","TRF","LIC"], tags:["RWS","PatOrg","recordal type"],
  date:"Reference term", summary:"RWS's PatOrg suffix codes identifying the type of change a recordal country folder represents.",
  body:`<p>CNA = change of name, CAD = change of address, CLE = change of legal entity, CRN = correction of name, IVD = correction of inventor details, MER = merger, TRF = assignment/transfer, LIC = licence. See Programme Overview for the full table.</p>`},
 
-{id:"gl-correlationid", cat:"glossary", title:"Correlation ID", match:["Correlation ID","CorrelationId"], tags:["RWS","architecture","tracing"],
+{id:"gl-correlationid", cat:"glossary-rws", title:"Correlation ID", match:["Correlation ID","CorrelationId"], tags:["RWS","architecture","tracing"],
  date:"Reference term", summary:"A unique identifier used to trace one transaction end-to-end across Kestrel, DOCAL, Azure, and PatOrg.",
  body:`<p>Always worth capturing and including when escalating an issue \u2014 see Support & Troubleshooting \u2192 evidence collection.</p>`},
 
-{id:"gl-sqs", cat:"glossary", title:"SQS", match:["SQS"], tags:["AWS","architecture","event queue"],
+{id:"gl-sqs", cat:"glossary-rws", title:"SQS", match:["SQS"], tags:["AWS","architecture","event queue"],
  date:"Reference term", summary:"Amazon Simple Queue Service \u2014 the event queue connecting Azure to DOCAL to PatOrg during project creation.",
  body:`<p>Decouples the Azure and AWS sides of the project-creation pipeline; see System Architecture for the full flow.</p>`},
 
-{id:"gl-s3", cat:"glossary", title:"S3", match:["Amazon S3"], tags:["AWS","storage","architecture"],
+{id:"gl-s3", cat:"glossary-rws", title:"S3", match:["Amazon S3"], tags:["AWS","storage","architecture"],
  date:"Reference term", summary:"Amazon's storage service, used to hold the JSON project requests and generated Excel workbooks in the DOCAL project-creation pipeline.",
  body:`<p>See System Architecture \u2192 Azure-to-PatOrg project creation flow via DOCAL for the full mechanics.</p>`},
 
-{id:"gl-ips", cat:"glossary", title:"IPS \u2014 IP Portal / Solutions", match:["IPS"], tags:["RWS","platform"],
+{id:"gl-ips", cat:"glossary-rws", title:"IPS \u2014 IP Portal / Solutions", match:["IPS"], tags:["RWS","platform"],
  date:"Reference term", summary:"Shorthand for the IP Portal / IP Solutions platform as a whole.",
  body:`<p>Used throughout Support & Troubleshooting and Architecture to refer to the platform generally, distinct from HAI (a separate, related portal).</p>`},
 
-{id:"gl-vpat", cat:"glossary", title:"VPAT", match:["VPAT"], tags:["accessibility","compliance"],
+{id:"gl-vpat", cat:"glossary-rws", title:"VPAT", match:["VPAT"], tags:["accessibility","compliance"],
  date:"Reference term", summary:"Voluntary Product Accessibility Template \u2014 the accessibility conformance report RWS produces for significant portal releases.",
  body:`<p>Needed whenever a release significantly changes the UX; assesses what's actually in Production. Not legally required to be shared externally, but kept on file for audits.</p>`},
 
-{id:"gl-wcag", cat:"glossary", title:"WCAG 2.2 AA", match:["WCAG"], tags:["accessibility","standard"],
+{id:"gl-wcag", cat:"glossary-rws", title:"WCAG 2.2 AA", match:["WCAG"], tags:["accessibility","standard"],
  date:"Reference term", summary:"The Web Content Accessibility Guidelines level RWS targets as a minimum across all its portals.",
  body:`<p>Company-wide minimum compliance target, per the accessibility notes in Rough Internal Notes.</p>`},
 
-{id:"gl-epv", cat:"glossary", title:"EPV \u2014 European Patent Validation", match:["EPV"], tags:["patent","national validation"],
+{id:"gl-epv", cat:"glossary-rws", title:"EPV \u2014 European Patent Validation", match:["EPV"], tags:["patent","national validation"],
  date:"Reference term", summary:"Converting a granted European patent into an enforceable national patent in one or more countries.",
  body:`<p>See Rough Internal Notes for the specific services/value proposition RWS was exploring around EPV.</p>`},
 
-{id:"gl-hai", cat:"glossary", title:"HAI", match:["HAI"], tags:["RWS","portal"],
+{id:"gl-hai", cat:"glossary-rws", title:"HAI", match:["HAI"], tags:["RWS","portal"],
  date:"Reference term", summary:"RWS's separate AI-powered self-service portal \u2014 related to, but distinct from, the IP Portal Programme.",
  body:`<p>Shares some underlying technology with the IP Portal but has its own scope and audience. See Programme Overview \u2192 "IP Programme vs HAI."</p>`},
 
-{id:"gl-dvtool", cat:"glossary", title:"DV Tool \u2014 Data Verification", match:["DV tool","data verification"], tags:["RWS","recordals","portal"],
+{id:"gl-dvtool", cat:"glossary-rws", title:"DV Tool \u2014 Data Verification", match:["DV tool","data verification"], tags:["RWS","recordals","portal"],
  date:"Reference term", summary:"The automated tool that checks a customer's submitted portfolio data against RWS's IP data records to flag discrepancies.",
  body:`<p>Minimum input needed: application number and country. Returns four outcomes per case \u2014 Matching, Omitted, Differences, or Not Found.</p>`},
 
-{id:"gl-discrepancy", cat:"glossary", title:"Discrepancy", match:["discrepancy","discrepancies"], tags:["RWS","recordals","data verification"],
+{id:"gl-discrepancy", cat:"glossary-rws", title:"Discrepancy", match:["discrepancy","discrepancies"], tags:["RWS","recordals","data verification"],
  date:"Reference term", summary:"A mismatch found between customer-provided ownership/case data and RWS's verified records.",
  body:`<p>Triggers additional cost and customer sign-off before work proceeds on the affected case. See Country Folders & Workflows \u2192 REC2007 status for how this is tracked in PatOrg.</p>`},
 
-{id:"gl-fx", cat:"glossary", title:"FX (foreign exchange)", match:["FX rate","FX mark up","FX markup"], tags:["pricing","currency"],
+{id:"gl-fx", cat:"glossary-rws", title:"FX (foreign exchange)", match:["FX rate","FX mark up","FX markup"], tags:["pricing","currency"],
  date:"Reference term", summary:"Currency conversion applied when a fee's native currency differs from the client's billing currency.",
  body:`<p>For Renewals, the FX rate is locked in at the first reminder and held stable until the urgency reminder recalculates it closer to the due date.</p>`},
 
-{id:"gl-po", cat:"glossary", title:"PO \u2014 Purchase Order", match:["PO number","PO numbers"], tags:["vendor","invoicing"],
+{id:"gl-po", cat:"glossary-rws", title:"PO \u2014 Purchase Order", match:["PO number","PO numbers"], tags:["vendor","invoicing"],
  date:"Reference term", summary:"The reference number given to an agent/vendor ahead of invoicing, used to match their invoice back to the correct case in D365.",
  body:`<p>For Recordals, the PO is sent to the vendor by email and manually entered into PatOrg \u2014 unlike Renewals, where the PatOrg invoice number itself doubles as the vendor PO.</p>`},
 ];
 
 
-ARTICLES_IP.push(...GLOSSARY_ARTICLES);
-ARTICLES_RWS.push(...GLOSSARY_ARTICLES);
+/* Glossary is its own top-level mode now (see CATEGORIES_GLOSSARY below) \u2014 not merged into the IP/RWS article pools. */
 
 
 
@@ -1972,27 +1978,41 @@ const brandTitle = document.getElementById("brandTitle");
 const modeBtnIp = document.getElementById("modeBtnIp");
 const modeBtnRws = document.getElementById("modeBtnRws");
 const modeBtnAll = document.getElementById("modeBtnAll");
+const modeBtnGlossary = document.getElementById("modeBtnGlossary");
 
-/* Combined "All Sections" dataset \u2014 built once, reusing the same cat ids (no collisions between the two source arrays). Glossary lives in both IP and RWS datasets so it's browsable from either mode \u2014 dedupe it here so it doesn't appear twice. */
+const CATEGORIES_GLOSSARY = [
+  {id:"all", name:"All terms", color:"var(--c-glossary)", group:null},
+  {id:"glossary-general", name:"General IP Terms", color:"var(--c-glossary)", group:"General IP Terms"},
+  {id:"glossary-rws", name:"RWS-Specific Terms", color:"var(--c-glossary)", group:"RWS-Specific Terms"},
+];
+
+/* Combined "All Sections" dataset \u2014 built once, reusing the same cat ids (no collisions across the three source arrays) */
 const CATEGORIES_ALL = [
   {id:"all", name:"All entries", color:"#0B7285", group:null},
   ...CATEGORIES_IP.slice(1).map(c => ({...c, group:"IP Services Knowledge Base"})),
-  ...CATEGORIES_RWS.slice(1).filter(c => c.id !== "glossary").map(c => ({...c, group: "RWS: " + (c.group || "Other")})),
+  ...CATEGORIES_RWS.slice(1).map(c => ({...c, group: "RWS: " + (c.group || "Other")})),
+  ...CATEGORIES_GLOSSARY.slice(1).map(c => ({...c, group: "\ud83d\udcd6 Glossary: " + c.group})),
 ];
-const seenIds = new Set();
-const ARTICLES_ALL = [...ARTICLES_IP, ...ARTICLES_RWS].filter(a => {
-  if(seenIds.has(a.id)) return false;
-  seenIds.add(a.id);
-  return true;
-});
+const ARTICLES_ALL = [...ARTICLES_IP, ...ARTICLES_RWS, ...GLOSSARY_ARTICLES];
 const IP_CAT_IDS = new Set(CATEGORIES_IP.map(c => c.id));
+const RWS_CAT_IDS = new Set(CATEGORIES_RWS.map(c => c.id));
 
 let mode = "ip";
 let activeCat = "all";
 let query = "";
 
-function CATEGORIES(){ return mode === "rws" ? CATEGORIES_RWS : mode === "all" ? CATEGORIES_ALL : CATEGORIES_IP; }
-function ARTICLES(){ return mode === "rws" ? ARTICLES_RWS : mode === "all" ? ARTICLES_ALL : ARTICLES_IP; }
+function CATEGORIES(){
+  if(mode === "rws") return CATEGORIES_RWS;
+  if(mode === "all") return CATEGORIES_ALL;
+  if(mode === "glossary") return CATEGORIES_GLOSSARY;
+  return CATEGORIES_IP;
+}
+function ARTICLES(){
+  if(mode === "rws") return ARTICLES_RWS;
+  if(mode === "all") return ARTICLES_ALL;
+  if(mode === "glossary") return GLOSSARY_ARTICLES;
+  return ARTICLES_IP;
+}
 
 function setMode(newMode){
   mode = newMode;
@@ -2000,11 +2020,13 @@ function setMode(newMode){
   query = "";
   searchInput.value = "";
   document.body.classList.toggle("mode-rws", mode === "rws");
+  document.body.classList.toggle("mode-glossary", mode === "glossary");
   modeBtnIp.classList.toggle("active", mode === "ip");
   modeBtnRws.classList.toggle("active", mode === "rws");
   modeBtnAll.classList.toggle("active", mode === "all");
-  brandTitle.innerHTML = mode === "rws" ? "RWS Internal<br>Knowledge Base" : mode === "all" ? "Search All<br>Sections" : "IP Services<br>Knowledge Base";
-  searchInput.placeholder = mode === "rws" ? "Search recordals, PatOrg, portal…" : mode === "all" ? "Search everything at once…" : "Search filing, recordals, PatOrg…";
+  modeBtnGlossary.classList.toggle("active", mode === "glossary");
+  brandTitle.innerHTML = mode === "rws" ? "RWS Internal<br>Knowledge Base" : mode === "all" ? "Search All<br>Sections" : mode === "glossary" ? "\ud83d\udcd6 Glossary &<br>Key Terms" : "IP Services<br>Knowledge Base";
+  searchInput.placeholder = mode === "rws" ? "Search recordals, PatOrg, portal…" : mode === "all" ? "Search everything at once…" : mode === "glossary" ? "Search terms and acronyms…" : "Search filing, recordals, PatOrg…";
   renderSidebar();
   renderGrid();
   catToggle.classList.remove("expanded");
@@ -2014,6 +2036,7 @@ function setMode(newMode){
 modeBtnIp.onclick = () => setMode("ip");
 modeBtnRws.onclick = () => setMode("rws");
 modeBtnAll.onclick = () => setMode("all");
+modeBtnGlossary.onclick = () => setMode("glossary");
 
 function counts(){
   const cats = CATEGORIES();
@@ -2089,9 +2112,18 @@ function highlightGlossaryTerms(rootEl, excludeArticleId){
 }
 
 function jumpToGlossary(gloss){
-  activeCat = "glossary";
+  mode = "glossary";
+  activeCat = gloss.cat;
   query = "";
   searchInput.value = "";
+  document.body.classList.remove("mode-rws");
+  document.body.classList.add("mode-glossary");
+  modeBtnIp.classList.remove("active");
+  modeBtnRws.classList.remove("active");
+  modeBtnAll.classList.remove("active");
+  modeBtnGlossary.classList.add("active");
+  brandTitle.innerHTML = "\ud83d\udcd6 Glossary &<br>Key Terms";
+  searchInput.placeholder = "Search terms and acronyms…";
   renderSidebar();
   renderGrid();
   openDetail(gloss);
@@ -2153,7 +2185,12 @@ function renderGrid(){
     card.className = "card" + (a.cat === "rough-notes" ? " rough-card" : "");
     card.innerHTML = `
       <span class="card-tag" style="background:var(--c-${a.cat}-bg, #F1EEE7); color:${meta.color}">${meta.name}</span>
-      ${mode==="all" ? `<span class="chip" style="margin-left:6px; background:${IP_CAT_IDS.has(a.cat) ? '#FDECEC' : '#F3E9FB'}; color:${IP_CAT_IDS.has(a.cat) ? '#C53030' : '#3E016F'};">${IP_CAT_IDS.has(a.cat) ? 'IP Services' : 'RWS Internal'}</span>` : ""}
+      ${mode==="all" ? (() => {
+        const origin = IP_CAT_IDS.has(a.cat) ? {label:"IP Services", bg:"#FDECEC", color:"#C53030"}
+          : RWS_CAT_IDS.has(a.cat) ? {label:"RWS Internal", bg:"#F3E9FB", color:"#3E016F"}
+          : {label:"Glossary", bg:"#FEF6E7", color:"#A16207"};
+        return `<span class="chip" style="margin-left:6px; background:${origin.bg}; color:${origin.color};">${origin.label}</span>`;
+      })() : ""}
       <h3>${a.title}</h3>
       <p>${a.summary}</p>
       <div class="tags">${a.tags.slice(0,4).map(t=>`<span class="chip">${t}</span>`).join("")}</div>
