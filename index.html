@@ -220,6 +220,7 @@
     font-size:13px; color:var(--ink-soft); margin:14px 0;
   }
   .note.rws{border-left-color:var(--c-rws); background:var(--c-rws-bg); color:#4A3068;}
+  .note.ai{border-left-color:#F56565; background:#FFF5F5; color:#742A2A;}
   .detail-tags{margin-top:20px; padding-top:16px; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:6px;}
 </style>
 </head>
@@ -874,6 +875,14 @@ const ARTICLES_RWS = [
  body:`<p>The IP Portal Support Model uses a tiered escalation structure: Tier 0, Tier 1&2, and Tier 3, cutting across six functional columns \u2014 Infrastructure, Portal, API, Docal, PatOrg, and Business/Renewals. Layered on top is an L0\u2013L4 support-level framework with SLA definitions split between standard priorities and Cloud Ops-specific priorities.</p>
  <p>Contact routing is organised by topic and product line, with a Pilot team distribution list, documented best practices for raising cases, Hypercare support arrangements for early post-go-live periods, and a readiness snapshot tracking open actions before go-live. Per-environment email routing (DEV/QA/UAT/PREPROD) exists underneath this but is typically summarised down to production rules for stakeholder-facing material.</p>
  <div class="note rws">From our conversations \u2014 internal RWS process/design detail; PatOrg/Docal terminology in this model may need revisiting as scope evolves.</div>`},
+
+{id:"w9", cat:"overview", title:"Docal \u2192 PatOrg integration: why the JSON becomes Excel", tags:["RWS","Docal","PatOrg","integration","SQS","S3"],
+ summary:"Kestrel sends JSON to Docal via SQS/S3; Docal converts it to Excel before PatOrg ingests it and creates one task per SubChain.",
+ date:"From ongoing conversations, 2026",
+ body:`<p>The Docal-to-PatOrg integration architecture uses two separate S3 buckets as staging points, each paired with an SQS queue: an <strong>Azure-to-Docal queue + docal-json-input bucket</strong> carries the quote-approved JSON from Kestrel into Docal's Recordals Service (Spring Boot), and a <strong>Docal-to-PatOrg queue + docal-excel-output bucket</strong> carries the result onward to PatOrg. The queues carry the event/notification; the buckets carry the actual payload \u2014 a common pattern to avoid oversized queue messages.</p>
+ <p>In between, Docal's processing pipeline converts the incoming JSON into an Excel file before PatOrg downloads and consumes it to create one task per SubChain. A MongoDB Project_Orchestration collection tracks status throughout (e.g. EXCEL_GENERATED, EVENT_SENT), and once PatOrg creates the task(s), it invokes a Docal callback API (Auth0-secured) to persist the taskId and status back into Project_Orchestration, with idempotent updates and a full audit trail.</p>
+ <p>Likely reasons for the JSON\u2192Excel conversion step: PatOrg's ingestion process may be built around spreadsheet imports rather than API/JSON payloads; Excel's row-based structure maps naturally onto "one row = one task" for the per-SubChain task creation; and Excel doubles as a human-readable business artifact for manual review if needed.</p>
+ <div class="note ai">This is an AI interpretation of an architecture diagram, not confirmed against PatOrg's actual ingestion requirements \u2014 worth validating with whoever owns the PatOrg side if the exact reason (technical limitation vs. business process design) matters.</div>`},
 /* ================= GETTING STARTED ================= */
 {id:"g1", cat:"getting-started", title:"Logging in & the PatOrg dashboard", tags:["PatOrg","login","dashboard","Citrix"],
  summary:"PatOrg runs through Citrix; the dashboard is organised into seven functional sections that filter automatically by user role.",
