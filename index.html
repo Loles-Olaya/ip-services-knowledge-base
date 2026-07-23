@@ -119,7 +119,39 @@
   .subtitle{color:var(--ink-soft); font-size:14px; margin:0 0 22px;}
 
   .grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
-  @media (max-width:760px){ .grid{grid-template-columns:1fr;} .sidebar{width:220px; min-width:220px;} .main{padding:22px 18px;} }
+
+  /* ---- Mobile: stack sidebar above content, collapse category list ---- */
+  .cat-toggle{ display:none; }
+  @media (max-width:760px){
+    .app{ flex-direction:column; }
+    .sidebar{
+      width:100%; min-width:0; position:relative; top:auto; height:auto; max-height:none;
+      overflow-y:visible; padding:16px 16px 10px;
+    }
+    .brand{display:none;}
+    #brandTitle{font-size:22px; margin-bottom:14px;}
+    .mode-switch{margin-bottom:12px;}
+    .search-box{margin-bottom:12px;}
+    .cat-toggle{
+      display:flex; width:100%; align-items:center; justify-content:space-between;
+      background:transparent; border:1px solid #4A5568; color:#CBD5E0; border-radius:8px;
+      padding:10px 12px; font-size:13.5px; font-weight:600; cursor:pointer; margin-bottom:0;
+    }
+    body.mode-rws .cat-toggle{ border-color:rgba(255,255,255,.25); }
+    .cat-toggle .chevron{ transition:transform .15s ease; }
+    .cat-toggle.expanded .chevron{ transform:rotate(180deg); }
+    .cat-list{
+      max-height:0; overflow:hidden; margin-top:0; transition:max-height .2s ease;
+    }
+    .cat-list.expanded{ max-height:2000px; margin-top:10px; }
+    .sidebar-footer{display:none;}
+    .main{max-width:100%; padding:18px 16px 60px;}
+    .toolbar h2{font-size:18px;}
+    .grid{grid-template-columns:1fr;}
+    .overlay{padding:0;}
+    .detail{max-width:100%; min-height:100vh; border-radius:0; padding:24px 20px 40px;}
+    .detail h2{font-size:20px;}
+  }
 
   .card{
     background:var(--card); border:1px solid var(--border); border-radius:10px;
@@ -190,6 +222,10 @@
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9AA5B1" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input id="searchInput" type="text" placeholder="Search filing, recordals, PatOrg…" autocomplete="off">
     </div>
+    <button class="cat-toggle" id="catToggle" type="button">
+      <span>📂 Browse categories</span>
+      <span class="chevron">▾</span>
+    </button>
     <ul class="cat-list" id="catList"></ul>
     <div class="sidebar-footer">
       Sourced from public web research plus prior conversations with Loles. Use search to cut across categories — e.g. "PatOrg" or "Madrid Protocol".
@@ -1650,6 +1686,11 @@ const ARTICLES_RWS = [
 
 /* ---------- render logic ---------- */
 const catList = document.getElementById("catList");
+const catToggle = document.getElementById("catToggle");
+catToggle.onclick = () => {
+  catToggle.classList.toggle("expanded");
+  catList.classList.toggle("expanded");
+};
 const grid = document.getElementById("grid");
 const emptyState = document.getElementById("emptyState");
 const viewTitle = document.getElementById("viewTitle");
@@ -1690,7 +1731,9 @@ function setMode(newMode){
   searchInput.placeholder = mode === "rws" ? "Search recordals, PatOrg, portal…" : mode === "all" ? "Search everything at once…" : "Search filing, recordals, PatOrg…";
   renderSidebar();
   renderGrid();
-  searchInput.focus();
+  catToggle.classList.remove("expanded");
+  catList.classList.remove("expanded");
+  if(window.innerWidth > 760) searchInput.focus();
 }
 modeBtnIp.onclick = () => setMode("ip");
 modeBtnRws.onclick = () => setMode("rws");
@@ -1720,7 +1763,13 @@ function renderSidebar(){
     const btn = document.createElement("button");
     btn.className = "cat-btn" + (cat.id===activeCat ? " active" : "");
     btn.innerHTML = `<span class="cat-name"><span class="cat-dot" style="background:${cat.id==='all'?(mode==='rws'?'#E60054':'#F56565'):cat.color}"></span>${cat.name}</span><span class="cat-count">${c[cat.id]}</span>`;
-    btn.onclick = () => { activeCat = cat.id; renderSidebar(); renderGrid(); };
+    btn.onclick = () => {
+      activeCat = cat.id;
+      renderSidebar();
+      renderGrid();
+      catToggle.classList.remove("expanded");
+      catList.classList.remove("expanded");
+    };
     li.appendChild(btn);
     catList.appendChild(li);
   });
