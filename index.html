@@ -1273,7 +1273,8 @@ const ARTICLES_RWS = [
  <li>Sends contract-activation emails via the Notification Service</li>
  <li>Publishes real-time scheduler status to the Admin Portal via the IPS Push Notification Service</li>
  <li>Retries Azure contract activation on subsequent runs if a prior attempt didn't complete</li></ul>
- <div class="note rws">This is the scheduler referenced throughout Support & Troubleshooting \u2192 "Business contract troubleshooting" \u2014 when a contract status looks stuck in the portal, this job is very often the fix.</div>`},
+ <div class="note rws">This is the scheduler referenced throughout Support & Troubleshooting \u2192 "Business contract troubleshooting" \u2014 when a contract status looks stuck in the portal, this job is very often the fix.</div>
+ <div class="note ai">Confirmed and extended from an architecture diagram walked through in conversation. Extra detail the diagram adds: the request lands on <strong>SFBusinessContractSyncController</strong> (REST API), which hands off to <strong>SFBusinessContractScheduler</strong> for the lock/status/persist steps; the async loop itself is driven by <strong>SFBusinessContractAsyncService</strong> and <strong>QuoteService.runSFBusinessContractScheduler()</strong>. Scheduler state moves through three named states \u2014 READY \u2192 IN_PROGRESS \u2192 SUCCESS/ERROR \u2014 with the distributed lock held only around IN_PROGRESS. Not confirmed against the codebase directly, so treat class/method names as indicative rather than exact.</div>`},
 
 {id:"arch5", cat:"architecture", title:"Quote state lifecycle: Estimate vs Quote", tags:["quote states","Estimate","Ready for Project Initiation","Expired"],
  summary:"A recordal quote moves through two named phases \u2014 Estimate, then Quote \u2014 with contract status determining whether it skips straight to project initiation.",
@@ -1937,6 +1938,12 @@ const GLOSSARY_ARTICLES = [
 {id:"gl-s3", cat:"glossary-rws", title:"S3", match:["Amazon S3"], tags:["AWS","storage","architecture"],
  date:"Reference term", summary:"Amazon's storage service, used to hold the JSON project requests and generated Excel workbooks in the DOCAL project-creation pipeline.",
  body:`<p>See System Architecture \u2192 Azure-to-PatOrg project creation flow via DOCAL for the full mechanics.</p>`},
+
+{id:"gl-eventbridge", cat:"glossary-rws", title:"EventBridge", match:["EventBridge","AWS EventBridge"], tags:["AWS","scheduler","event router"],
+ date:"Reference term", summary:"AWS's scheduler and event router \u2014 fires the SF Business Contract Sync automatically on a schedule (e.g. daily), as an alternative to the Admin manually triggering it.",
+ body:`<p>Two things bundled together: a cloud scheduler (like a cron job \u2014 "run this every day at 2am" \u2014 with no server needed to sit and wait), and an event router that listens for events elsewhere (e.g. a file landing in S3) and routes them to a target such as a Lambda function or SQS queue based on rules.</p>
+ <p>In the Manage Contract / SF Business Contract Sync flow, EventBridge is one of two ways the sync can start \u2014 the other being an Admin manually triggering it from the Admin Portal \u2014 and it's what fires the periodic (e.g. daily) run without anyone needing to remember to kick it off.</p>
+ <div class="note ai">This is an AI interpretation from a conversation about the integration architecture diagram, not confirmed against the actual implementation.</div>`},
 
 {id:"gl-ips", cat:"glossary-rws", title:"IPS \u2014 IP Portal / Solutions", match:["IPS"], tags:["RWS","platform"],
  date:"Reference term", summary:"Shorthand for the IP Portal / IP Solutions platform as a whole.",
