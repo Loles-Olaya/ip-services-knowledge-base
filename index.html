@@ -41,6 +41,7 @@
     --c-support:#B91C1C;             --c-support-bg:#FDECEA;
     --c-rough-notes:#78716C;         --c-rough-notes-bg:#F1EFED;
     --c-glossary:#A16207;            --c-glossary-bg:#FEF6E7;
+    --c-legacy-recordals:#B45309;    --c-legacy-recordals-bg:#FDF3E7;
   }
   .note.rough{ border-left-color:#A8A29E; border-left-style:dashed; background:#F5F5F4; color:#44403C; }
   .card.rough-card{ border-style:dashed; border-color:#D6D3D1; }
@@ -305,6 +306,7 @@ const CATEGORIES_RWS = [
   {id:"support", name:"Support & Troubleshooting", color:"var(--c-support)", group:"IP Portal & Platform"},
   {id:"release-notes", name:"Release Notes & Caveats", color:"var(--c-release-notes)", group:"Release Notes"},
   {id:"rough-notes", name:"Rough Notes (unverified)", color:"var(--c-rough-notes)", group:"\u26a0\ufe0f Rough Internal Notes (unverified)"},
+  {id:"legacy-recordals", name:"Legacy Manual Process (pre-PatOrg)", color:"var(--c-legacy-recordals)", group:"Legacy Recordals Process (pre-PatOrg)"},
 ];
 
 const ARTICLES_IP = [
@@ -1708,6 +1710,146 @@ const ARTICLES_RWS = [
  <p>Two ADO projects for IP: <strong>IP Services</strong> (the business backlog \u2014 Actions, User Stories, tracked by Paul/James in a weekly "IPS Week ahead" meeting; not used by Development directly) and <strong>IP Service Portal</strong> (the actual Development project \u2014 user stories, bugs, sprints). If a Business-ADO item becomes a development user story, it gets created as an Epic/User Story in the Portal ADO. Iterations = sets of features spanning several sprints; releases happen per module; the team wanted to move to UAT-per-iteration rather than waiting for a full release.</p>
  <h3>Accessibility</h3>
  <p><strong>WCAG 2.2 level AA</strong> is the company-wide minimum compliance target. RWS's Accessibility team primarily uses Silktide and Google Lighthouse, alongside manual checks (the larger share of the work). A VPAT (accessibility conformance report) is needed for any release with a significant UX change \u2014 IP and HAI are both in scope. VPATs assess what's actually in Prod, so can technically be done after go-live (though better before); RWS isn't legally required to share VPATs with anyone \u2014 they're kept on file for audits. An Accessibility test run was planned after Recordals released, mirroring what was done after Renewals released.</p>`},
+
+/* ================= LEGACY RECORDALS PROCESS (PRE-PATORG) ================= */
+/* Source: two stakeholder-walkthrough recordings, Anja Ganley (Recordals SME) explaining the process to
+   Wande Lamuye (BA) and Galina Pavlova (observer) \u2014 14 Nov 2024 and 21 Nov 2024. This captures the
+   CURRENT-STATE, pre-PatOrg manual process (Excel + Kestrel + email), not the target PatOrg workflow
+   documented elsewhere in this section. Treat as discovery-stage understanding, not a signed-off process
+   definition \u2014 several points (cancellation fees, future invoicing model) were explicitly open questions
+   at the time. */
+
+{id:"lr1", cat:"legacy-recordals", title:"What is a recordal? Triggers, types & products covered", tags:["recordal definition","change of name","transfer","merger","trigger events"],
+ summary:"The administrative process of updating a national Patent Office's record when patent ownership or bibliographic details change \u2014 handled per country, since every patent is validated separately in each jurisdiction.",
+ date:"Initial workshop Wande-Anja (Nov 2024)",
+ body:`<p>A recordal updates the official record held by a national/regional Patent Office when there's a change in ownership or bibliographic detail. Because a patent is validated separately in every country it exists in, recordals are handled \u2014 and priced \u2014 on a per-country basis.</p>
+ <h3>Trigger events</h3>
+ <ul><li>A company changes its name</li>
+ <li>A company changes its registered address</li>
+ <li>A company changes legal entity/structure</li>
+ <li>A company sells or transfers part or all of its patent portfolio to another company</li></ul>
+ <h3>Who requests recordals</h3>
+ <p>Overwhelmingly companies/corporates \u2014 patent ownership is cost-intensive, so private individual owners are rare but not excluded. Clients are often patent attorneys acting for their own end clients, or large corporates restructuring or acquiring patent portfolios.</p>
+ <h3>Core recordal types</h3>
+ <p>Change of name, change of address, merger, and transfer (change of ownership/applicant) are the four handled routinely. Correction of name and correction of inventor details occur less often.</p>
+ <h3>Products covered</h3>
+ <p>Patents (the main volume), designs, and trademarks.</p>
+ <div class="note rws">Project size varies hugely \u2014 from a single patent in one country up to portfolios spanning 47\u201390+ countries with multiple patents per country. Every project is different, which is what makes the work highly variable and hard to standardise.</div>`},
+
+{id:"lr2", cat:"legacy-recordals", title:"End-to-end process, part 1: Quoting & Order Creation", tags:["quoting","cost estimate","order creation","go-ahead","country requirements"],
+ summary:"Two entry routes \u2014 quote-first or straight go-ahead \u2014 both converge on a per-country checklist of agents, documents and requirements before filing can begin.",
+ date:"Initial workshop Wande-Anja (Nov 2024)",
+ body:`<h3>Stage 1 \u2014 Quoting (cost-estimate route)</h3>
+ <p>Actors: client, Recordals team.</p>
+ <ol><li>Client emails the shared Recordals inbox (the only channel used at the time)</li>
+ <li>Team validates minimum data is present: type of change, and number of patents per country</li>
+ <li>If data is missing, the team follows up by email/phone; the request loops until sufficient info is received</li>
+ <li>A client folder is created in the file structure</li>
+ <li>Country and document requirements are checked against the internally maintained country-requirements spreadsheet</li>
+ <li>Where an agent is needed, the most cost-efficient agent is identified and their fee checked (removed from the quote before it's sent to the client)</li>
+ <li>A per-country cost estimate is compiled: agent fee (where used) + official Patent Office fee + RWS service fee. Translation cost is marked <strong>TBC</strong> at this stage, since source documents haven't been reviewed yet</li>
+ <li>A quote document is generated from a template and sent to the client</li>
+ <li>Client approves (\u2192 Order Creation), requests a revised quote (loops back), or declines (process ends)</li></ol>
+ <p><strong>Straight go-ahead route:</strong> regular/known clients often skip quoting entirely and instruct RWS to proceed directly \u2014 no cost confirmation happens before work begins; the case moves straight into Order Creation.</p>
+ <h3>Stage 2 \u2014 Order Creation</h3>
+ <p>Actors: client, Recordals team, country agents.</p>
+ <ol><li>A tab is created in the Current Cases spreadsheet for the project (client name/reference, patent numbers, from/to applicants, countries, fees at the top for ease of invoicing later)</li>
+ <li>Per country: agent name logged where used; direct-filing countries marked accordingly (RWS files directly in Switzerland, the Netherlands and GB, for example)</li>
+ <li>Documents already held are sent to agents, who confirm any additional documents required (yellow highlight = additional docs needed but not yet received; dash "\u2013" = nothing further required; blank = still awaiting response)</li>
+ <li>A "docs needed from client" subfolder collates outstanding items; once complete, the client gets one consolidated request \u2014 countries needing nothing further proceed immediately</li>
+ <li>Documents are validated; discrepancies (e.g. address mismatches between register and deed of assignment) go back to the client, creating iterative back-and-forth</li>
+ <li>Translation need is scoped, but word count/cost is only finalised at billing \u2014 the team deliberately limits translated text to essentials (e.g. names, patent numbers) to control client cost</li>
+ <li>A Kestrel sales order is created and countries added (no costs added yet, since scope can still shift as documents come in)</li></ol>
+ <div class="note rws">A Power of Attorney is required per country, even with the same agent, because the POA is issued in that agent's name specifically for that jurisdiction \u2014 documents aren't shared across countries.</div>`},
+
+{id:"lr3", cat:"legacy-recordals", title:"End-to-end process, part 2: Progress Monitoring, Invoicing & Closure", tags:["progress monitoring","invoicing","filing receipt","official confirmation","case closure"],
+ summary:"A country is only marked complete once the official Patent Office confirmation arrives \u2014 not the agent's filing receipt \u2014 and turnaround can range from a day to seven months.",
+ date:"Initial workshop Wande-Anja (Nov 2024)",
+ body:`<h3>Stage 3 \u2014 Progress Monitoring</h3>
+ <p><strong>Agent-filed countries:</strong> documents/POA sent to agent \u2192 agent reviews and flags any further outstanding items \u2192 relayed to client \u2192 agent translates if needed \u2192 agent files with the Patent Office \u2192 agent sends RWS a filing receipt, evidence of filing, and their invoice \u2192 RWS logs dates/receipts and forwards the agent invoice to Billings \u2192 RWS later receives the official confirmation (a day to several months later) \u2192 only then is the country marked complete.</p>
+ <p><strong>Direct-filed countries:</strong> RWS checks for discrepancies, files directly, updates the spreadsheet with the filing date, and awaits confirmation before marking complete.</p>
+ <div class="note rws">Payment receipts from Patent Offices sometimes arrive separately from, and earlier than, the official confirmation itself (e.g. GB takes payment up front, with a confirmation email following ~2 weeks later). A country is only "done" once the official confirmation \u2014 not the filing receipt \u2014 is in hand.</div>
+ <h3>Stage 4 \u2014 Invoicing</h3>
+ <ol><li>Once countries are confirmed, RWS sends completed-country receipts and the cost breakdown to Invoicing, including official confirmations (not filing receipts)</li>
+ <li>A Kestrel invoicing workflow is created with the costs and routed to Invoicing/Billings</li>
+ <li>Invoicing issues the invoice and reassigns the case back to Recordals</li>
+ <li>Recordals sends the invoice and official confirmations to the client \u2014 except e-billing/portal clients, where Invoicing sends directly</li>
+ <li>Where not all countries are complete, the team can part-invoice for completed countries, or wait for the whole project (large/long-running projects, e.g. 50+ countries over a year, sometimes use monthly invoicing for whichever countries close that month)</li></ol>
+ <p>Invoices are split into RWS service fee, official Patent Office fee, agent/country fee, and (where applicable) translation cost, shown per country. Agent invoices are paid by RWS directly; RWS's markup is added when billing the client.</p>
+ <h3>Stage 5 \u2014 Case Closure</h3>
+ <p>Documents are uploaded/filed; a check confirms all countries are complete (if not, loops back to Progress Monitoring); once complete, the case is moved to a closed-cases folder and records archived.</p>`},
+
+{id:"lr4", cat:"legacy-recordals", title:"Fee structure & manual quoting", tags:["official fee","agent fee","RWS service fee","translation fee","cancellation"],
+ summary:"Quotes are built manually from four fee components, using a monthly company exchange rate and calculator \u2014 a 90-country quote can take hours.",
+ date:"Initial workshop Wande-Anja (Nov 2024)",
+ body:`<table><tr><th>Fee component</th><th>Description</th></tr>
+ <tr><td>Official fee</td><td>Charged directly by the Patent Office. Varies by country, sometimes flat per filing regardless of patent count (e.g. Sweden ~\u20ac50 per change per patent; GB ~\u00a350 per filing)</td></tr>
+ <tr><td>Agent / country fee</td><td>Charged by the local agent/attorney used where RWS doesn't file directly. Renewals team calls this the "country fee" (agent fee + RWS fee combined, going forward)</td></tr>
+ <tr><td>RWS service fee</td><td>RWS's own fee, tiered by number of patents per country (example: 1\u20135 patents in a country = a flat band, e.g. \u20ac250; each additional country incurs the fee again)</td></tr>
+ <tr><td>Translation fee</td><td>Only where local law requires translation; scoped as TBC at quoting, finalised at billing from final word count. Team minimises translated content to essential sections to control cost</td></tr></table>
+ <h3>Other pricing notes</h3>
+ <ul><li>A standard monthly company-issued exchange rate is applied, with consistent markup across regions</li>
+ <li>A working price list exists per country but coverage is incomplete \u2014 Vendor Management was being engaged to fill gaps</li>
+ <li>Quotes are calculated manually (spreadsheet + calculator) \u2014 described as "really time intense"; a 90-country quote can take hours</li>
+ <li>A quoting automation tool was in development at the time (auto-calculating from patent/country counts) but not yet ready for use</li>
+ <li>A minimum charge typically applies per client/project, sometimes reduced for high-volume or special-rate clients</li></ul>
+ <div class="note rws">Cancellation costs were <strong>not yet formally defined</strong> as of this workshop \u2014 flagged as an open gap. Some agents (e.g. Belgium, Italy) charge for document preparation even if a case is cancelled before filing; RWS was considering charging half the RWS fee for cases cancelled after work has started. A future "data verification fee" was also being discussed, to validate client-supplied ownership data before quoting and reduce costly mid-project rework.</div>`},
+
+{id:"lr5", cat:"legacy-recordals", title:"Country-by-country variability", tags:["apostille","notarisation","wet signature","representation","turnaround time"],
+ summary:"Original vs PDF, notarisation, digital signatures, representation transfer, and confirmation turnaround (a day to seven months) all differ by jurisdiction \u2014 the single biggest driver of process complexity.",
+ date:"Initial workshop Wande-Anja (Nov 2024)",
+ body:`<p>Requirements differ significantly by jurisdiction, and this variability drives most of the process's complexity, timing risk, and manual overhead. Dimensions tracked per country:</p>
+ <ul><li>Whether original (wet-ink) documents are required vs. a signed PDF being acceptable</li>
+ <li>Whether notarisation and/or apostille legalisation is required</li>
+ <li>Whether digital signatures are accepted</li>
+ <li>Whether counterpart signatures are permitted</li>
+ <li>Whether filing automatically transfers legal representation to the filing agent \u2014 a concern for clients who want to keep their own patent attorney of record</li>
+ <li>Typical turnaround time for confirmation \u2014 from same-day/days up to 4\u20137 months, depending on the Patent Office</li>
+ <li>Whether the Patent Office auto-updates from EPO data within the 9-month opposition window post-grant (e.g. Spain, France, Finland, Monaco, Norway, Luxembourg), vs. requiring a separate request after a deadline (e.g. Switzerland: separate request needed after 3 months post-grant)</li></ul>
+ <p>Where the same document type can serve multiple countries, RWS tries to minimise duplicate paperwork \u2014 e.g. sending a PDF copy where accepted and reserving the original for the one country that requires it.</p>
+ <div class="note rws">Anja referenced a personal subscription to "the Brown Books" (a patent-law reference covering country requirements) as the working knowledge source for unclear cases, with a longer-term ambition to build an internal requirements "booklet" so the team isn't reliant on always asking the agent first.</div>`},
+
+{id:"lr6", cat:"legacy-recordals", title:"Tools, roles & the EPO validation handoff", tags:["Kestrel","Eurofile","Current Cases spreadsheet","EPO validation","handoff"],
+ summary:"A manual toolchain (Excel + Kestrel + shared mailboxes) run by a two-person team, with an occasional handoff from the EPO validation team for recently-granted patents.",
+ date:"Initial workshop Wande-Anja (Nov 2024)",
+ body:`<h3>Systems in use</h3>
+ <table><tr><th>Tool</th><th>How it's used</th></tr>
+ <tr><td>Eurofile</td><td>Legacy shared-drive location where Recordals historically sat under the EP validation team structure</td></tr>
+ <tr><td>Current Cases spreadsheet (Excel, shared via Teams)</td><td>The operational backbone \u2014 one tab per project, tracking countries, fees, agents, dates, discrepancies and completion status (colour-coded)</td></tr>
+ <tr><td>Kestrel</td><td>Raises sales orders, records agent job/PO numbers, triggers invoicing workflows. Built for the EP validation team, not well suited to Recordals \u2014 being phased out</td></tr>
+ <tr><td>D365 (formerly Agresso)</td><td>Finance/billing; invoices split into "service fee" and "official fee" lines; holds client billing rates and portfolio price brackets</td></tr>
+ <tr><td>PatOrg (in development)</td><td>Target system intended to replace Kestrel/Excel entirely \u2014 see the PatOrg section of this knowledge base for the target-state workflow</td></tr></table>
+ <p>Anja and colleague Sue work the same spreadsheet in parallel (via Teams) so either can pick up the other's cases when one is absent \u2014 called out as an important requirement for any future system.</p>
+ <h3>Interaction with the EPO validation team</h3>
+ <ol><li>Client notifies (or is advised to notify) a change at the EPO; EPO Form 2544 is issued</li>
+ <li>The validation team files the new details in as many countries as possible at no extra cost, while the case is still within the relevant window</li>
+ <li>Once they've done everything possible without incurring cost, they hand the remaining countries to Recordals, having first informed the client</li>
+ <li>Recordals completes the recordal work in the countries still on the old details</li></ol>
+ <p>The two teams try not to work the same case simultaneously, to avoid confusing the client and duplicating effort.</p>
+ <div class="note rws">At the time of this workshop, Recordals had recently moved from Chris Guy's EP validation team into Nicola's team, which now oversees both Renewals and Recordals as a combined "patent lifecycle" grouping.</div>`},
+
+{id:"lr7", cat:"legacy-recordals", title:"Risks, pain points & open questions from discovery", tags:["risks","pain points","open questions","data quality","key-person risk"],
+ summary:"Manual tooling, manual quoting, patchy client data, and tacit process knowledge were the standout risks \u2014 several open questions were carried into the Brogman workshops.",
+ date:"Initial workshop Wande-Anja (Nov 2024)",
+ body:`<h3>Key risks & pain points identified</h3>
+ <table><tr><th>Risk / challenge</th><th>Detail</th></tr>
+ <tr><td>Manual, disjointed tooling</td><td>Kestrel was built for EP validation, not Recordals; the team relies on manual Excel tracking alongside it. Repeatedly described as "disjointed" and "not really suited to our needs"</td></tr>
+ <tr><td>Manual cost estimation</td><td>Quotes calculated by hand with exchange rates and markups per country; a 90-country quote can take hours and needs careful double-checking</td></tr>
+ <tr><td>No formal cancellation policy</td><td>Cancellation fees are inconsistent and undefined, despite some agents charging RWS for preparation work already done</td></tr>
+ <tr><td>Client data quality</td><td>Client-provided ownership data is often inaccurate or incomplete, triggering rework and back-and-forth after work has already started</td></tr>
+ <tr><td>Partial/staggered document submission</td><td>Clients often send documents piecemeal, making it hard to track exactly what's outstanding for a given case</td></tr>
+ <tr><td>Fragmented invoicing</td><td>Kestrel/D365 can't currently pull through a final cost automatically, since scope can change mid-project (e.g. discovering it's a change-of-address plus transfer, not just a transfer)</td></tr>
+ <tr><td>Key-person / tacit knowledge risk</td><td>Most process and country-requirement knowledge "is all in my head" (Anja); no single documented source of truth existed before this discovery work</td></tr>
+ <tr><td>Unpaid-invoice visibility</td><td>Recordals has no visibility into whether a client has paid a previous invoice unless explicitly told (e.g. a hold notice from another team)</td></tr>
+ <tr><td>System transition uncertainty</td><td>Multiple parallel changes in flight (Kestrel \u2192 PatOrg, Agresso \u2192 D365, new quoting tool) with future invoicing/quoting process still undecided at the time</td></tr></table>
+ <h3>Open questions carried into the Brogman workshops</h3>
+ <ul><li>Whether a formal sign-off/e-signature process for cost estimates and go-aheads will be introduced (currently email-only acknowledgement)</li>
+ <li>How cancellations and part-completed work should be charged</li>
+ <li>How the new quoting/automation tool will work, and its readiness timeline</li>
+ <li>What a formal per-country "requirements booklet" should contain</li>
+ <li>How invoicing and confirmations will work once PatOrg is live</li>
+ <li>A list of the most frequently identified data discrepancies and most frequently requested documents, per recordal type</li></ul>
+ <div class="note rws">This entry captures discovery-stage understanding, not a signed-off process definition \u2014 several items above were explicitly open at the time of the workshop and may since have been resolved elsewhere in this knowledge base (check the PatOrg and Release Notes sections for the current target-state answers).</div>`},
 
 ];
 
